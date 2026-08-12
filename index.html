@@ -18,7 +18,7 @@
     <div class="field"><label style="color:#dfe2ea">Senha</label><input id="accessPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')unlockApp()"></div>
     <button class="btn p" onclick="unlockApp()">Entrar</button>
     <div id="accessError" class="access-error"></div>
-    <div class="access-foot">Você pode lembrar o acesso apenas neste aparelho.</div>
+    <div class="access-foot">Este aparelho ficará autenticado até você limpar os dados do navegador.</div>
   </div>
 </div>
 
@@ -95,6 +95,7 @@
 <div id="toast" class="toast"></div>
 
 <script src="core.js"></script>
+<script src="auth-persist.js"></script>
 <script src="app.js"></script>
 <script src="strategy.js"></script>
 </body></html>
