@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#5c5ff2">
 <title>LAMOU Music Promoter</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,7 +18,7 @@
     <div class="field"><label style="color:#dfe2ea">Senha</label><input id="accessPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')unlockApp()"></div>
     <button class="btn p" onclick="unlockApp()">Entrar</button>
     <div id="accessError" class="access-error"></div>
-    <div class="access-foot">Sessão lembrada apenas neste navegador.</div>
+    <div class="access-foot">Você pode lembrar o acesso apenas neste aparelho.</div>
   </div>
 </div>
 
@@ -85,12 +88,13 @@
 <section id="analytics" class="card"><h2>📊 Resultados</h2><p class="sub">Histórico local e importação de CSV do Spotify for Artists.</p><div class="stats"><div class="stat"><b id="aActions">0</b><small>Ações</small></div><div class="stat"><b id="aChannels">0</b><small>Canais</small></div><div class="stat"><b id="aCampaigns">0</b><small>Campanhas</small></div><div class="stat"><b id="aBase">0</b><small>Canais-base</small></div></div>
 <div class="two" style="margin-top:15px"><div><h3>Histórico</h3><div id="history" style="margin-top:8px"></div></div><div><h3>Spotify CSV</h3><input type="file" accept=".csv,text/csv" onchange="csv(event)" style="margin-top:8px"><div id="csvResult" class="notice" style="margin-top:8px">Importe o CSV e o app procura colunas de streams, ouvintes, saves, playlists e seguidores.</div></div></div></section>
 
-<section id="hosting" class="card s6"><h2>☁️ Onde hospedar</h2><p class="sub">Arquitetura preparada para evoluir.</p><div class="notice"><b>Recomendação: Cloudflare Pages.</b><br>Publique este arquivo como <b>index.html</b>. Para a próxima fase, Pages Functions/Workers adicionam OAuth, tracking e banco sem refazer o front-end.</div></section>
-<section class="card s6"><h2>🔌 O que é automático hoje?</h2><p class="sub">Transparência total.</p><table><tr><th>Função</th><th>Status</th></tr><tr><td>Spotify player/oEmbed</td><td><span class="status green">Funcional</span></td></tr><tr><td>Hook local</td><td><span class="status green">Funcional</span></td></tr><tr><td>Campanha/textos/histórico</td><td><span class="status green">Funcional</span></td></tr><tr><td>Publicar direto nas redes</td><td><span class="status yellow">OAuth/backend</span></td></tr><tr><td>Cliques externos reais</td><td><span class="status yellow">Backend</span></td></tr><tr><td>Envio automático a sites</td><td><span class="status yellow">Somente onde autorizado</span></td></tr></table></section>
+<section id="hosting" class="card s6"><h2>☁️ Onde hospedar</h2><p class="sub">Arquitetura preparada para evoluir.</p><div class="notice"><b>Cloudflare.</b><br>O app já pode ser instalado na tela inicial. Na próxima fase, Functions/Workers podem adicionar OAuth, tracking e banco sem refazer o front-end.</div></section>
+<section class="card s6"><h2>🔌 O que é automático hoje?</h2><p class="sub">Transparência total.</p><table><tr><th>Função</th><th>Status</th></tr><tr><td>Spotify player/oEmbed</td><td><span class="status green">Funcional</span></td></tr><tr><td>Hook local</td><td><span class="status green">Funcional</span></td></tr><tr><td>Campanha/textos/histórico</td><td><span class="status green">Funcional</span></td></tr><tr><td>Perfil por CSV Spotify/Amuse</td><td><span class="status green">Funcional</span></td></tr><tr><td>Top 10 técnico de IA por áudio</td><td><span class="status green">Funcional</span></td></tr><tr><td>Publicar direto nas redes</td><td><span class="status yellow">OAuth/backend</span></td></tr><tr><td>Cliques externos reais</td><td><span class="status yellow">Backend</span></td></tr><tr><td>Envio automático a sites</td><td><span class="status yellow">Somente onde autorizado</span></td></tr></table></section>
 </main>
 </div>
 <div id="toast" class="toast"></div>
 
 <script src="core.js"></script>
 <script src="app.js"></script>
+<script src="strategy.js"></script>
 </body></html>
