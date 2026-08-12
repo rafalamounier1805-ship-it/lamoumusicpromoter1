@@ -1,0 +1,44 @@
+const ACCESS_HASH="d8cbcbfa08a6a7920797a98668fbb6e8e1ba12e1dd09e9e75495f958423c870f";
+async function sha256Text(t){const b=new TextEncoder().encode(t);const d=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function unlockApp(){const v=document.getElementById('accessPassword').value;const hh=await sha256Text(v);if(hh===ACCESS_HASH){sessionStorage.setItem('lamou_access','ok');document.getElementById('accessGate').classList.add('hidden');document.getElementById('accessError').textContent=''}else{document.getElementById('accessError').textContent='Senha incorreta.';document.getElementById('accessPassword').select()}}
+function initAccess(){if(sessionStorage.getItem('lamou_access')==='ok')document.getElementById('accessGate')?.classList.add('hidden')}
+
+const S={url:'',title:'',cover:'',hooks:[],hook:null,duration:0,audioUrl:'',creativeMode:'image',creativeFormat:'1:1',creativeImageUrl:'',creativeVideoUrl:'',creativeImageSource:'',creativeVideoName:'',syncHook:true,quick:['Instagram','TikTok','YouTube Shorts'],camp:['Instagram','TikTok'],langs:['Português'],markets:['Brasil'],selected:[],history:[]};
+const genres={"Pop":["Pop","Indie Pop","Electropop","Latin Pop"],"Rock":["Rock","Indie Rock","Alternative Rock","Hard Rock"],"Sertanejo":["Sertanejo","Universitário","Romântico","Raiz"],"Forró":["Forró","Piseiro","Xote","Baião"],"Gospel":["Adoração","Pentecostal","Gospel Pop","Worship","Gospel animado","Christian Hip Hop"],"Funk":["Funk BH","Mandelão","Funk Pop"],"Pagode / Samba":["Pagode","Pagode romântico","Samba"],"Eletrônica":["House","EDM","Techno","Dance"],"Hip Hop / Rap":["Hip Hop","Rap","Trap","Christian Hip Hop"],"R&B / Soul":["R&B","Soul","Neo Soul"],"Latino":["Reggaeton","Latin Pop","Cumbia","Bachata"],"MPB":["MPB","Bossa Nova"],"Outros":["Folk","Jazz","Lo-fi","Reggae","Afrobeats","Country"]};
+const platformNames=['Instagram','TikTok','YouTube Shorts','Facebook','Threads'];
+const channels=[
+{id:'daily',name:'DailyPlaylists',type:'Playlist/Curador',cost:'free',perm:'yellow',ai:'review',genres:['Pop','Rock','Gospel','Hip Hop / Rap','Eletrônica','R&B / Soul','Latino','Outros'],url:'https://dailyplaylists.com/',note:'Plano gratuito: submissões Standard; login necessário.'},
+{id:'sound',name:'Soundplate — diretório',type:'Playlist/Curador',cost:'free',perm:'yellow',ai:'yes',genres:['Pop','Rock','Gospel','Hip Hop / Rap','Eletrônica','R&B / Soul','Latino','Outros'],url:'https://soundplate.com/new-spotify-playlists1/',note:'Submissões gratuitas e categorias por gênero, incluindo AI Generated e Christian/Gospel.'},
+{id:'soundai',name:'Soundplate — AI Generated',type:'Playlist/Curador',cost:'free',perm:'yellow',ai:'yes',genres:['Pop','Rock','Eletrônica','Outros'],url:'https://play.soundplate.com/aights',note:'Playlist explicitamente voltada a faixas geradas com IA.'},
+{id:'soundg',name:'Soundplate — Christian Hip Hop',type:'Playlist/Curador',cost:'free',perm:'yellow',ai:'yes',genres:['Gospel','Hip Hop / Rap'],url:'https://play.soundplate.com/selections',note:'Curadoria Christian Hip Hop.'},
+{id:'indie',name:'Indiemono',type:'Playlist/Curador',cost:'free',perm:'green',ai:'no',genres:['Pop','Rock','Hip Hop / Rap','Eletrônica','R&B / Soul','Latino','Outros'],url:'https://player.indiemono.com/music-submit',note:'Grátis; política atual não aceita música AI-generated.'},
+{id:'spotifyPitch',name:'Spotify for Artists — Editorial Pitch',type:'Playlist/Curador',cost:'free',perm:'green',ai:'review',genres:Object.keys(genres),url:'https://artists.spotify.com/',note:'Pitch editorial oficial para lançamentos elegíveis.'}
+];
+const words={
+'Português':{impact:['Um clique. Um refrão. Talvez uma obsessão. 🎧','Essa música não pede atenção. Ela rouba. ▶️','Descubra antes de todo mundo. 🎵'],curator:'Olá! Esta faixa pode conversar com a linha editorial de vocês. Ouça aqui:',editorial:'Novo lançamento independente com identidade própria em {g}. Ouça no Spotify:'},
+'English':{impact:['One click. One hook. Maybe a new obsession. 🎧','This track does not ask for attention. It takes it. ▶️'],curator:'Hi! This track may fit your editorial direction. Listen here:',editorial:'Independent release with a distinct {g} identity. Listen on Spotify:'},
+'Español':{impact:['Un clic. Un hook. Tal vez una nueva obsesión. 🎧','Esta canción no pide atención. Se la lleva. ▶️'],curator:'¡Hola! Esta canción puede encajar con su línea editorial. Escúchala aquí:',editorial:'Lanzamiento independiente con identidad {g}. Escúchalo en Spotify:'},
+'Français':{impact:['Un clic. Un refrain. Peut-être une nouvelle obsession. 🎧'],curator:'Bonjour ! Ce titre pourrait correspondre à votre ligne éditoriale. Écoutez ici :',editorial:'Sortie indépendante avec une identité {g}. À écouter sur Spotify :'},
+'Italiano':{impact:['Un clic. Un ritornello. Forse una nuova ossessione. 🎧'],curator:'Ciao! Questo brano potrebbe essere in linea con la vostra selezione. Ascolta qui:',editorial:'Nuova uscita indipendente con identità {g}. Ascolta su Spotify:'}
+};
+function init(){
+ try{Object.assign(S,JSON.parse(localStorage.lamou||'{}'))}catch(e){}
+ genre.innerHTML=Object.keys(genres).map(x=>`<option>${x}</option>`).join('');subgenres();
+ ['Português','English','Español','Français','Italiano','Todos'].forEach(x=>langs.insertAdjacentHTML('beforeend',chip(x,S.langs,'lang')));
+ ['Brasil','Latino','EUA','Europa','Portugal','Global'].forEach(x=>markets.insertAdjacentHTML('beforeend',chip(x,S.markets,'market')));
+ copyLang.innerHTML=Object.keys(words).map(x=>`<option>${x}</option>`).join('');
+ renderPlatforms();filterChannels();renderHistory();aBase.textContent=channels.length;restoreCreative();
+ if(S.url){spotify.value=S.url;loadSpotify(true)}
+}
+function save(){localStorage.lamou=JSON.stringify({...S,audioUrl:'',creativeImageUrl:S.creativeImageSource==='spotify'?S.creativeImageUrl:'',creativeVideoUrl:''})}
+function chip(x,arr,type){return `<button class="chip ${arr.includes(x)?'on':''}" onclick="toggleChip('${type}','${x}',this)">${x}</button>`}
+function toggleChip(type,x,el){let a=type==='lang'?S.langs:S.markets;let i=a.indexOf(x);i>=0?a.splice(i,1):a.push(x);el.classList.toggle('on');save()}
+function subgenres(){subgenre.innerHTML=(genres[genre.value]||[]).map(x=>`<option>${x}</option>`).join('')}
+function renderPlatforms(){['quick','campaign'].forEach(kind=>{let arr=kind==='quick'?S.quick:S.camp;document.getElementById(kind+'Platforms').innerHTML=platformNames.map(x=>`<label class="platform ${arr.includes(x)?'on':''}"><input type="checkbox" ${arr.includes(x)?'checked':''} onchange="plat('${kind}','${x}',this)"> ${x}</label>`).join('')})}
+function plat(k,x,c){let a=k==='quick'?S.quick:S.camp,i=a.indexOf(x);c.checked&&i<0?a.push(x):!c.checked&&i>=0?a.splice(i,1):0;c.parentElement.classList.toggle('on',c.checked);save()}
+function mode(m){document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('on',x.dataset.mode===m));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));document.getElementById(m+'Panel').classList.add('on')}
+async function loadSpotify(silent=false){
+ let u=spotify.value.trim();if(!/^https:\/\/open\.spotify\.com\/(track|album|playlist|artist)\//.test(u)){if(!silent)toast('Cole um link válido do Spotify.');return}
+ S.url=u;track.classList.add('show');title.textContent='Carregando…';let p=new URL(u).pathname.split('/').filter(Boolean);embed.innerHTML=`<iframe src="https://open.spotify.com/embed/${p[0]}/${p[1]}" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+ try{let r=await fetch('https://open.spotify.com/oembed?url='+encodeURIComponent(u)),d=await r.json();S.title=d.title||'Faixa Spotify';S.cover=d.thumbnail_url||'';title.textContent=S.title;if(S.cover)cover.src=S.cover;if(document.getElementById('creativeTitle')){creativeTitle.value=S.title;updateCreativeOverlay()}if(S.creativeImageSource==='spotify'||(!S.creativeImageUrl&&!S.creativeVideoUrl))useSpotifyCover(true);makeCopy()}catch(e){S.title='Faixa Spotify';title.textContent=S.title}save()
+}
