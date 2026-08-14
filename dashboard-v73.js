@@ -1,6 +1,6 @@
-/* LAMOU compatibility loader — v8.1
-   Legacy filename kept so existing deployments load the consolidated shell
-   and then the simplified user/header/clear-data layer.
+/* LAMOU compatibility loader — v8.2
+   Legacy filename kept so existing deployments load the consolidated shell,
+   simplified user/header layer, then workflow correctness fixes.
 */
 (() => {
   'use strict';
@@ -15,6 +15,14 @@
     x.id = 'lamouV81Loader';
     x.src = 'lamou-v81.js?v=8.1.0';
     x.defer = true;
+    x.onload = () => {
+      if (document.getElementById('lamouV82Loader')) return;
+      const y = document.createElement('script');
+      y.id = 'lamouV82Loader';
+      y.src = 'workflow-fix-v82.js?v=8.2.0';
+      y.defer = true;
+      document.body.appendChild(y);
+    };
     document.body.appendChild(x);
   };
   document.body.appendChild(s);
