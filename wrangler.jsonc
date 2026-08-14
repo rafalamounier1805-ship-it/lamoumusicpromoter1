@@ -21,6 +21,7 @@
     }
   ],
   "vars": {
-    "APP_ENV": "production"
+    "APP_ENV": "production",
+    "SPOTIFY_CLIENT_ID": "8a9c328f33b14bad9b48473d238925fc"
   }
 }
