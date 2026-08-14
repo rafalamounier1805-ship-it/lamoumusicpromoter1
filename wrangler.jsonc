@@ -13,6 +13,13 @@
   "ai": {
     "binding": "AI"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lamou-music-promoter",
+      "database_id": "c62bd9a3-fb46-4ed0-81e0-8853387f4167"
+    }
+  ],
   "vars": {
     "APP_ENV": "production"
   }
