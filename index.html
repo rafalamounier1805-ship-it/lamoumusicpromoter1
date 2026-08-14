@@ -9,18 +9,33 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
+<style>
+.quick-access{width:min(1260px,calc(100% - 24px));margin:14px auto -8px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.quick-access button{border:1px solid #e1e7f0;background:#fff;color:#29344a;border-radius:14px;padding:12px 10px;font-weight:780;box-shadow:0 8px 24px rgba(27,40,72,.05)}
+.quick-access button strong{display:block;font-size:.9rem}.quick-access button small{display:block;color:#6f7a8d;font-size:.7rem;margin-top:2px;font-weight:600}
+@media(max-width:620px){.quick-access{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.quick-access button{padding:10px 5px;font-size:.82rem}.quick-access button small{display:none}.app-header .header-actions .soft-button span{display:none}}
+</style>
 </head>
 <body>
-<!-- Mantido apenas como alvo interno do código legado. Não há mais tela de login. -->
+<!-- Sem tela de login: o app abre direto. -->
 <div id="loginShell" class="hidden"><div id="authView"></div></div>
 
 <div id="appShell" class="app-shell hidden">
   <header class="app-header">
     <button class="brand-button" onclick="Lamou.go('home')"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
     <div class="header-actions">
-      <button class="soft-button" onclick="Lamou.runTests()">🧪 <span>Rodar teste</span></button>
+      <button class="soft-button" onclick="LamouUserManager.open()">👤 <span>Usuário</span></button>
+      <button class="soft-button" onclick="Lamou.openUser()">🔌 <span>Conexões</span></button>
+      <button class="soft-button" onclick="LamouInstall.install()">⬇️ <span>Instalar</span></button>
+      <button class="soft-button" onclick="Lamou.runTests()">🧪 <span>Teste</span></button>
     </div>
   </header>
+
+  <section class="quick-access" aria-label="Acessos rápidos">
+    <button onclick="LamouUserManager.open()">👤 <strong>Usuário</strong><small>trocar ou criar</small></button>
+    <button onclick="Lamou.openUser()">🔌 <strong>Conexões</strong><small>Spotify e redes</small></button>
+    <button onclick="LamouInstall.install()">⬇️ <strong>Instalar app</strong><small>adicionar ao celular</small></button>
+  </section>
 
   <main id="appRoot"></main>
 
@@ -35,23 +50,51 @@
 <div id="toast" class="toast"></div>
 
 <script>
-/* Modo simples: entra direto no app, sem cadastro, senha ou sessão de backend. */
+/* Entrada direta com múltiplos usuários locais. Cada usuário mantém seu próprio perfil/histórico/radar. */
 (() => {
   const STORE='lamou_v10_db';
   const SESSION='lamou_v10_session';
-  const KEY='lamou-local';
-  let data={};
-  try { data=JSON.parse(localStorage.getItem(STORE)||'{}')||{}; } catch (_) { data={}; }
-  if(!data.accounts || typeof data.accounts!=='object') data.accounts={};
-  if(!data.accounts[KEY]) data.accounts[KEY]={name:'LAMOU',email:'',createdAt:new Date().toISOString(),localOnly:true};
-  data.current=KEY;
-  data.profile=data.profile||{};
-  if(!data.profile.displayName) data.profile.displayName='LAMOU';
-  try {
-    localStorage.setItem(STORE,JSON.stringify(data));
-    localStorage.setItem(SESSION,KEY);
-    sessionStorage.setItem(SESSION,KEY);
-  } catch (_) {}
+  const DEFAULT_CONNECTIONS={spotify:'red',instagram:'red',tiktok:'red',youtube:'red',facebook:'red',threads:'red',amuse:'yellow'};
+  const read=()=>{try{return JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(_){return {}}};
+  const write=d=>localStorage.setItem(STORE,JSON.stringify(d));
+  const workspaceFrom=d=>({profile:d.profile||{},connections:d.connections||DEFAULT_CONNECTIONS,history:Array.isArray(d.history)?d.history:[],draft:d.draft||null,radar:Array.isArray(d.radar)?d.radar:[]});
+  const blankWorkspace=a=>({profile:{displayName:a.name||'LAMOU',email:a.email||'',adCode:'',artistUrl:'',artistName:'',artistImage:'',artistStats:null,localAI:false},connections:{...DEFAULT_CONNECTIONS},history:[],draft:null,radar:[]});
+  function archiveCurrent(d){if(d.current&&d.accounts?.[d.current])d.accounts[d.current].workspace=workspaceFrom(d)}
+  function loadWorkspace(d,key){const a=d.accounts[key],w=a.workspace||blankWorkspace(a);d.profile=w.profile;d.connections=w.connections;d.history=w.history;d.draft=w.draft;d.radar=w.radar;d.current=key;write(d);localStorage.setItem(SESSION,key);sessionStorage.setItem(SESSION,key)}
+
+  let data=read();
+  if(!data.accounts||typeof data.accounts!=='object')data.accounts={};
+  if(!Object.keys(data.accounts).length)data.accounts['lamou-local']={name:'LAMOU',email:'',createdAt:new Date().toISOString(),localOnly:true};
+  let current=(data.current&&data.accounts[data.current])?data.current:(localStorage.getItem(SESSION)&&data.accounts[localStorage.getItem(SESSION)]?localStorage.getItem(SESSION):Object.keys(data.accounts)[0]);
+  data.current=current;
+  if(!data.profile)data.profile=(data.accounts[current].workspace||blankWorkspace(data.accounts[current])).profile;
+  write(data);localStorage.setItem(SESSION,current);sessionStorage.setItem(SESSION,current);
+
+  window.LamouUserManager={
+    open(){
+      const d=read(),keys=Object.keys(d.accounts||{}),root=document.getElementById('modalRoot');
+      const rows=keys.map(k=>{const a=d.accounts[k],on=k===d.current;return `<button class="channel-item ${on?'on':''}" style="grid-template-columns:1fr auto" onclick="LamouUserManager.switchTo('${k}')"><div><b>${String(a.name||k).replace(/[&<>\"']/g,'')}</b><small>${String(a.email||'').replace(/[&<>\"']/g,'')}</small></div><span class="status ${on?'green':'gray'}">${on?'Ativo':'Trocar'}</span></button>`}).join('');
+      root.innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)LamouUserManager.close()"><section class="modal"><div class="modal-head"><div><div class="eyebrow">USUÁRIOS</div><h2>Quem está usando o LAMOU?</h2></div><button class="icon-button" onclick="LamouUserManager.close()">×</button></div><div class="channel-list">${rows}</div><div class="row" style="margin-top:14px"><button class="primary-button" onclick="LamouUserManager.create()">＋ Novo usuário</button><button class="ghost-button" onclick="LamouUserManager.edit()">Editar atual</button><button class="ghost-button" onclick="LamouUserManager.connections()">🔌 Conexões</button><button class="ghost-button" onclick="LamouUserManager.remove()">Excluir atual</button></div><div class="notice" style="margin-top:12px">Ao trocar de usuário, perfil, conexões, histórico, rascunhos e Radar ficam separados.</div></section></div>`;
+    },
+    close(){document.getElementById('modalRoot').innerHTML=''},
+    switchTo(key){const d=read();if(!d.accounts?.[key])return;archiveCurrent(d);loadWorkspace(d,key);location.reload()},
+    create(){const name=prompt('Nome do novo usuário/artista:');if(!name?.trim())return;const email=(prompt('E-mail (opcional):','')||'').trim();const d=read();archiveCurrent(d);const key='user_'+Date.now().toString(36);d.accounts[key]={name:name.trim(),email,createdAt:new Date().toISOString(),localOnly:true};d.accounts[key].workspace=blankWorkspace(d.accounts[key]);loadWorkspace(d,key);location.reload()},
+    edit(){const d=read(),a=d.accounts?.[d.current];if(!a)return;const name=prompt('Nome do usuário/artista:',a.name||'LAMOU');if(!name?.trim())return;const email=prompt('E-mail:',a.email||'');a.name=name.trim();a.email=String(email??a.email??'').trim();d.profile=d.profile||{};d.profile.displayName=a.name;d.profile.email=a.email;write(d);location.reload()},
+    remove(){const d=read(),keys=Object.keys(d.accounts||{});if(keys.length<=1){alert('Mantenha pelo menos um usuário no app.');return}const a=d.accounts[d.current];if(!confirm(`Excluir o usuário ${a?.name||''} deste aparelho?`))return;delete d.accounts[d.current];const next=Object.keys(d.accounts)[0];loadWorkspace(d,next);location.reload()},
+    connections(){this.close();setTimeout(()=>window.Lamou?.openUser(),0)}
+  };
+
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
+  window.addEventListener('appinstalled',()=>{deferred=null});
+  window.LamouInstall={
+    async install(){
+      if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true){alert('O LAMOU já está instalado neste aparelho.');return}
+      if(deferred){deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;return}
+      const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+      alert(ios?'No Safari: toque em Compartilhar e depois em “Adicionar à Tela de Início”.':'No Chrome: abra o menu ⋮ e toque em “Instalar app” ou “Adicionar à tela inicial”. Se a opção ainda não apareceu, recarregue a página uma vez.');
+    }
+  };
 })();
 </script>
 <script src="lamou-v10.js"></script>
