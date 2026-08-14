@@ -4,6 +4,7 @@
   "main": "backend/worker-entry-v10.js",
   "compatibility_date": "2026-08-14",
   "workers_dev": true,
+  "keep_vars": true,
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
