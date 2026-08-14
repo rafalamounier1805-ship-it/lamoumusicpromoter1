@@ -1,3 +1,5 @@
+import { ensureSchema } from './schema-v10.js';
+
 const json=(data,status=200,headers={})=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store',...headers}});
 const now=()=>new Date().toISOString();
 const uid=()=>crypto.randomUUID();
@@ -36,11 +38,15 @@ async function publish(req,env,user){const x=await body(req);return json({ok:fal
 export default {
   async fetch(req,env){
     const url=new URL(req.url),path=url.pathname;
-    if(path==='/api/health')return json({ok:true,service:'lamou-v10',time:now(),db:!!env.DB,ai:!!env.AI,vector:!!env.MUSIC_VECTOR});
+    let schema=null;
+    if(env.DB&&(path==='/api/health'||path.startsWith('/api/auth/')))schema=await ensureSchema(env.DB);
+    if(path==='/api/health')return json({ok:true,service:'lamou-v10',time:now(),db:!!env.DB,db_ready:!!schema?.ready,db_tables:schema?.tables||0,db_error:schema?.error||null,ai:!!env.AI,vector:!!env.MUSIC_VECTOR});
     if(path==='/api/ai/health')return json({ok:!!env.AI,provider:env.AI?'Cloudflare Workers AI':'not-bound'});
+    if(path.startsWith('/api/auth/')&&env.DB&&!schema?.ready)return json({error:'Banco D1 conectado, mas o esquema ainda não ficou pronto.',detail:schema?.error||null},503);
     if(path==='/api/auth/register'&&req.method==='POST')return register(req,env);
     if(path==='/api/auth/login'&&req.method==='POST')return login(req,env);
     if(path==='/api/auth/forgot'&&req.method==='POST')return forgot(req,env);
+    if(path.startsWith('/api/')&&!env.DB&&path!=='/api/health'&&path!=='/api/ai/health')return json({error:'Banco D1 não conectado.'},503);
     const user=await currentUser(req,env);
     if(path.startsWith('/api/')&&!user&&path!=='/api/health'&&path!=='/api/ai/health')return json({error:'Não autenticado.'},401);
     if(path==='/api/auth/logout'&&req.method==='POST')return logout(req,env);
