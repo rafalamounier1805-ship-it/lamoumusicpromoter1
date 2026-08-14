@@ -9,12 +9,6 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
-<style>
-.quick-access{width:min(1260px,calc(100% - 24px));margin:14px auto -8px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.quick-access button{border:1px solid #e1e7f0;background:#fff;color:#29344a;border-radius:14px;padding:12px 10px;font-weight:780;box-shadow:0 8px 24px rgba(27,40,72,.05)}
-.quick-access button strong{display:block;font-size:.9rem}.quick-access button small{display:block;color:#6f7a8d;font-size:.7rem;margin-top:2px;font-weight:600}
-@media(max-width:620px){.quick-access{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.quick-access button{padding:10px 5px;font-size:.82rem}.quick-access button small{display:none}.app-header .header-actions .soft-button span{display:none}}
-</style>
 </head>
 <body>
 <!-- Sem tela de login: o app abre direto. -->
@@ -24,18 +18,9 @@
   <header class="app-header">
     <button class="brand-button" onclick="Lamou.go('home')"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
     <div class="header-actions">
-      <button class="soft-button" onclick="LamouUserManager.open()">👤 <span>Usuário</span></button>
-      <button class="soft-button" onclick="Lamou.openUser()">🔌 <span>Conexões</span></button>
-      <button class="soft-button" onclick="LamouInstall.install()">⬇️ <span>Instalar</span></button>
-      <button class="soft-button" onclick="Lamou.runTests()">🧪 <span>Teste</span></button>
+      <button class="soft-button" onclick="LamouUserManager.menu()" aria-label="Menu do LAMOU">⚙️ <span>Menu</span></button>
     </div>
   </header>
-
-  <section class="quick-access" aria-label="Acessos rápidos">
-    <button onclick="LamouUserManager.open()">👤 <strong>Usuário</strong><small>trocar ou criar</small></button>
-    <button onclick="Lamou.openUser()">🔌 <strong>Conexões</strong><small>Spotify e redes</small></button>
-    <button onclick="LamouInstall.install()">⬇️ <strong>Instalar app</strong><small>adicionar ao celular</small></button>
-  </section>
 
   <main id="appRoot"></main>
 
@@ -65,23 +50,56 @@
   let data=read();
   if(!data.accounts||typeof data.accounts!=='object')data.accounts={};
   if(!Object.keys(data.accounts).length)data.accounts['lamou-local']={name:'LAMOU',email:'',createdAt:new Date().toISOString(),localOnly:true};
-  let current=(data.current&&data.accounts[data.current])?data.current:(localStorage.getItem(SESSION)&&data.accounts[localStorage.getItem(SESSION)]?localStorage.getItem(SESSION):Object.keys(data.accounts)[0]);
+
+  const keys=Object.keys(data.accounts);
+  const priorKeys=keys.filter(k=>k!=='lamou-local');
+  let current=(data.current&&data.accounts[data.current])?data.current:(localStorage.getItem(SESSION)&&data.accounts[localStorage.getItem(SESSION)]?localStorage.getItem(SESSION):keys[0]);
+  /* Migração: se a simplificação anterior criou o perfil temporário LAMOU, volta automaticamente ao usuário antigo existente. */
+  if(current==='lamou-local'&&priorKeys.length){
+    current=priorKeys.find(k=>data.accounts[k]?.backend)||priorKeys.find(k=>data.accounts[k]?.email)||priorKeys[0];
+  }
   data.current=current;
-  if(!data.profile)data.profile=(data.accounts[current].workspace||blankWorkspace(data.accounts[current])).profile;
+  if(data.accounts[current]?.workspace){
+    const w=data.accounts[current].workspace;
+    data.profile=w.profile||data.profile||{};
+    data.connections=w.connections||data.connections||DEFAULT_CONNECTIONS;
+    data.history=Array.isArray(w.history)?w.history:(Array.isArray(data.history)?data.history:[]);
+    data.draft=w.draft??data.draft??null;
+    data.radar=Array.isArray(w.radar)?w.radar:(Array.isArray(data.radar)?data.radar:[]);
+  } else {
+    data.profile=data.profile||blankWorkspace(data.accounts[current]).profile;
+    data.connections=data.connections||{...DEFAULT_CONNECTIONS};
+    data.history=Array.isArray(data.history)?data.history:[];
+    data.radar=Array.isArray(data.radar)?data.radar:[];
+  }
   write(data);localStorage.setItem(SESSION,current);sessionStorage.setItem(SESSION,current);
 
+  const clean=s=>String(s||'').replace(/[&<>\"']/g,'');
+  function modal(html){document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)LamouUserManager.close()"><section class="modal">${html}</section></div>`}
+
   window.LamouUserManager={
+    menu(){
+      const d=read(),a=d.accounts?.[d.current]||{},c=d.connections||{};
+      const connected=Object.values(c).filter(v=>v==='green').length;
+      modal(`<div class="modal-head"><div><div class="eyebrow">LAMOU</div><h2>${clean(a.name||d.profile?.displayName||'Usuário')}</h2><p class="sub">${connected} conexão(ões) ativa(s)</p></div><button class="icon-button" onclick="LamouUserManager.close()">×</button></div>
+      <div class="mode-grid" style="grid-template-columns:repeat(2,1fr)">
+        <button class="choice-card" onclick="LamouUserManager.open()"><span class="choice-icon">👤</span><strong>Usuários</strong><small>Trocar, criar ou editar.</small></button>
+        <button class="choice-card" onclick="LamouUserManager.connections()"><span class="choice-icon">🔌</span><strong>Conexões</strong><small>Spotify e demais plataformas.</small></button>
+        <button class="choice-card" onclick="LamouInstall.install()"><span class="choice-icon">⬇️</span><strong>Instalar app</strong><small>Adicionar o LAMOU ao celular.</small></button>
+        <button class="choice-card" onclick="LamouUserManager.tests()"><span class="choice-icon">🧪</span><strong>Rodar teste</strong><small>Verificar funções do app.</small></button>
+      </div>`);
+    },
     open(){
-      const d=read(),keys=Object.keys(d.accounts||{}),root=document.getElementById('modalRoot');
-      const rows=keys.map(k=>{const a=d.accounts[k],on=k===d.current;return `<button class="channel-item ${on?'on':''}" style="grid-template-columns:1fr auto" onclick="LamouUserManager.switchTo('${k}')"><div><b>${String(a.name||k).replace(/[&<>\"']/g,'')}</b><small>${String(a.email||'').replace(/[&<>\"']/g,'')}</small></div><span class="status ${on?'green':'gray'}">${on?'Ativo':'Trocar'}</span></button>`}).join('');
-      root.innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)LamouUserManager.close()"><section class="modal"><div class="modal-head"><div><div class="eyebrow">USUÁRIOS</div><h2>Quem está usando o LAMOU?</h2></div><button class="icon-button" onclick="LamouUserManager.close()">×</button></div><div class="channel-list">${rows}</div><div class="row" style="margin-top:14px"><button class="primary-button" onclick="LamouUserManager.create()">＋ Novo usuário</button><button class="ghost-button" onclick="LamouUserManager.edit()">Editar atual</button><button class="ghost-button" onclick="LamouUserManager.connections()">🔌 Conexões</button><button class="ghost-button" onclick="LamouUserManager.remove()">Excluir atual</button></div><div class="notice" style="margin-top:12px">Ao trocar de usuário, perfil, conexões, histórico, rascunhos e Radar ficam separados.</div></section></div>`;
+      const d=read(),ks=Object.keys(d.accounts||{}),rows=ks.map(k=>{const a=d.accounts[k],on=k===d.current;return `<button class="channel-item ${on?'on':''}" style="grid-template-columns:1fr auto" onclick="LamouUserManager.switchTo('${k}')"><div><b>${clean(a.name||k)}</b><small>${clean(a.email||'')}</small></div><span class="status ${on?'green':'gray'}">${on?'Ativo':'Trocar'}</span></button>`}).join('');
+      modal(`<div class="modal-head"><div><div class="eyebrow">USUÁRIOS</div><h2>Escolha o perfil</h2></div><button class="icon-button" onclick="LamouUserManager.close()">×</button></div><div class="channel-list">${rows}</div><div class="row" style="margin-top:14px"><button class="primary-button" onclick="LamouUserManager.create()">＋ Novo usuário</button><button class="ghost-button" onclick="LamouUserManager.edit()">Editar atual</button><button class="ghost-button" onclick="LamouUserManager.remove()">Excluir atual</button></div><div class="notice" style="margin-top:12px">Perfil, conexões, histórico, rascunhos e Radar ficam separados por usuário.</div></section></div>`;
     },
     close(){document.getElementById('modalRoot').innerHTML=''},
     switchTo(key){const d=read();if(!d.accounts?.[key])return;archiveCurrent(d);loadWorkspace(d,key);location.reload()},
     create(){const name=prompt('Nome do novo usuário/artista:');if(!name?.trim())return;const email=(prompt('E-mail (opcional):','')||'').trim();const d=read();archiveCurrent(d);const key='user_'+Date.now().toString(36);d.accounts[key]={name:name.trim(),email,createdAt:new Date().toISOString(),localOnly:true};d.accounts[key].workspace=blankWorkspace(d.accounts[key]);loadWorkspace(d,key);location.reload()},
     edit(){const d=read(),a=d.accounts?.[d.current];if(!a)return;const name=prompt('Nome do usuário/artista:',a.name||'LAMOU');if(!name?.trim())return;const email=prompt('E-mail:',a.email||'');a.name=name.trim();a.email=String(email??a.email??'').trim();d.profile=d.profile||{};d.profile.displayName=a.name;d.profile.email=a.email;write(d);location.reload()},
-    remove(){const d=read(),keys=Object.keys(d.accounts||{});if(keys.length<=1){alert('Mantenha pelo menos um usuário no app.');return}const a=d.accounts[d.current];if(!confirm(`Excluir o usuário ${a?.name||''} deste aparelho?`))return;delete d.accounts[d.current];const next=Object.keys(d.accounts)[0];loadWorkspace(d,next);location.reload()},
-    connections(){this.close();setTimeout(()=>window.Lamou?.openUser(),0)}
+    remove(){const d=read(),ks=Object.keys(d.accounts||{});if(ks.length<=1){alert('Mantenha pelo menos um usuário no app.');return}const a=d.accounts[d.current];if(!confirm(`Excluir o usuário ${a?.name||''} deste aparelho?`))return;delete d.accounts[d.current];const next=Object.keys(d.accounts)[0];loadWorkspace(d,next);location.reload()},
+    connections(){this.close();setTimeout(()=>window.Lamou?.openUser(),0)},
+    tests(){this.close();setTimeout(()=>window.Lamou?.runTests(),0)}
   };
 
   let deferred=null;
