@@ -11,20 +11,14 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="loginShell" class="login-shell">
-  <div class="login-orbit orbit-a"></div><div class="login-orbit orbit-b"></div>
-  <section class="login-card">
-    <div class="login-brand"><img src="icon-192.svg" alt="LAMOU"><div><b>LAMOU</b><span>Music Promoter</span></div></div>
-    <div id="authView"></div>
-  </section>
-</div>
+<!-- Mantido apenas como alvo interno do código legado. Não há mais tela de login. -->
+<div id="loginShell" class="hidden"><div id="authView"></div></div>
 
 <div id="appShell" class="app-shell hidden">
   <header class="app-header">
-    <button class="brand-button" onclick="Lamou.openUser()"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">Usuário</small></span></button>
+    <button class="brand-button" onclick="Lamou.go('home')"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
     <div class="header-actions">
       <button class="soft-button" onclick="Lamou.runTests()">🧪 <span>Rodar teste</span></button>
-      <button class="soft-button danger" onclick="Lamou.logout()">Sair</button>
     </div>
   </header>
 
@@ -39,7 +33,27 @@
 
 <div id="modalRoot"></div>
 <div id="toast" class="toast"></div>
+
+<script>
+/* Modo simples: entra direto no app, sem cadastro, senha ou sessão de backend. */
+(() => {
+  const STORE='lamou_v10_db';
+  const SESSION='lamou_v10_session';
+  const KEY='lamou-local';
+  let data={};
+  try { data=JSON.parse(localStorage.getItem(STORE)||'{}')||{}; } catch (_) { data={}; }
+  if(!data.accounts || typeof data.accounts!=='object') data.accounts={};
+  if(!data.accounts[KEY]) data.accounts[KEY]={name:'LAMOU',email:'',createdAt:new Date().toISOString(),localOnly:true};
+  data.current=KEY;
+  data.profile=data.profile||{};
+  if(!data.profile.displayName) data.profile.displayName='LAMOU';
+  try {
+    localStorage.setItem(STORE,JSON.stringify(data));
+    localStorage.setItem(SESSION,KEY);
+    sessionStorage.setItem(SESSION,KEY);
+  } catch (_) {}
+})();
+</script>
 <script src="lamou-v10.js"></script>
-<script src="auth-backend-v10.js"></script>
 </body>
 </html>
