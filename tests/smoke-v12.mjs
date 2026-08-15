@@ -31,6 +31,9 @@ assert.match(stability,/data-v12-switch-account/,'account switching must use the
 assert.match(uiPolish,/Meu perfil/,'legacy Users card must be relabeled as the unified profile');
 assert.match(uiPolish,/regEmail/,'first-access migration form should be prefilled');
 assert.match(uiPolish,/getRegistration\(\).*update/,'installed PWA should proactively check for updates');
+assert.match(uiPolish,/function setTextIfChanged/,'UI polish must use idempotent text updates');
+assert.match(uiPolish,/el&&el\.textContent!==value/,'MutationObserver must not write identical text repeatedly');
+assert(!uiPolish.includes("if(strong)strong.textContent='Meu perfil'"),'settings menu must not contain the old recursive observer write');
 
 assert.match(workerEntry,/BUILD='12\.0\.0-stability'/,'worker must expose the v12 build');
 assert.match(workerEntry,/path==='\/api\/version'/,'worker must expose a live version endpoint');
