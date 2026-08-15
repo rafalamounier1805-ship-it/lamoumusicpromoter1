@@ -34,6 +34,6 @@ jobs:
           ! grep -q 'stability-v12.js' index.html
           ! grep -q 'ui-polish-v12.js' index.html
           grep -q 'backend/worker-entry-reach.js' wrangler.jsonc
-          grep -q 'lamou-spotify-workflow-v2' sw.js
+          grep -q 'lamou-spotify-workflow-v3' sw.js
       - name: Run workflow smoke test
         run: node tests/smoke-reach.mjs
