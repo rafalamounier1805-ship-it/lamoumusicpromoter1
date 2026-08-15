@@ -21,6 +21,7 @@ jobs:
           node --check bootstrap-v11.js
           node --check migration-v11.js
           node --check stability-v12.js
+          node --check ui-polish-v12.js
           node --check sw.js
           node --check backend/worker-v10.js
           node --check backend/worker-entry-v10.js
@@ -33,6 +34,7 @@ jobs:
           test -s bootstrap-v11.js
           test -s migration-v11.js
           test -s stability-v12.js
+          test -s ui-polish-v12.js
           test -s manifest.webmanifest
           test -s LAMOU_V10_SPEC.md
           test -s backend/schema-v10.sql
@@ -44,6 +46,7 @@ jobs:
           grep -q 'bootstrap-v11.js' index.html
           grep -q 'migration-v11.js' index.html
           grep -q 'stability-v12.js' index.html
+          grep -q 'ui-polish-v12.js' index.html
           ! grep -q 'core.js' index.html
           ! grep -q 'strategy.js' index.html
       - name: Run v12 regression smoke tests
