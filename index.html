@@ -9,6 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="workflow.css">
 </head>
 <body>
 <div id="loginShell" class="hidden"><div id="authView"></div></div>
@@ -19,9 +20,9 @@
   </header>
   <main id="appRoot"></main>
   <nav id="bottomNav" class="bottom-nav hidden" aria-label="Navegação principal">
-    <button data-view="new" onclick="Lamou.go('new')">🎯<span>Divulgar</span></button>
+    <button data-view="new" onclick="Lamou.go('new')">＋<span>Nova música</span></button>
     <button data-view="history" onclick="Lamou.go('history')">◷<span>Histórico</span></button>
-    <button data-view="radar" onclick="Lamou.go('radar')">◎<span>Preparar</span></button>
+    <button data-view="results" onclick="Lamou.go('results')">◎<span>Resultados</span></button>
   </nav>
 </div>
 <div id="modalRoot"></div>
