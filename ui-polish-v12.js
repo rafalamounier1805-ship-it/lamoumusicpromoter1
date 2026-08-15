@@ -11,13 +11,15 @@
     return {name,email,username};
   }
 
+  function setTextIfChanged(el,value){
+    if(el&&el.textContent!==value)el.textContent=value;
+  }
+
   function polish(){
     const card=document.querySelector('[data-action="users"]');
     if(card){
-      const strong=card.querySelector('strong');
-      const small=card.querySelector('small');
-      if(strong)strong.textContent='Meu perfil';
-      if(small)small.textContent='Dados, conta e conexões.';
+      setTextIfChanged(card.querySelector('strong'),'Meu perfil');
+      setTextIfChanged(card.querySelector('small'),'Dados, conta e conexões.');
     }
 
     const {name,email,username}=currentIdentity();
@@ -33,7 +35,8 @@
   }
 
   polish();
-  new MutationObserver(polish).observe(document.documentElement,{subtree:true,childList:true});
+  const observer=new MutationObserver(polish);
+  observer.observe(document.documentElement,{subtree:true,childList:true});
 
   if('serviceWorker' in navigator){
     navigator.serviceWorker.getRegistration().then(reg=>reg?.update()).catch(()=>{});
