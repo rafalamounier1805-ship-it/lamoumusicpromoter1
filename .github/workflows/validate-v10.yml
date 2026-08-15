@@ -1,4 +1,4 @@
-name: Validate LAMOU Spotify Workflow
+name: Validate LAMOU Clean Core
 on:
   push:
     branches: [main]
@@ -15,25 +15,23 @@ jobs:
           node-version: '22'
       - name: Check JavaScript syntax
         run: |
-          node --check shell-v10.js
-          node --check app.js
+          node --check app-core.js
           node --check integrations-v10.js
           node --check sw.js
           node --check backend/worker-v10.js
           node --check backend/worker-entry-reach.js
+          node --check backend/worker-entry-app.js
           node --check backend/schema-v10.js
           node --check tests/smoke-reach.mjs
       - name: Check clean entrypoint
         run: |
-          grep -q 'app.js' index.html
-          grep -q 'workflow.css' index.html
+          grep -q 'app-core.js' index.html
+          grep -q 'app-core.css' index.html
           grep -q 'integrations-v10.js' index.html
+          ! grep -q 'shell-v10.js' index.html
+          ! grep -q 'app.js' index.html
           ! grep -q 'lamou-v10.js' index.html
-          ! grep -q 'bootstrap-v11.js' index.html
-          ! grep -q 'migration-v11.js' index.html
-          ! grep -q 'stability-v12.js' index.html
-          ! grep -q 'ui-polish-v12.js' index.html
-          grep -q 'backend/worker-entry-reach.js' wrangler.jsonc
-          grep -q 'lamou-spotify-workflow-v3' sw.js
+          grep -q 'backend/worker-entry-app.js' wrangler.jsonc
+          grep -q 'lamou-clean-core-ranking-v4' sw.js
       - name: Run workflow smoke test
         run: node tests/smoke-reach.mjs
