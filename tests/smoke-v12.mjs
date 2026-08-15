@@ -7,15 +7,17 @@ const sw = read('sw.js');
 const integrations = read('integrations-v10.js');
 const migration = read('migration-v11.js');
 const stability = read('stability-v12.js');
+const uiPolish = read('ui-polish-v12.js');
 const workerEntry = read('backend/worker-entry-v10.js');
 
-const order = ['integrations-v10.js','bootstrap-v11.js','migration-v11.js','stability-v12.js'].map(x=>index.indexOf(x));
+const order = ['integrations-v10.js','bootstrap-v11.js','migration-v11.js','stability-v12.js','ui-polish-v12.js'].map(x=>index.indexOf(x));
 assert(order.every(x=>x>=0),'v12 scripts must be loaded');
-assert(order.every((x,i)=>i===0||x>order[i-1]),'script order must preserve OAuth -> bootstrap -> migration -> stability');
+assert(order.every((x,i)=>i===0||x>order[i-1]),'script order must preserve OAuth -> bootstrap -> migration -> stability -> UI polish');
 
 assert.match(sw,/pathname\.startsWith\('\/api\/'\)/,'service worker must bypass API routes');
 assert.match(sw,/request\.mode==='navigate'/,'SPA fallback must apply only to navigation');
 assert(!/cache\.put\(event\.request/.test(sw),'service worker must not blindly cache every GET');
+assert.match(sw,/ui-polish-v12\.js/,'latest PWA cache must include UI polish');
 
 assert(!integrations.includes('Ativar integrações'),'integration module must not render a second login modal');
 assert(!integrations.includes('intLoginPass'),'integration module must not own a second password field');
@@ -26,6 +28,9 @@ assert.match(stability,/FINAL=new Set\(\['published','completed','concluded','se
 assert.match(stability,/window\.dispatchEvent\(new Event\('beforeunload'\)\)/,'wizard must sync visible identity fields before navigation');
 assert.match(stability,/Voltar ao hook →/,'dead campaign navigation button must be removed at runtime');
 assert.match(stability,/data-v12-switch-account/,'account switching must use the unified session path');
+assert.match(uiPolish,/Meu perfil/,'legacy Users card must be relabeled as the unified profile');
+assert.match(uiPolish,/regEmail/,'first-access migration form should be prefilled');
+assert.match(uiPolish,/getRegistration\(\).*update/,'installed PWA should proactively check for updates');
 
 assert.match(workerEntry,/BUILD='12\.0\.0-stability'/,'worker must expose the v12 build');
 assert.match(workerEntry,/path==='\/api\/version'/,'worker must expose a live version endpoint');
