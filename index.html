@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#5c5ff2">
-<meta name="description" content="LAMOU Music Promoter — inteligência e divulgação musical.">
+<meta name="description" content="LAMOU Music Promoter — divulgação musical profissional e legal.">
 <title>LAMOU Music Promoter</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
@@ -12,32 +12,22 @@
 </head>
 <body>
 <div id="loginShell" class="hidden"><div id="authView"></div></div>
-
 <div id="appShell" class="app-shell hidden">
   <header class="app-header">
     <button class="brand-button" onclick="Lamou.go('home')"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
-    <div class="header-actions">
-      <button id="lamouMenuBtn" type="button" class="soft-button" aria-label="Abrir menu do LAMOU">⚙️ <span>Menu</span></button>
-    </div>
+    <div class="header-actions"><button id="lamouMenuBtn" type="button" class="soft-button" aria-label="Abrir menu do LAMOU">⚙️ <span>Menu</span></button></div>
   </header>
-
   <main id="appRoot"></main>
-
   <nav id="bottomNav" class="bottom-nav hidden" aria-label="Navegação principal">
-    <button data-view="new" onclick="Lamou.go('new')">＋<span>Nova música</span></button>
+    <button data-view="new" onclick="Lamou.go('new')">🎯<span>Divulgar</span></button>
     <button data-view="history" onclick="Lamou.go('history')">◷<span>Histórico</span></button>
-    <button data-view="radar" onclick="Lamou.go('radar')">◎<span>Radar</span></button>
+    <button data-view="radar" onclick="Lamou.go('radar')">◎<span>Preparar</span></button>
   </nav>
 </div>
-
 <div id="modalRoot"></div>
 <div id="toast" class="toast"></div>
 <script src="shell-v10.js"></script>
-<script src="lamou-v10.js"></script>
+<script src="app.js"></script>
 <script src="integrations-v10.js"></script>
-<script src="bootstrap-v11.js"></script>
-<script src="migration-v11.js"></script>
-<script src="stability-v12.js"></script>
-<script src="ui-polish-v12.js"></script>
 </body>
 </html>
