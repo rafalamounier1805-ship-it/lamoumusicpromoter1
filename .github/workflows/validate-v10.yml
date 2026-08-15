@@ -1,4 +1,4 @@
-name: Validate LAMOU v12
+name: Validate LAMOU Outreach
 on:
   push:
     branches: [main]
@@ -16,38 +16,23 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check shell-v10.js
-          node --check lamou-v10.js
+          node --check app.js
           node --check integrations-v10.js
-          node --check bootstrap-v11.js
-          node --check migration-v11.js
-          node --check stability-v12.js
-          node --check ui-polish-v12.js
           node --check sw.js
           node --check backend/worker-v10.js
-          node --check backend/worker-entry-v10.js
+          node --check backend/worker-entry-reach.js
           node --check backend/schema-v10.js
-          node --check tests/smoke-v12.mjs
-      - name: Check required files
+          node --check tests/smoke-reach.mjs
+      - name: Check clean entrypoint
         run: |
-          test -s index.html
-          test -s styles.css
-          test -s bootstrap-v11.js
-          test -s migration-v11.js
-          test -s stability-v12.js
-          test -s ui-polish-v12.js
-          test -s manifest.webmanifest
-          test -s LAMOU_V10_SPEC.md
-          test -s backend/schema-v10.sql
-          test -s tests/smoke-v12.mjs
-      - name: Check v12 entrypoint
-        run: |
-          grep -q 'lamou-v10.js' index.html
+          grep -q 'app.js' index.html
           grep -q 'integrations-v10.js' index.html
-          grep -q 'bootstrap-v11.js' index.html
-          grep -q 'migration-v11.js' index.html
-          grep -q 'stability-v12.js' index.html
-          grep -q 'ui-polish-v12.js' index.html
-          ! grep -q 'core.js' index.html
-          ! grep -q 'strategy.js' index.html
-      - name: Run v12 regression smoke tests
-        run: node tests/smoke-v12.mjs
+          ! grep -q 'lamou-v10.js' index.html
+          ! grep -q 'bootstrap-v11.js' index.html
+          ! grep -q 'migration-v11.js' index.html
+          ! grep -q 'stability-v12.js' index.html
+          ! grep -q 'ui-polish-v12.js' index.html
+          grep -q 'backend/worker-entry-reach.js' wrangler.jsonc
+          grep -q 'lamou-reach-spotify-only' sw.js
+      - name: Run outreach smoke test
+        run: node tests/smoke-reach.mjs
