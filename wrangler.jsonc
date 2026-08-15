@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "lamoumusicpromoteroficial",
-  "main": "backend/worker-entry-v13.js",
+  "main": "backend/worker-entry-v14.js",
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
@@ -17,5 +17,10 @@
   },
   "ai": {"binding": "AI"},
   "d1_databases": [{"binding":"DB","database_name":"lamou-music-promoter","database_id":"c62bd9a3-fb46-4ed0-81e0-8853387f4167"}],
-  "vars": {"APP_ENV":"production","SPOTIFY_CLIENT_ID":"8a9c328f33b14bad9b48473d238925fc"}
+  "vars": {
+    "APP_ENV":"production",
+    "SPOTIFY_CLIENT_ID":"8a9c328f33b14bad9b48473d238925fc",
+    "EMAIL_PROVIDER":"resend",
+    "EMAIL_DAILY_LIMIT":"20"
+  }
 }
