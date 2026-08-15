@@ -1,5 +1,5 @@
-const CACHE='lamou-v12-stability1';
-const ASSETS=['./','./index.html','./styles.css','./shell-v10.js','./lamou-v10.js','./integrations-v10.js','./bootstrap-v11.js','./migration-v11.js','./stability-v12.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg'];
+const CACHE='lamou-v12-stability2';
+const ASSETS=['./','./index.html','./styles.css','./shell-v10.js','./lamou-v10.js','./integrations-v10.js','./bootstrap-v11.js','./migration-v11.js','./stability-v12.js','./ui-polish-v12.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(
