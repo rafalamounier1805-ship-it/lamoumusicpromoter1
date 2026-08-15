@@ -1,9 +1,9 @@
-const CACHE='lamou-runtime-v13';
+const CACHE='lamou-runtime-v14';
 const ASSETS=[
   './','./index.html',
-  './styles.css?v=13','./workflow.css?v=13','./app-core.css?v=13',
-  './app-core.js?v=13','./integrations-v10.js?v=13','./runtime-v13.js?v=13',
-  './manifest.webmanifest?v=13','./icon-192.svg','./icon-512.svg'
+  './styles.css?v=14','./workflow.css?v=14','./app-core.css?v=14',
+  './app-core.js?v=14','./integrations-v10.js?v=14','./runtime-v13.js?v=14','./runtime-v14.js?v=14',
+  './manifest.webmanifest?v=14','./icon-192.svg','./icon-512.svg'
 ];
 
 self.addEventListener('install',event=>{
