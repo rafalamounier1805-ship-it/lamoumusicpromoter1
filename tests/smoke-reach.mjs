@@ -4,16 +4,19 @@ import assert from 'node:assert/strict';
 const index=fs.readFileSync('index.html','utf8');
 const app=fs.readFileSync('app-core.js','utf8');
 const integrations=fs.readFileSync('integrations-v10.js','utf8');
+const runtime=fs.readFileSync('runtime-v13.js','utf8');
 const worker=fs.readFileSync('backend/worker-entry-app.js','utf8');
 const reach=fs.readFileSync('backend/worker-entry-reach.js','utf8');
+const v13=fs.readFileSync('backend/worker-entry-v13.js','utf8');
 const wrangler=fs.readFileSync('wrangler.jsonc','utf8');
 const sw=fs.readFileSync('sw.js','utf8');
+const ignore=fs.readFileSync('.assetsignore','utf8');
 
 assert.match(index,/Nova música/);
 assert.match(index,/Histórico/);
 assert.match(index,/Resultados/);
-assert.match(index,/app-core\.js/);
-assert.match(index,/app-core\.css/);
+assert.match(index,/app-core\.js\?v=13/);
+assert.match(index,/runtime-v13\.js\?v=13/);
 assert.doesNotMatch(index,/shell-v10\.js|app\.js|bootstrap-v11|migration-v11|stability-v12|ui-polish-v12|lamou-v10\.js/);
 assert.match(index,/nav-icon/);
 
@@ -47,6 +50,26 @@ assert.match(worker,/ai_rank_reference/);
 assert.match(worker,/criteria:'technical-only'/);
 assert.match(worker,/popularity:false/);
 assert.match(reach,/Publicação em redes sociais foi removida/);
-assert.match(wrangler,/worker-entry-app\.js/);
-assert.match(sw,/lamou-clean-core-ranking-v4/);
-console.log('LAMOU clean core + Spotify profile + opt-out + AI ranking: OK');
+
+assert.match(v13,/Never replace a valid account cookie/);
+assert.match(v13,/\/api\/auth\/me/);
+assert.match(v13,/\/api\/spotify\/track/);
+assert.match(v13,/\/api\/diagnostics/);
+assert.match(v13,/CREATE TABLE IF NOT EXISTS app_state/);
+assert.match(runtime,/Entrar \/ criar conta/);
+assert.match(runtime,/Diagnóstico real/);
+assert.match(runtime,/computeRealHooks/);
+assert.match(runtime,/Metadados carregados/);
+assert.match(runtime,/maybeAutoAI/);
+assert.match(runtime,/persistState/);
+assert.match(runtime,/beforeinstallprompt/);
+
+assert.match(wrangler,/worker-entry-v13\.js/);
+assert.match(wrangler,/2026-08-15/);
+assert.match(wrangler,/nodejs_compat/);
+assert.match(sw,/lamou-runtime-v13/);
+assert.match(ignore,/^backend$/m);
+assert.match(ignore,/^wrangler\.jsonc$/m);
+assert.match(ignore,/^tests$/m);
+
+console.log('LAMOU runtime v13: auth + Spotify + D1 sync + AI + PWA + real hook checks OK');
