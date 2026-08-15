@@ -1,7 +1,7 @@
-name: Validate LAMOU Clean Core
+name: Validate LAMOU Runtime
 on:
   push:
-    branches: [main]
+    branches: [main, fix/runtime-v13]
   pull_request:
     branches: [main]
 
@@ -17,21 +17,25 @@ jobs:
         run: |
           node --check app-core.js
           node --check integrations-v10.js
+          node --check runtime-v13.js
           node --check sw.js
           node --check backend/worker-v10.js
           node --check backend/worker-entry-reach.js
           node --check backend/worker-entry-app.js
+          node --check backend/worker-entry-v13.js
           node --check backend/schema-v10.js
           node --check tests/smoke-reach.mjs
-      - name: Check clean entrypoint
+      - name: Check production entrypoint
         run: |
-          grep -q 'app-core.js' index.html
-          grep -q 'app-core.css' index.html
-          grep -q 'integrations-v10.js' index.html
+          grep -q 'app-core.js?v=13' index.html
+          grep -q 'runtime-v13.js?v=13' index.html
           ! grep -q 'shell-v10.js' index.html
           ! grep -q 'app.js' index.html
           ! grep -q 'lamou-v10.js' index.html
-          grep -q 'backend/worker-entry-app.js' wrangler.jsonc
-          grep -q 'lamou-clean-core-ranking-v4' sw.js
+          grep -q 'backend/worker-entry-v13.js' wrangler.jsonc
+          grep -q 'lamou-runtime-v13' sw.js
+          test -f .assetsignore
+          grep -q '^backend$' .assetsignore
+          grep -q '^wrangler.jsonc$' .assetsignore
       - name: Run workflow smoke test
         run: node tests/smoke-reach.mjs
