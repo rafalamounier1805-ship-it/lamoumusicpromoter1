@@ -1,8 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "lamoumusicpromoteroficial",
-  "main": "backend/worker-entry-app.js",
-  "compatibility_date": "2026-08-14",
+  "main": "backend/worker-entry-v13.js",
+  "compatibility_date": "2026-08-15",
+  "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
   "keep_vars": true,
   "secrets": {
