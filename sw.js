@@ -1,5 +1,5 @@
-const CACHE='lamou-v10-simple5';
-const ASSETS=['./','./index.html','./styles.css','./shell-v10.js','./lamou-v10.js','./integrations-v10.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg'];
+const CACHE='lamou-v11-cloud1';
+const ASSETS=['./','./index.html','./styles.css','./shell-v10.js','./lamou-v10.js','./integrations-v10.js','./bootstrap-v11.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
