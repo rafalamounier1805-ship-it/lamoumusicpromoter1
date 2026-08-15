@@ -1,4 +1,4 @@
-name: Validate LAMOU Outreach
+name: Validate LAMOU Spotify Workflow
 on:
   push:
     branches: [main]
@@ -26,6 +26,7 @@ jobs:
       - name: Check clean entrypoint
         run: |
           grep -q 'app.js' index.html
+          grep -q 'workflow.css' index.html
           grep -q 'integrations-v10.js' index.html
           ! grep -q 'lamou-v10.js' index.html
           ! grep -q 'bootstrap-v11.js' index.html
@@ -33,6 +34,6 @@ jobs:
           ! grep -q 'stability-v12.js' index.html
           ! grep -q 'ui-polish-v12.js' index.html
           grep -q 'backend/worker-entry-reach.js' wrangler.jsonc
-          grep -q 'lamou-reach-spotify-only' sw.js
-      - name: Run outreach smoke test
+          grep -q 'lamou-spotify-workflow-v2' sw.js
+      - name: Run workflow smoke test
         run: node tests/smoke-reach.mjs
