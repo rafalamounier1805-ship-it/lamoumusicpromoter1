@@ -259,6 +259,21 @@ async function verify(req,env,user){
   return json({ok:true,checked:output.length,results:output,checkedAt:now()});
 }
 
+async function verifyAllPublic(env){
+  await ensureTables(env);
+  const {results:tracks=[]}=await env.DB.prepare('SELECT * FROM submission_tracks').all();
+  let checked=0;
+  for(const tr of tracks){
+    await ensureStatesForTrack(env,tr.user_id,tr.id);
+    const {results:states=[]}=await env.DB.prepare('SELECT * FROM submission_states WHERE user_id=? AND track_id=?').bind(tr.user_id,tr.id).all();
+    for(const st of states){
+      await verifyState(env,{id:tr.user_id},tr,st);
+      checked++;
+    }
+  }
+  return checked;
+}
+
 export default {
   async fetch(req,env,ctx){
     const url=new URL(req.url), path=url.pathname;
@@ -273,5 +288,8 @@ export default {
       return json({error:'Rota de submissão não encontrada.'},404);
     }
     return app.fetch(req,env,ctx);
+  },
+  async scheduled(event,env,ctx){
+    ctx.waitUntil(verifyAllPublic(env));
   }
 };
