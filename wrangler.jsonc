@@ -22,5 +22,8 @@
     "SPOTIFY_CLIENT_ID":"8a9c328f33b14bad9b48473d238925fc",
     "EMAIL_PROVIDER":"resend",
     "EMAIL_DAILY_LIMIT":"20"
+  },
+  "triggers": {
+    "crons": ["17 * * * *"]
   }
 }
