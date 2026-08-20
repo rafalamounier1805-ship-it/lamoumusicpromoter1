@@ -20,10 +20,10 @@ jobs:
           node --check backend/worker-entry-v15.js
           node --check backend/schema-v10.js
           node --check tests/smoke-reach.mjs
-      - name: Check submissions-only production entrypoint
+      - name: Check simple production entrypoint
         run: |
-          grep -q 'submissions-standalone-v152.js?v=1521' index.html
-          grep -q 'submissions-v15.css?v=1521' index.html
+          grep -q 'submissions-standalone-v152.js?v=160' index.html
+          grep -q 'submissions-v15.css?v=160' index.html
           ! grep -q 'app-core.js' index.html
           ! grep -q 'integrations-v10.js' index.html
           ! grep -q 'runtime-v13.js' index.html
@@ -31,7 +31,7 @@ jobs:
           ! grep -q 'workflow.css' index.html
           ! grep -q 'lamou-v10.js' index.html
           grep -q 'backend/worker-entry-v15.js' wrangler.jsonc
-          grep -q 'lamou-runtime-v1521' sw.js
+          grep -q 'lamou-dashboard-v160' sw.js
           test -f .assetsignore
           grep -q '^backend$' .assetsignore
           grep -q '^wrangler.jsonc$' .assetsignore
