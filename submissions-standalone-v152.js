@@ -1,145 +1,117 @@
 (() => {
 'use strict';
 
-const VERSION='15.2.1';
-const PENDING_KEY='lamou_submission_pending';
-let cache=null;
+const VERSION='16.0.0';
+let dashboard=null;
+let profile=null;
 let verifying=false;
-let profileCache=null;
-let currentUser=null;
+let lastRefresh=null;
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const root=()=>document.getElementById('appRoot');
-const toast=m=>{const e=document.getElementById('toast');if(!e)return;e.textContent=m;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),3600)};
 
 async function api(path,options={}){
   try{
     const r=await fetch(path,{credentials:'include',cache:'no-store',...options,headers:{...(options.body?{'content-type':'application/json'}:{}),...(options.headers||{})}});
-    let d={};try{d=await r.json()}catch(_){}
-    return {ok:r.ok,status:r.status,data:d};
+    let data={};try{data=await r.json()}catch(_){}
+    return {ok:r.ok,status:r.status,data};
   }catch(_){return {ok:false,status:0,data:{error:'Sem resposta do servidor.'}}}
 }
 
-function modal(h){document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)LamouSub.close()"><section class="modal">${h}</section></div>`}
-function close(){document.getElementById('modalRoot').innerHTML=''}
-function color(s){return s==='green'?'green':s==='blue'?'blue':'red'}
-function label(s){return s==='green'?'Concluído':s==='blue'?'Em andamento':'Pendente'}
-function savePending(ctx){try{sessionStorage.setItem(PENDING_KEY,JSON.stringify(ctx))}catch(_){}}
-function readPending(){try{return JSON.parse(sessionStorage.getItem(PENDING_KEY)||'null')}catch(_){return null}}
-function clearPending(){try{sessionStorage.removeItem(PENDING_KEY)}catch(_){}}
-
 async function ensureSession(){
   let me=await api('/api/auth/me');
-  if(me.ok){currentUser=me.data?.user||null;return true}
-  let dv=localStorage.getItem('lamou_device_id');
-  if(!dv){dv=(crypto.randomUUID?crypto.randomUUID():'dev-'+Date.now())+'-'+Date.now();localStorage.setItem('lamou_device_id',dv)}
-  const made=await api('/api/session/device',{method:'POST',body:JSON.stringify({deviceId:dv})});
-  if(!made.ok)return false;
-  me=await api('/api/auth/me');
-  currentUser=me.ok?(me.data?.user||null):null;
-  return true;
+  if(me.ok)return true;
+  let id=localStorage.getItem('lamou_device_id');
+  if(!id){id=(crypto.randomUUID?crypto.randomUUID():'dev-'+Date.now())+'-'+Date.now();localStorage.setItem('lamou_device_id',id)}
+  const r=await api('/api/session/device',{method:'POST',body:JSON.stringify({deviceId:id})});
+  return r.ok;
 }
 
-function stageButton(track,p,s,key,stage,title,url){
-  const status=s[key]||'red';
-  const canOpen=status==='red'||status==='blue';
-  return `<button class="sub-stage ${color(status)}" ${canOpen?`onclick="LamouSub.openStage('${esc(track.id)}','${esc(p.id)}','${esc(stage)}','${esc(url)}')"`:''}><span class="sub-dot"></span><b>${esc(title)}</b><small>${esc(label(status))}</small></button>`;
+const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat('pt-BR').format(Number(n)):'—';
+const time=iso=>{try{return new Date(iso).toLocaleString('pt-BR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'})}catch(_){return '—'}};
+
+function metric(value,label){return `<div class="dash-metric"><b>${fmt(value)}</b><small>${esc(label)}</small></div>`}
+
+function statusFor(s){
+  if(s.result_status==='rejected')return {label:'Reprovada',tone:'red'};
+  if(s.ranking_status==='green')return {label:s.rank_value?`#${s.rank_value}`:'Ranqueada',tone:'green'};
+  if(s.result_status==='under_review'||s.form_status==='blue'||s.form_status==='green'||s.ranking_status==='blue')return {label:'Em análise',tone:'blue'};
+  if(s.registration_status==='green')return {label:'Não encontrada publicamente',tone:'gray'};
+  return {label:'Sem status público',tone:'gray'};
 }
-function platformRow(track,s){
-  const p=s.platform;
-  return `<div class="sub-platform-row"><div class="sub-platform-name"><b>${esc(p.name)}</b><small>${esc(s.note||'')}</small></div><div class="sub-stages">${stageButton(track,p,s,'registration_status','registration','Registro',p.registerUrl)}${stageButton(track,p,s,'form_status','form','Formulário',p.formUrl)}${stageButton(track,p,s,'ranking_status','ranking','Final Ranking',p.rankingUrl)}</div><div class="sub-check"><small>${s.last_checked_at?'Verificado '+new Date(s.last_checked_at).toLocaleString('pt-BR'):'Ainda não verificado'}</small><button class="ghost-button" onclick="LamouSub.verify('${esc(track.id)}')">↻</button></div></div>`;
+
+function platformPill(s){
+  const st=statusFor(s);
+  const checked=s.last_checked_at?` · ${time(s.last_checked_at)}`:'';
+  return `<div class="rank-pill ${st.tone}"><span><b>${esc(s.platform?.name||s.platform_id)}</b><small>${esc(st.label)}${esc(checked)}</small></span></div>`;
 }
+
 function trackCard(t){
-  const green=t.platforms?.filter(s=>s.ranking_status==='green').length||0;
-  const blue=t.platforms?.filter(s=>s.form_status==='blue'||s.ranking_status==='blue').length||0;
-  return `<button class="sub-track-card" onclick="LamouSub.openTrack('${esc(t.id)}')"><div class="sub-cover">${t.cover?`<img src="${esc(t.cover)}" alt="">`:'♫'}</div><div><b>${esc(t.title)}</b><small>${esc(t.artist||'LAMOU')}${t.album?` · ${esc(t.album)}`:''}</small></div><div class="sub-track-meta"><span class="status ${green?'green':blue?'blue':'red'}">${green?`${green} ranking`:blue?'Em andamento':'Pendente'}</span></div></button>`;
-}
-function metric(v,name,sub=''){return `<div class="sub-metric"><b>${v??'—'}</b><small>${esc(name)}</small>${sub?`<em>${esc(sub)}</em>`:''}</div>`}
-
-async function loadProfile(){
-  try{
-    const r=await api('/api/profile/summary?artist=LAMOU');
-    if(r.ok)profileCache=r.data?.artist||null;
-  }catch(_){}
-  return profileCache;
-}
-function setHeader(){
-  const name=currentUser?.displayName||currentUser?.username||'LAMOU';
-  const el=document.getElementById('headerUser');if(el)el.textContent=name==='LAMOU'?'LAMOU':name;
+  const relevant=(t.platforms||[]).filter(s=>s.registration_status!=='red'||s.form_status!=='red'||s.ranking_status!=='red'||s.result_status!=='pending');
+  const rows=relevant.length?relevant.map(platformPill).join(''):'<div class="rank-empty">Nenhum status público encontrado ainda.</div>';
+  return `<article class="rank-track"><div class="rank-track-head"><div class="rank-cover">${t.cover?`<img src="${esc(t.cover)}" alt="">`:'♫'}</div><div><h3>${esc(t.title)}</h3><p>${esc(t.album||t.artist||'LAMOU')}</p></div></div><div class="rank-platforms">${rows}</div></article>`;
 }
 
-async function render(){
-  const r=root();if(!r)return;
-  r.innerHTML='<section class="sub-page"><div class="sub-head"><div><div class="eyebrow">LAMOU · SUBMISSÕES</div><h1>Ranking automático</h1><p>Carregando dados reais…</p></div></div></section>';
-  const ok=await ensureSession();setHeader();
-  if(!ok){r.innerHTML='<section class="card"><h2>Não foi possível iniciar a sessão</h2><p class="sub">Atualize a página e tente novamente.</p></section>';return}
-  const res=await api('/api/submissions/dashboard');
-  if(!res.ok){r.innerHTML=`<section class="card"><h2>Submissões</h2><p class="sub">${esc(res.data?.error||'Não foi possível carregar o painel.')}</p><button class="primary-button" onclick="LamouSub.render()">Tentar novamente</button></section>`;return}
-  cache=res.data;await loadProfile();
-  const st=profileCache?.stats||{};
-  const tracks=cache.tracks||[];
-  const albums=st.albums??'—';
-  const songs=st.tracks??'—';
-  const views=st.views??st.streams??'—';
-  const monthly=st.monthlyViews??st.monthlyListeners??'—';
-  r.innerHTML=`<section class="sub-page"><div class="sub-head"><div><div class="eyebrow">LAMOU · SUBMISSÕES</div><h1>Ranking automático</h1><p>Somente submissão. O app verifica as plataformas e atualiza as etapas.</p></div><button class="primary-button" onclick="LamouSub.verify()" ${verifying?'disabled':''}>${verifying?'Verificando…':'↻ Verificar agora'}</button></div><div class="sub-metrics">${metric(albums,'Álbuns',albums==='—'?'aguardando fonte oficial':'Spotify')}${metric(songs,'Músicas',songs==='—'?'aguardando fonte oficial':'Spotify')}${metric(views,'Visualizações gerais',views==='—'?'não disponível publicamente':'fonte oficial')}${metric(monthly,'Visualizações mensais',monthly==='—'?'não disponível publicamente':'fonte oficial')}</div><div class="sub-section-head"><div><h2>Faixas submetidas</h2><p class="sub">Toque na faixa para ver as plataformas e as etapas.</p></div></div><div class="sub-track-grid">${tracks.map(trackCard).join('')}<button class="sub-track-card new" onclick="LamouSub.newTrack()"><div class="sub-cover">＋</div><div><b>Nova faixa para submeter</b><small>Adicionar pelo link do Spotify</small></div></button></div></section>`;
+function renderLoading(){
+  root().innerHTML='<main class="dash"><section class="dash-hero"><div><span class="eyebrow">LAMOU</span><h1>Spotify + Rankings</h1><p>Carregando seus dados e verificando os rankings…</p></div><div class="sync-badge blue">Atualizando</div></section></main>';
 }
 
-function openTrack(id){
-  const t=cache?.tracks?.find(x=>x.id===id);if(!t)return;
-  modal(`<div class="modal-head"><div><div class="eyebrow">FAIXA SUBMETIDA</div><h2>${esc(t.title)}</h2><p class="sub">${esc(t.artist||'LAMOU')}${t.album?` · ${esc(t.album)}`:''}</p></div><button class="icon-button" onclick="LamouSub.close()">×</button></div><div class="sub-platform-list">${(t.platforms||[]).map(s=>platformRow(t,s)).join('')}</div>${t.spotify_url?`<div class="row" style="margin-top:14px"><a class="ghost-button" href="${esc(t.spotify_url)}" target="_blank" rel="noopener">Spotify ↗</a></div>`:''}`);
+function render(){
+  const artist=profile?.artist||{};
+  const stats=artist.stats||{};
+  const tracks=dashboard?.tracks||[];
+  const spotifyReady=!!(artist.url&&artist.stats);
+  const lastChecks=tracks.flatMap(t=>t.platforms||[]).map(s=>s.last_checked_at).filter(Boolean).sort();
+  const checkedAt=lastChecks.at(-1)||lastRefresh;
+
+  root().innerHTML=`<main class="dash">
+    <section class="dash-hero">
+      <div class="artist-summary">
+        <div class="artist-photo">${artist.image?`<img src="${esc(artist.image)}" alt="">`:'♫'}</div>
+        <div><span class="eyebrow">PAINEL LAMOU</span><h1>${esc(artist.name||'LAMOU')}</h1><p>${spotifyReady?'Dados oficiais do catálogo Spotify.':'Conecte o Spotify uma vez; depois o painel atualiza sozinho.'}</p></div>
+      </div>
+      <div class="sync-badge ${verifying?'blue':'green'}">${verifying?'Atualizando…':checkedAt?`Atualizado ${time(checkedAt)}`:'Automático'}</div>
+    </section>
+
+    ${spotifyReady?`<section class="dash-metrics">${metric(stats.albums,'Álbuns')}${metric(stats.tracks,'Músicas')}${metric(stats.followers,'Seguidores')}${metric(stats.releases,'Lançamentos')}</section>`:`<section class="spotify-connect"><div><b>Spotify ainda não conectado</b><p>Essa é a única conexão necessária para os números do catálogo.</p></div><a class="primary-button" href="/api/oauth/spotify/start">Conectar Spotify</a></section>`}
+
+    <p class="api-note">O Spotify não fornece streams totais nem ouvintes mensais pela Web API pública; por isso o app não inventa esses números.</p>
+
+    <section class="ranking-head"><div><span class="eyebrow">RANKINGS</span><h2>Suas músicas</h2><p>O servidor verifica as plataformas automaticamente ao abrir o app e também de hora em hora.</p></div></section>
+
+    <section class="ranking-list">${tracks.length?tracks.map(trackCard).join(''):'<div class="rank-empty large">Ainda não há faixas acompanhadas no banco de submissões.</div>'}</section>
+  </main>`;
 }
 
-async function verify(trackId=''){
+async function load({verify=true}={}){
+  renderLoading();
+  if(!await ensureSession()){
+    root().innerHTML='<main class="dash"><div class="rank-empty large">Não foi possível iniciar a sessão do aplicativo.</div></main>';return;
+  }
+  const [p,d]=await Promise.all([api('/api/profile/summary?artist=LAMOU'),api('/api/submissions/dashboard')]);
+  if(p.ok)profile=p.data;
+  if(d.ok)dashboard=d.data;
+  lastRefresh=new Date().toISOString();
+  render();
+  if(verify)verifyInBackground();
+}
+
+async function verifyInBackground(){
   if(verifying)return;
-  verifying=true;toast('Verificando plataformas…');
-  const res=await api('/api/submissions/verify',{method:'POST',body:JSON.stringify(trackId?{trackId}:{})});
+  verifying=true;render();
+  const r=await api('/api/submissions/verify',{method:'POST',body:'{}'});
   verifying=false;
-  if(!res.ok){toast(res.data?.error||'Falha na verificação.');return}
-  toast(`✓ ${res.data.checked||0} verificações concluídas`);
-  await render();if(trackId)openTrack(trackId);
+  if(r.ok){
+    const d=await api('/api/submissions/dashboard');
+    if(d.ok)dashboard=d.data;
+    lastRefresh=new Date().toISOString();
+  }
+  render();
 }
 
-async function openStage(trackId,platformId,stage,url){
-  const ctx={trackId,platformId,stage,openedAt:Date.now()};
-  savePending(ctx);
-  const marked=await api('/api/submissions/opened',{method:'POST',body:JSON.stringify({trackId,platformId,stage})});
-  if(!marked.ok){clearPending();toast(marked.data?.error||'Não foi possível registrar a etapa.');return}
-  window.location.assign(url);
-}
-
-async function resumePending(){
-  const ctx=readPending();
-  if(!ctx?.trackId)return;
-  if(Date.now()-Number(ctx.openedAt||0)>21600000){clearPending();return}
-  clearPending();
-  setTimeout(()=>verify(ctx.trackId),650);
-}
-
-function newTrack(){
-  modal(`<div class="modal-head"><div><div class="eyebrow">NOVA FAIXA</div><h2>Adicionar para submissão</h2></div><button class="icon-button" onclick="LamouSub.close()">×</button></div><div class="field"><label>Link da faixa no Spotify</label><input id="subSpotifyUrl" type="url" placeholder="https://open.spotify.com/track/..."></div><div class="row"><button class="primary-button" onclick="LamouSub.importSpotify()">Buscar e adicionar</button><a class="ghost-button" href="/api/oauth/spotify/start">Conectar Spotify</a></div><div id="subImportNote" class="mini" style="margin-top:10px"></div>`);
-}
-
-async function importSpotify(){
-  const u=document.getElementById('subSpotifyUrl')?.value.trim();if(!u)return toast('Cole o link do Spotify.');
-  const note=document.getElementById('subImportNote');if(note)note.textContent='Buscando metadados oficiais…';
-  const sr=await api('/api/spotify/track?url='+encodeURIComponent(u));
-  if(!sr.ok){if(note)note.innerHTML=`${esc(sr.data?.error||'Não foi possível buscar a faixa.')} ${sr.status===409||sr.status===401?'<br><a class="ghost-button" style="display:inline-block;margin-top:10px" href="/api/oauth/spotify/start">Conectar Spotify</a>':''}`;return}
-  const t=sr.data.track;
-  const res=await api('/api/submissions/tracks',{method:'POST',body:JSON.stringify({title:t.title,artist:t.artist||'LAMOU',spotifyUrl:t.url||u,spotifyId:t.id,album:t.album,cover:t.cover})});
-  if(!res.ok){if(note)note.textContent=res.data?.error||'Falha ao adicionar.';return}
-  close();toast('Faixa adicionada.');await render();
-}
-
-function bind(){
-  document.getElementById('lamouMenuBtn')?.addEventListener('click',()=>verify());
-  document.querySelector('.brand-button')?.addEventListener('click',()=>render());
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')resumePending()});
-  window.addEventListener('pageshow',()=>resumePending());
-}
-
-window.LamouSub={render,openTrack,verify,openStage,newTrack,importSpotify,close,version:VERSION};
-bind();
-render().then(()=>resumePending());
+document.querySelector('.brand-button')?.addEventListener('click',()=>load({verify:true}));
+window.addEventListener('focus',()=>{if(document.visibilityState==='visible'&&Date.now()-new Date(lastRefresh||0).getTime()>120000)load({verify:true})});
+setInterval(()=>verifyInBackground(),5*60*1000);
+load({verify:true});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
