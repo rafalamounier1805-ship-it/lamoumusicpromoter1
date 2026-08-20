@@ -1,14 +1,13 @@
 (() => {
 'use strict';
 
-const VERSION='15.2.0';
+const VERSION='15.2.1';
+const PENDING_KEY='lamou_submission_pending';
 let cache=null;
 let verifying=false;
-let openedContext=null;
 let profileCache=null;
 let currentUser=null;
 
-const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const root=()=>document.getElementById('appRoot');
 const toast=m=>{const e=document.getElementById('toast');if(!e)return;e.textContent=m;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),3600)};
@@ -25,6 +24,9 @@ function modal(h){document.getElementById('modalRoot').innerHTML=`<div class="mo
 function close(){document.getElementById('modalRoot').innerHTML=''}
 function color(s){return s==='green'?'green':s==='blue'?'blue':'red'}
 function label(s){return s==='green'?'Concluído':s==='blue'?'Em andamento':'Pendente'}
+function savePending(ctx){try{sessionStorage.setItem(PENDING_KEY,JSON.stringify(ctx))}catch(_){}}
+function readPending(){try{return JSON.parse(sessionStorage.getItem(PENDING_KEY)||'null')}catch(_){return null}}
+function clearPending(){try{sessionStorage.removeItem(PENDING_KEY)}catch(_){}}
 
 async function ensureSession(){
   let me=await api('/api/auth/me');
@@ -38,14 +40,14 @@ async function ensureSession(){
   return true;
 }
 
-function stageButton(track,p,s,key,title,url){
+function stageButton(track,p,s,key,stage,title,url){
   const status=s[key]||'red';
   const canOpen=status==='red'||status==='blue';
-  return `<button class="sub-stage ${color(status)}" ${canOpen?`onclick="LamouSub.openStage('${esc(track.id)}','${esc(p.id)}','${esc(key)}','${esc(url)}')"`:''}><span class="sub-dot"></span><b>${esc(title)}</b><small>${esc(label(status))}</small></button>`;
+  return `<button class="sub-stage ${color(status)}" ${canOpen?`onclick="LamouSub.openStage('${esc(track.id)}','${esc(p.id)}','${esc(stage)}','${esc(url)}')"`:''}><span class="sub-dot"></span><b>${esc(title)}</b><small>${esc(label(status))}</small></button>`;
 }
 function platformRow(track,s){
   const p=s.platform;
-  return `<div class="sub-platform-row"><div class="sub-platform-name"><b>${esc(p.name)}</b><small>${esc(s.note||'')}</small></div><div class="sub-stages">${stageButton(track,p,s,'registration_status','Registro',p.registerUrl)}${stageButton(track,p,s,'form_status','Formulário',p.formUrl)}${stageButton(track,p,s,'ranking_status','Final Ranking',p.rankingUrl)}</div><div class="sub-check"><small>${s.last_checked_at?'Verificado '+new Date(s.last_checked_at).toLocaleString('pt-BR'):'Ainda não verificado'}</small><button class="ghost-button" onclick="LamouSub.verify('${esc(track.id)}')">↻</button></div></div>`;
+  return `<div class="sub-platform-row"><div class="sub-platform-name"><b>${esc(p.name)}</b><small>${esc(s.note||'')}</small></div><div class="sub-stages">${stageButton(track,p,s,'registration_status','registration','Registro',p.registerUrl)}${stageButton(track,p,s,'form_status','form','Formulário',p.formUrl)}${stageButton(track,p,s,'ranking_status','ranking','Final Ranking',p.rankingUrl)}</div><div class="sub-check"><small>${s.last_checked_at?'Verificado '+new Date(s.last_checked_at).toLocaleString('pt-BR'):'Ainda não verificado'}</small><button class="ghost-button" onclick="LamouSub.verify('${esc(track.id)}')">↻</button></div></div>`;
 }
 function trackCard(t){
   const green=t.platforms?.filter(s=>s.ranking_status==='green').length||0;
@@ -61,7 +63,6 @@ async function loadProfile(){
   }catch(_){}
   return profileCache;
 }
-
 function setHeader(){
   const name=currentUser?.displayName||currentUser?.username||'LAMOU';
   const el=document.getElementById('headerUser');if(el)el.textContent=name==='LAMOU'?'LAMOU':name;
@@ -100,9 +101,19 @@ async function verify(trackId=''){
 }
 
 async function openStage(trackId,platformId,stage,url){
-  openedContext={trackId,platformId,stage,openedAt:Date.now()};
-  await api('/api/submissions/opened',{method:'POST',body:JSON.stringify({trackId,platformId,stage})});
-  window.location.href=url;
+  const ctx={trackId,platformId,stage,openedAt:Date.now()};
+  savePending(ctx);
+  const marked=await api('/api/submissions/opened',{method:'POST',body:JSON.stringify({trackId,platformId,stage})});
+  if(!marked.ok){clearPending();toast(marked.data?.error||'Não foi possível registrar a etapa.');return}
+  window.location.assign(url);
+}
+
+async function resumePending(){
+  const ctx=readPending();
+  if(!ctx?.trackId)return;
+  if(Date.now()-Number(ctx.openedAt||0)>21600000){clearPending();return}
+  clearPending();
+  setTimeout(()=>verify(ctx.trackId),650);
 }
 
 function newTrack(){
@@ -123,11 +134,12 @@ async function importSpotify(){
 function bind(){
   document.getElementById('lamouMenuBtn')?.addEventListener('click',()=>verify());
   document.querySelector('.brand-button')?.addEventListener('click',()=>render());
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&openedContext){const c=openedContext;openedContext=null;setTimeout(()=>verify(c.trackId),500)}});
-  window.addEventListener('pageshow',()=>{if(openedContext){const c=openedContext;openedContext=null;setTimeout(()=>verify(c.trackId),500)}});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')resumePending()});
+  window.addEventListener('pageshow',()=>resumePending());
 }
 
 window.LamouSub={render,openTrack,verify,openStage,newTrack,importSpotify,close,version:VERSION};
-bind();render();
+bind();
+render().then(()=>resumePending());
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
