@@ -6,28 +6,21 @@
 <meta name="theme-color" content="#5c5ff2">
 <meta name="description" content="LAMOU — submissões e ranking de música com IA.">
 <title>LAMOU Submissions</title>
-<link rel="manifest" href="manifest.webmanifest?v=151">
+<link rel="manifest" href="manifest.webmanifest?v=152">
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=151">
-<link rel="stylesheet" href="app-core.css?v=151">
-<link rel="stylesheet" href="submissions-v15.css?v=151">
-<style id="submissionBootGuard">#appRoot{visibility:hidden}</style>
+<link rel="stylesheet" href="styles.css?v=152">
+<link rel="stylesheet" href="submissions-v15.css?v=152">
 </head>
 <body>
-<div id="loginShell" class="hidden"><div id="authView"></div></div>
-<div id="appShell" class="app-shell hidden">
+<div id="appShell" class="app-shell">
   <header class="app-header">
-    <button class="brand-button"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
+    <button class="brand-button" type="button"><img src="icon-192.svg" alt=""><span><b>LAMOU</b><small id="headerUser">LAMOU</small></span></button>
     <div class="header-actions"><button id="lamouMenuBtn" type="button" class="soft-button" aria-label="Verificar submissões">Verificar</button></div>
   </header>
   <main id="appRoot"></main>
-  <nav id="bottomNav" class="bottom-nav hidden" aria-label="Navegação principal"></nav>
 </div>
 <div id="modalRoot"></div>
 <div id="toast" class="toast"></div>
-<script src="app-core.js?v=151"></script>
-<script src="integrations-v10.js?v=151"></script>
-<script src="runtime-v13.js?v=151"></script>
-<script src="submissions-only-v151.js?v=151"></script>
+<script src="submissions-standalone-v152.js?v=152"></script>
 </body>
 </html>
