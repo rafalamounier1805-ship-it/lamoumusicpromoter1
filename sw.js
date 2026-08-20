@@ -1,9 +1,9 @@
-const CACHE='lamou-runtime-v152';
+const CACHE='lamou-runtime-v1521';
 const ASSETS=[
   './','./index.html',
-  './styles.css?v=152','./submissions-v15.css?v=152',
-  './submissions-standalone-v152.js?v=152',
-  './manifest.webmanifest?v=152','./icon-192.svg','./icon-512.svg'
+  './styles.css?v=1521','./submissions-v15.css?v=1521',
+  './submissions-standalone-v152.js?v=1521',
+  './manifest.webmanifest?v=1521','./icon-192.svg','./icon-512.svg'
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
