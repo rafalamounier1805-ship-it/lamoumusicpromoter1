@@ -1,0 +1,10 @@
+{
+  "name":"LAMOU Ranking AI",
+  "short_name":"LAMOU Rank",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#07101f",
+  "theme_color":"#08111f",
+  "description":"Análise musical técnica, mercadológica e transparente.",
+  "icons":[]
+}
