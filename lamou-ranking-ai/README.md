@@ -1,11 +1,11 @@
-# LAMOU Ranking AI — bootstrap de deploy
+# LAMOU Ranking AI
 
-Esta pasta contém o pacote executável do LAMOU Ranking AI para implantação via Cloudflare Workers Builds.
+Aplicativo publicado diretamente a partir da pasta `app/`, sem compactação intermediária.
 
-Configuração no Cloudflare:
+Cloudflare Builds:
 - Root directory: `/lamou-ranking-ai`
-- Build command: `npm run prepare-app`
-- Deploy command: `cd app && npx wrangler deploy`
-- Non-production deploy: `cd app && npx wrangler versions upload`
+- Build: `npm run prepare-app`
+- Deploy: `cd app && npx wrangler deploy`
+- Non-production: `cd app && npx wrangler versions upload`
 
-O primeiro deploy ativa site, PWA e Workers AI. O D1 será conectado no passo seguinte para habilitar histórico em nuvem.
+A aplicação mede áudio localmente, preserva histórico local e separa dados medidos, verificados e interpretados. Banco D1 será vinculado na etapa seguinte.
