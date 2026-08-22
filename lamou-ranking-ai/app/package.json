@@ -1,7 +1,7 @@
 {
   "name":"lamou-ranking-ai-app",
-  "version":"1.0.0",
+  "version":"1.2.0",
   "private":true,
   "type":"module",
-  "scripts":{"check":"node --check public/app.js && node --check src/worker.js"}
+  "scripts":{"check":"node --check public/app.js && node --check public/dsp-engine.js && node --check public/stage2.js && node --check src/worker.js"}
 }
