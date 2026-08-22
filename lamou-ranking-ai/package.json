@@ -1,11 +1,7 @@
 {
-  "name": "lamou-ranking-ai-bootstrap",
-  "version": "1.0.1",
-  "private": true,
-  "scripts": {
-    "prepare-app": "rm -rf app && mkdir -p app && base64 -d app.tgz | tar -xzf - -C app --strip-components=1 && cd app && npm install && npm run check"
-  },
-  "devDependencies": {
-    "wrangler": "^4.0.0"
-  }
+  "name":"lamou-ranking-ai-bootstrap",
+  "version":"1.0.0",
+  "private":true,
+  "scripts":{"prepare-app":"cd app && npm run check"},
+  "devDependencies":{"wrangler":"^4.0.0"}
 }
