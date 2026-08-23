@@ -1,9 +1,7 @@
 {
-  "name": "lamou-ranking-ai-app",
-  "version": "1.7.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "check": "node --check public/app.js && node --check public/dsp-engine.js && node --check public/stage2.js && node --check public/market-engine.js && node --check public/stage3.js && node --check public/stage5-visible.js && node --check public/stage6-visible.js && node --check public/stage7-visible.js && node --check src/worker.js"
-  }
+  "name":"lamou-ranking-ai-app",
+  "version":"2.0.0",
+  "private":true,
+  "type":"module",
+  "scripts":{"check":"node --check public/consolidated-app.js && node --check public/dsp-engine.js && node --check public/market-engine.js && node --check src/worker.js"}
 }
