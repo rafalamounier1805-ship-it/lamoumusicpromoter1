@@ -1,0 +1,8 @@
+{
+  "name":"APP CORE CUSTOM — Base Universal",
+  "version":"2.0.0",
+  "runtime":"browser-local-first",
+  "principles":{"noFakeActions":true,"testBeforeProduction":true,"dependencyValidation":true,"auditability":true},
+  "mandatoryTransversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK"],
+  "modules":["identity","auth","users","workspaces","rbac-abac","ui-shell","design-system","persistence","autosave-versioning","files-media","search-filters","notifications","calendar-tasks","audit-logs","admin","settings","ai-gateway","prompt-library","billing-quotas","integrations","api-webhooks","security","lgpd","analytics","observability","error-handling","backup-dr","performance-cache","pwa-mobile","accessibility","i18n","import-export","feature-flags","support","onboarding","communications","environments","ci-cd","automated-tests","deployment","app-health","pre-production-check"]
+}
