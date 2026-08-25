@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "profile": "commercial",
+  "enabled": true,
+  "capabilities": {
+    "campaigns": true,
+    "cta": true,
+    "share": true,
+    "referral": true,
+    "offers": true,
+    "attribution": true,
+    "experiments": true,
+    "conversionEvents": true
+  },
+  "rules": {
+    "neverBlockPrimaryUse": true,
+    "requireConsentForOutboundMessaging": true,
+    "allowFakeScarcity": false,
+    "allowAutomaticPaidUpgrade": false,
+    "analyticsFallback": "local-queue"
+  }
+}
