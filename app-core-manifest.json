@@ -1,1 +1,11 @@
-{"core":"APP CORE CUSTOM — Base Universal","version":"2.0.0","appId":"lamoumusicpromoter1","runtime":"core/runtime.js","transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK"],"status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite"}}
+{
+  "core":"APP CORE CUSTOM — Base Universal",
+  "version":"2.1.0",
+  "appId":"lamoumusicpromoter1",
+  "runtime":"core/runtime.js",
+  "pluginRegistry":"plugin-registry.json",
+  "pluginPolicy":{"costMode":"free-only","paidAutoUpgrade":false,"neverBlockApp":true,"quotaWarningAtPercent":80,"quotaFallbackAtPercent":95,"statelessFailover":"automatic","statefulFailover":"offline-degraded-then-controlled-migration","providerOverride":true},
+  "transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK","PLUGIN CENTER","QUOTA GUARD","FALLBACK ROUTER"],
+  "providers":{"posthog":"available-not-configured","sentry":"available-not-configured","supabase":"available-not-routed","localFallbacks":"active"},
+  "status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite","pluginLayer":"applied","pluginCenter":"available","quotaGuard":"applied"}
+}
