@@ -9,6 +9,7 @@
   "theme_color": "#071123",
   "orientation": "any",
   "icons": [
-    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"maskable"},
+    {"src":"./lamou-ia-logo-oficial.webp","sizes":"512x512","type":"image/webp","purpose":"any"}
   ]
 }
