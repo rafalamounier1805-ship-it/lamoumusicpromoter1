@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0b2a55" />
+<title>LAMOU IA — Diagnóstico 360</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="mobile-overlay" onclick="toggleMenu(false)"></div>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brandmark">L</div><div><div class="brandname">LAMOU IA</div><div class="brandsub">Diagnóstico 360</div></div></div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sidefoot"><div class="mini-profile"><div class="avatar">RL</div><div><div style="font-size:12px;font-weight:800">Consultoria</div><div class="brandsub">Workspace demo</div></div></div></div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <button class="iconbtn mobileMenu" onclick="toggleMenu(true)">☰</button>
+    <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Buscar empresa, reunião, problema..." oninput="searchGlobal(this.value)"></div>
+    <div class="top-actions"><button class="iconbtn" title="Alternar tema" onclick="toggleTheme()">◐</button><button class="iconbtn" title="Notificações" onclick="toast('3 alertas de demonstração no workspace')">◉</button><div class="avatar">RL</div></div>
+  </header>
+  <section class="content" id="content"></section>
+</main>
+</div>
+<div id="modalRoot"></div><div class="toastwrap" id="toastwrap"></div>
+<script src="app1.js"></script><script src="app2.js"></script><script src="app3.js"></script><script src="app4.js"></script>
+</body>
+</html>
