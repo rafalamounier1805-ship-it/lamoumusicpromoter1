@@ -1,11 +1,12 @@
 {
   "core":"APP CORE CUSTOM — Base Universal",
-  "version":"2.1.0",
+  "version":"2.1.1",
   "appId":"lamoumusicpromoter1",
   "runtime":"core/runtime.js",
   "pluginRegistry":"plugin-registry.json",
   "pluginPolicy":{"costMode":"free-only","paidAutoUpgrade":false,"neverBlockApp":true,"quotaWarningAtPercent":80,"quotaFallbackAtPercent":95,"statelessFailover":"automatic","statefulFailover":"offline-degraded-then-controlled-migration","providerOverride":true},
-  "transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK","PLUGIN CENTER","QUOTA GUARD","FALLBACK ROUTER"],
+  "authUx":{"semanticForms":true,"passwordManagerCompatible":true,"showHidePassword":"required","savePasswordOptIn":"required","reuseSavedPasswordOptIn":"required","autocomplete":["username","new-password","current-password"],"credentialStorageOwner":"browser-or-os-password-manager","localTestCredentialStorage":"salted-hash-only","neverStorePlaintextInLocalStorage":true},
+  "transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK","PLUGIN CENTER","QUOTA GUARD","FALLBACK ROUTER","PASSWORD MANAGER UX"],
   "providers":{"posthog":"available-not-configured","sentry":"available-not-configured","supabase":"available-not-routed","localFallbacks":"active"},
-  "status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite","pluginLayer":"applied","pluginCenter":"available","quotaGuard":"applied"}
+  "status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite","pluginLayer":"applied","pluginCenter":"available","quotaGuard":"applied","passwordManagerUx":"applied-to-central"}
 }
