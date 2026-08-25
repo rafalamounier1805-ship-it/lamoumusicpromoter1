@@ -117,3 +117,41 @@ function productMediaPanel(a){
   pmSave.onclick=()=>{m.cover=pmCover.value.trim();m.logo=pmLogo.value.trim();m.screenshots=pmShots.value.split('\n').map(x=>x.trim()).filter(Boolean);saveState();audit('Imagens do produto atualizadas',a.name);toast('Imagens salvas.');dRender(a.id,'overview')};
 }
 if(sessionStorage.getItem(SESSION)==='1')renderAll();
+
+/* CORE 2.1.1 — password credential UX: browser/Google Password Manager + reveal controls */
+(function enhancePasswordUX(){
+  const style=document.createElement('style');
+  style.textContent=`
+    .pw-wrap{position:relative}.pw-wrap input{padding-right:48px!important}.pw-eye{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:36px;height:34px;border:0;border-radius:9px;background:transparent;color:inherit;font-size:18px;cursor:pointer}.pw-eye:hover{background:rgba(127,127,127,.12)}
+    .pw-pref{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--muted);cursor:pointer}.pw-pref input{width:auto}.pw-help{display:block;margin-top:5px;font-size:10px;color:var(--muted)}
+  `;
+  document.head.appendChild(style);
+  function addEye(input){
+    if(!input||input.dataset.eyeReady)return;input.dataset.eyeReady='1';
+    const wrap=document.createElement('div');wrap.className='pw-wrap';input.parentNode.insertBefore(wrap,input);wrap.appendChild(input);
+    const b=document.createElement('button');b.type='button';b.className='pw-eye';b.setAttribute('aria-label','Mostrar senha');b.textContent='👁';
+    b.onclick=()=>{const show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'🙈':'👁';b.setAttribute('aria-label',show?'Ocultar senha':'Mostrar senha');};wrap.appendChild(b);
+  }
+  const setupName=$('#setupName'),p1=$('#setupPassword'),p2=$('#setupPassword2'),login=$('#loginPassword');
+  if(setupName){setupName.name='username';setupName.autocomplete='username';}
+  if(p1){p1.name='new-password';p1.autocomplete='new-password';addEye(p1);}
+  if(p2){p2.name='new-password-confirmation';p2.autocomplete='new-password';addEye(p2);}
+  if(login){login.name='password';login.autocomplete='current-password';addEye(login);}
+  const setupBox=$('#setupAccess');
+  if(setupBox&&!$('#savePasswordPref')){
+    const anchor=$('#setupPassword2')?.closest('.field')||p2?.parentNode;
+    const label=document.createElement('label');label.className='pw-pref';label.innerHTML='<input id="savePasswordPref" type="checkbox" checked> Salvar senha neste dispositivo';
+    anchor?.insertAdjacentElement('afterend',label);
+    const help=document.createElement('small');help.className='pw-help';help.textContent='O navegador/Google Password Manager pode oferecer para salvar com segurança.';label.insertAdjacentElement('afterend',help);
+    label.querySelector('input').onchange=e=>{const on=e.target.checked;p1&&p1.setAttribute('autocomplete',on?'new-password':'off');p2&&p2.setAttribute('autocomplete',on?'new-password':'off');};
+  }
+  const loginBox=$('#loginAccess');
+  if(loginBox&&!$('#useSavedPasswordPref')){
+    const field=login?.closest('.field')||login?.parentNode;
+    const label=document.createElement('label');label.className='pw-pref';label.innerHTML='<input id="useSavedPasswordPref" type="checkbox" checked> Usar senha salva anteriormente';
+    field?.insertAdjacentElement('afterend',label);
+    const help=document.createElement('small');help.className='pw-help';help.textContent='Se houver uma senha salva no Chrome/Google, toque no campo de senha para selecioná-la.';label.insertAdjacentElement('afterend',help);
+    label.querySelector('input').onchange=e=>{login?.setAttribute('autocomplete',e.target.checked?'current-password':'off');if(e.target.checked)login?.focus();};
+    try{const a=JSON.parse(localStorage.getItem(AUTH)||'null');if(a?.name){const user=document.createElement('input');user.type='text';user.name='username';user.autocomplete='username';user.value=a.name;user.readOnly=true;user.tabIndex=-1;user.style.position='absolute';user.style.opacity='0';user.style.pointerEvents='none';loginBox.prepend(user);}}catch(e){}
+  }
+})();
