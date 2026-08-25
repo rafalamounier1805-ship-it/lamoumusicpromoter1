@@ -1,0 +1,72 @@
+{
+  "coreVersion": "2.1.0",
+  "policy": {
+    "costMode": "free-only",
+    "neverBlockApp": true,
+    "paidUpgradeAutomatic": false,
+    "quotaWarningAtPercent": 80,
+    "quotaFallbackAtPercent": 95,
+    "statelessFailover": "automatic",
+    "statefulFailover": "offline-degraded-then-controlled-migration",
+    "localFallbackRequired": true
+  },
+  "capabilities": {
+    "analytics": {
+      "effective": "local-audit",
+      "preferred": "posthog-free",
+      "options": ["posthog-free", "umami-selfhosted", "local-audit"]
+    },
+    "errorMonitoring": {
+      "effective": "local-audit",
+      "preferred": "sentry-free",
+      "options": ["sentry-free", "glitchtip-selfhosted", "local-audit"]
+    },
+    "dataAuth": {
+      "effective": "existing-data-layer",
+      "preferred": "supabase-free",
+      "options": ["supabase-free", "appwrite-free", "pocketbase-selfhosted", "local-offline"],
+      "switchMode": "manual-after-schema-and-data-compatibility-check"
+    },
+    "ai": {
+      "effective": "local-rules",
+      "preferred": "gemini-free",
+      "options": ["gemini-free", "transformers-local", "local-rules"]
+    },
+    "e2eTesting": {
+      "preferred": "playwright",
+      "options": ["playwright", "cypress-oss"]
+    },
+    "accessibility": {
+      "preferred": "axe-core",
+      "options": ["axe-core", "pa11y"]
+    },
+    "performance": {
+      "preferred": "lighthouse",
+      "options": ["lighthouse", "web-performance-api"]
+    },
+    "security": {
+      "preferred": "npm-audit",
+      "options": ["npm-audit", "semgrep-ce", "trivy"]
+    },
+    "hosting": {
+      "effective": "current-host",
+      "preferred": "cloudflare-pages",
+      "options": ["cloudflare-pages", "github-pages", "vercel-hobby", "current-host"],
+      "switchMode": "controlled-deploy-failover"
+    }
+  },
+  "providerRules": {
+    "posthog-free": {"free": true, "quotaBased": true, "configured": false, "fallback": "umami-selfhosted"},
+    "umami-selfhosted": {"free": true, "quotaBased": false, "configured": false, "fallback": "local-audit"},
+    "sentry-free": {"free": true, "quotaBased": true, "configured": false, "fallback": "glitchtip-selfhosted"},
+    "glitchtip-selfhosted": {"free": true, "quotaBased": false, "configured": false, "fallback": "local-audit"},
+    "supabase-free": {"free": true, "quotaBased": true, "configured": false, "fallback": "local-offline"},
+    "appwrite-free": {"free": true, "quotaBased": true, "configured": false, "fallback": "local-offline"},
+    "pocketbase-selfhosted": {"free": true, "quotaBased": false, "configured": false, "fallback": "local-offline"},
+    "gemini-free": {"free": true, "quotaBased": true, "configured": false, "fallback": "transformers-local"},
+    "transformers-local": {"free": true, "quotaBased": false, "configured": false, "fallback": "local-rules"},
+    "local-audit": {"free": true, "quotaBased": false, "configured": true},
+    "local-offline": {"free": true, "quotaBased": false, "configured": true},
+    "local-rules": {"free": true, "quotaBased": false, "configured": true}
+  }
+}
