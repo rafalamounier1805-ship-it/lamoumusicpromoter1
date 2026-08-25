@@ -1,12 +1,15 @@
 {
   "core":"APP CORE CUSTOM — Base Universal",
-  "version":"2.1.1",
+  "version":"2.2.0",
   "appId":"lamoumusicpromoter1",
   "runtime":"core/runtime.js",
   "pluginRegistry":"plugin-registry.json",
+  "promotionRegistry":"core/promotion-registry.json",
+  "promotionProfile":"commercial",
   "pluginPolicy":{"costMode":"free-only","paidAutoUpgrade":false,"neverBlockApp":true,"quotaWarningAtPercent":80,"quotaFallbackAtPercent":95,"statelessFailover":"automatic","statefulFailover":"offline-degraded-then-controlled-migration","providerOverride":true},
+  "promotionPolicy":{"enabled":true,"neverBlockPrimaryUse":true,"consentRequiredForOutbound":true,"fakeScarcity":false,"automaticPaidPromotion":false},
   "authUx":{"semanticForms":true,"passwordManagerCompatible":true,"showHidePassword":"required","savePasswordOptIn":"required","reuseSavedPasswordOptIn":"required","autocomplete":["username","new-password","current-password"],"credentialStorageOwner":"browser-or-os-password-manager","localTestCredentialStorage":"salted-hash-only","neverStorePlaintextInLocalStorage":true},
-  "transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK","PLUGIN CENTER","QUOTA GUARD","FALLBACK ROUTER","PASSWORD MANAGER UX"],
+  "transversal":["TEST MODE","PRODUCT CRITIC","IMPROVE MODE","MODULE MANAGER","APP HEALTH","PRE-PRODUCTION CHECK","PLUGIN CENTER","QUOTA GUARD","FALLBACK ROUTER","PASSWORD MANAGER UX","PROMOTION ENGINE","CAMPAIGN REGISTRY","ATTRIBUTION","SHARE & REFERRAL"],
   "providers":{"posthog":"available-not-configured","sentry":"available-not-configured","supabase":"available-not-routed","localFallbacks":"active"},
-  "status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite","pluginLayer":"applied","pluginCenter":"available","quotaGuard":"applied","passwordManagerUx":"applied-to-central"}
+  "status":{"bootstrap":"partial","audit":"available","health":"available","persistence":"partial","security":"partial","aiGateway":"partial","deploy":"github-pages-existing-plus-suite","pluginLayer":"applied","pluginCenter":"available","quotaGuard":"applied","passwordManagerUx":"applied-to-central","promotionLayer":"configured-commercial"}
 }
