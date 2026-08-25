@@ -2,10 +2,8 @@
    Clicking any app card opens the complete product hub.
 */
 const KNOWN_PRODUCT_LINKS={
-  composer:{test:'https://composer-os-test.vercel.app'},
-  chargeme:{test:'https://charge-me-premium-v2-test.vercel.app'},
-  hq:{test:'https://path-test-hq.vercel.app'},
-  teconvido:{test:'https://lamou-convite-test.vercel.app'},
+  composer:{test:'https://composer-os-mvp.vercel.app'},
+  chargeme:{test:'https://charge-me-premium.vercel.app'},
   corestudio:{official:'https://app-core-custom.vercel.app'}
 };
 function productApplyKnownLinks(a){
