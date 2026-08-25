@@ -1,6 +1,20 @@
 /* LAMOU IA — Product Home
    Clicking any app card opens the complete product hub.
 */
+const KNOWN_PRODUCT_LINKS={
+  composer:{test:'https://composer-os-test.vercel.app'},
+  chargeme:{test:'https://charge-me-premium-v2-test.vercel.app'},
+  hq:{test:'https://path-test-hq.vercel.app'},
+  teconvido:{test:'https://lamou-convite-test.vercel.app'},
+  corestudio:{official:'https://app-core-custom.vercel.app'}
+};
+function productApplyKnownLinks(a){
+  const k=KNOWN_PRODUCT_LINKS[a.id];if(!k)return;
+  const ch=releaseEnsureApp(a);
+  if(k.test&&!ch.test.url)ch.test.url=k.test;
+  if(k.official&&!ch.official.url){ch.official.url=k.official;a.url=k.official;}
+}
+state.apps.forEach(productApplyKnownLinks);saveState();
 function productEnsureMedia(a){
   const d=dEnsure(a);
   d.media=d.media||{cover:'',logo:'',screenshots:[]};
