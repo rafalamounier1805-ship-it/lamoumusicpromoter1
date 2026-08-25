@@ -58,3 +58,120 @@ function releaseChannelsPanel(a){
 }
 releaseMigrate();
 if(sessionStorage.getItem(SESSION)==='1')renderAll();
+
+/* CORE — Password Manager & password visibility UX
+   Senha continua armazenada apenas como hash no app. O preenchimento/salvamento
+   da senha em texto claro, quando o usuário permite, pertence ao navegador/OS.
+*/
+function corePasswordUX(){
+  const setupBox=document.getElementById('setupAccess');
+  const loginBox=document.getElementById('loginAccess');
+  const setupName=document.getElementById('setupName');
+  const setupPassword=document.getElementById('setupPassword');
+  const setupPassword2=document.getElementById('setupPassword2');
+  const loginPassword=document.getElementById('loginPassword');
+  const createBtn=document.getElementById('createAccessBtn');
+  const loginBtnEl=document.getElementById('loginBtn');
+  if(!setupBox||!loginBox||!setupPassword||!setupPassword2||!loginPassword||!createBtn||!loginBtnEl)return;
+
+  if(!document.getElementById('corePasswordUxStyles')){
+    const st=document.createElement('style');
+    st.id='corePasswordUxStyles';
+    st.textContent=`
+      .pw-wrap{position:relative;display:flex;align-items:center}
+      .pw-wrap input{padding-right:48px!important;width:100%}
+      .pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:34px;border:0;border-radius:9px;background:transparent;color:inherit;cursor:pointer;font-size:18px;display:grid;place-items:center}
+      .pw-eye:hover,.pw-eye:focus-visible{background:rgba(255,255,255,.08);outline:2px solid rgba(96,165,250,.5);outline-offset:1px}
+      .pw-choice{display:flex;align-items:flex-start;gap:9px;margin-top:10px;padding:10px 11px;border:1px solid rgba(148,163,184,.22);border-radius:12px;background:rgba(15,23,42,.26);cursor:pointer;font-size:12px;line-height:1.35}
+      .pw-choice input{margin-top:2px;accent-color:#4f8cff}
+      .pw-help{display:block;margin-top:6px;color:var(--muted);font-size:10px;line-height:1.4}
+      .pw-user{margin-bottom:8px}
+      .pw-user input[readonly]{opacity:.88;cursor:default}
+    `;
+    document.head.appendChild(st);
+  }
+
+  function makeForm(oldBox,handler){
+    if(oldBox.tagName==='FORM')return oldBox;
+    const form=document.createElement('form');
+    [...oldBox.attributes].forEach(a=>form.setAttribute(a.name,a.value));
+    form.setAttribute('autocomplete','on');
+    while(oldBox.firstChild)form.appendChild(oldBox.firstChild);
+    oldBox.replaceWith(form);
+    form.addEventListener('submit',async e=>{e.preventDefault();await handler();});
+    return form;
+  }
+
+  const authData=(()=>{try{return JSON.parse(localStorage.getItem(AUTH)||'null')}catch{return null}})();
+  setupName.setAttribute('name','username');
+  setupName.setAttribute('autocomplete','username');
+  setupPassword.setAttribute('name','new-password');
+  setupPassword.setAttribute('autocomplete','new-password');
+  setupPassword2.setAttribute('name','new-password-confirmation');
+  setupPassword2.setAttribute('autocomplete','new-password');
+  loginPassword.setAttribute('name','password');
+  loginPassword.setAttribute('autocomplete','current-password');
+  loginPassword.setAttribute('enterkeyhint','go');
+
+  if(!document.getElementById('loginUsername')){
+    const userField=document.createElement('div');
+    userField.className='field pw-user';
+    userField.innerHTML='<label>Usuário</label><input id="loginUsername" name="username" autocomplete="username" readonly>';
+    const title=loginBox.querySelector('h2');
+    title?.insertAdjacentElement('afterend',userField);
+    userField.querySelector('input').value=authData?.name||setupName.value||'Rafael';
+  }
+
+  function eye(input){
+    if(input.parentElement?.classList.contains('pw-wrap'))return;
+    const wrap=document.createElement('div');wrap.className='pw-wrap';
+    input.parentNode.insertBefore(wrap,input);wrap.appendChild(input);
+    const b=document.createElement('button');b.type='button';b.className='pw-eye';b.textContent='👁';b.title='Mostrar senha';b.setAttribute('aria-label','Mostrar senha');b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',()=>{const show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'🙈':'👁';b.title=show?'Ocultar senha':'Mostrar senha';b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(show));input.focus({preventScroll:true});});
+    wrap.appendChild(b);
+  }
+  eye(setupPassword);eye(setupPassword2);eye(loginPassword);
+
+  let allowSave=document.getElementById('allowSavePassword');
+  if(!allowSave){
+    const label=document.createElement('label');label.className='pw-choice';
+    label.innerHTML='<input id="allowSavePassword" type="checkbox" checked><span><b>Salvar senha neste dispositivo</b><small class="pw-help">O navegador/Google Password Manager pode guardar a senha. A Central mantém apenas o hash protegido.</small></span>';
+    createBtn.insertAdjacentElement('beforebegin',label);allowSave=label.querySelector('input');
+  }
+  let useSaved=document.getElementById('useSavedPassword');
+  if(!useSaved){
+    const label=document.createElement('label');label.className='pw-choice';
+    label.innerHTML='<input id="useSavedPassword" type="checkbox" checked><span><b>Usar senha salva anteriormente</b><small class="pw-help">Ao tocar no campo Senha, escolha a credencial salva pelo navegador/Google Password Manager.</small></span>';
+    loginBtnEl.insertAdjacentElement('beforebegin',label);useSaved=label.querySelector('input');
+  }
+
+  function syncAutocomplete(){
+    setupPassword.autocomplete=allowSave.checked?'new-password':'off';
+    setupPassword2.autocomplete=allowSave.checked?'new-password':'off';
+    loginPassword.autocomplete=useSaved.checked?'current-password':'off';
+  }
+  allowSave.addEventListener('change',syncAutocomplete);
+  useSaved.addEventListener('change',()=>{syncAutocomplete();if(useSaved.checked)setTimeout(()=>loginPassword.focus(),0)});
+  syncAutocomplete();
+
+  async function storeCredential(username,password,enabled){
+    if(!enabled||!username||!password)return;
+    if('PasswordCredential' in window&&navigator.credentials?.store){
+      try{await navigator.credentials.store(new PasswordCredential({id:username,name:username,password}));}catch(e){}
+    }
+  }
+
+  createBtn.type='submit';loginBtnEl.type='submit';
+  createBtn.onclick=null;loginBtnEl.onclick=null;loginPassword.onkeydown=null;
+  makeForm(setupBox,async()=>{
+    const user=setupName.value.trim()||'Admin',pass=setupPassword.value;
+    await createAccess();
+    if(sessionStorage.getItem(SESSION)==='1')await storeCredential(user,pass,allowSave.checked);
+  });
+  makeForm(loginBox,async()=>{
+    const user=document.getElementById('loginUsername')?.value||authData?.name||'Admin',pass=loginPassword.value;
+    await doLogin();
+    if(sessionStorage.getItem(SESSION)==='1')await storeCredential(user,pass,useSaved.checked);
+  });
+}
+corePasswordUX();
