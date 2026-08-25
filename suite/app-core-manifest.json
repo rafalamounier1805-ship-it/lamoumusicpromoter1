@@ -1,6 +1,6 @@
 {
   "name": "APP CORE CUSTOM — Base Universal",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "catalogSchemaVersion": "1.0.0",
   "studio": {
     "name": "LAMOU CORE Studio",
@@ -20,7 +20,20 @@
     "testBeforeProduction": true,
     "dependencyValidation": true,
     "auditability": true,
-    "securityIsBase": true
+    "securityIsBase": true,
+    "passwordPlaintextStorageForbidden": true
+  },
+  "authUx": {
+    "semanticForms": true,
+    "passwordManagerCompatible": true,
+    "autocomplete": ["username", "new-password", "current-password"],
+    "showHidePassword": "required",
+    "savePasswordOptIn": "required",
+    "reuseSavedPasswordOptIn": "required",
+    "credentialStorageOwner": "browser-or-os-password-manager",
+    "localTestCredentialStorage": "salted-hash-only",
+    "productionCredentialStorage": "secure-backend-or-idp",
+    "neverStorePlaintextInLocalStorage": true
   },
   "mandatoryTransversal": [
     "TEST MODE / Sandbox",
@@ -31,7 +44,8 @@
     "PRE-PRODUCTION CHECK",
     "OFFICIAL VERSION REGISTRY",
     "CORE UPDATE CENTER",
-    "PWA UPDATE CHANNEL"
+    "PWA UPDATE CHANNEL",
+    "PASSWORD MANAGER UX"
   ],
   "moduleCatalog": "suite/core-studio/modules.js",
   "modules": [
@@ -87,6 +101,7 @@
     "product-critic",
     "improve-mode",
     "module-manager",
-    "core-update-center"
+    "core-update-center",
+    "password-manager-ux"
   ]
 }
