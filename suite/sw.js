@@ -1,5 +1,5 @@
-const CACHE='lamou-central-official-20260824c';
-const CORE=['./','./index.html','./styles.css','./data.js','./app.js','./manifest.webmanifest','./icon.svg','./lamou-ia-logo-oficial.webp'];
+const CACHE='lamou-central-official-20260824d';
+const CORE=['./','./index.html','./styles.css','./dossier.css','./data.js','./app.js','./dossier-v2.js','./manifest.webmanifest','./icon.svg','./lamou-ia-logo-oficial.webp'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]));});
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
