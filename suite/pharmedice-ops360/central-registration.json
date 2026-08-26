@@ -1,0 +1,32 @@
+{
+  "central": "LAMOU IA — Central Oficial",
+  "product": {
+    "id": "pharmedice-ops360",
+    "name": "PHARMÉDICE OPS 360",
+    "mark": "P360",
+    "category": "Pharma • Operações & Qualidade",
+    "status": "dev",
+    "version": "Design Lock / Integração CORE",
+    "color": "linear-gradient(135deg,#0d3b72,#3d7fc9)",
+    "description": "Gestão operacional farmacêutica por resultados, processos, qualidade, diagnóstico, dados, IA governada e melhoria contínua.",
+    "officialUrl": "",
+    "testPath": "./pharmedice-ops360/",
+    "coreCoverage": 86,
+    "history": [
+      "Especificação Mestre V6",
+      "Seed DEMO V6",
+      "V1 teste — REJEITADA visualmente",
+      "V2 redesign — REJEITADA como direção visual",
+      "Design System — EM DEFINIÇÃO"
+    ],
+    "tags": ["Pharma", "Processos", "Qualidade", "IA", "Diagnóstico 360"]
+  },
+  "project": {
+    "id": "p-pharmedice-ops360",
+    "name": "PHARMÉDICE OPS 360",
+    "area": "Pharma / Operações",
+    "status": "Em desenvolvimento",
+    "owner": "LAMOU IA",
+    "next": "Fechar Design System, três telas-mãe, Manual do Usuário e Teste³ IA antes do release."
+  }
+}
