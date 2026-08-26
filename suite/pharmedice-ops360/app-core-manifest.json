@@ -1,0 +1,38 @@
+{
+  "appId": "pharmedice-ops360",
+  "name": "PHARMÉDICE OPS 360",
+  "status": "EM_DESENVOLVIMENTO",
+  "inheritsFrom": {"name": "APP CORE CUSTOM", "version": "2.1.1"},
+  "environmentChannels": ["SIMULATION", "HOMOLOGATION", "REAL"],
+  "corePrinciples": [
+    "no_fake_actions",
+    "test_before_production",
+    "security_privacy_by_design",
+    "no_vendor_lock_in",
+    "auditability",
+    "data_minimization"
+  ],
+  "reusedCoreModules": [
+    "identity", "auth", "users", "workspaces", "rbac-abac", "ui-shell", "design-system",
+    "accessibility", "persistence", "autosave-versioning", "files-media", "search-filters",
+    "import-export", "notifications", "calendar-tasks", "collaboration", "ai-gateway",
+    "integrations", "security", "lgpd", "audit-logs", "admin", "settings", "analytics",
+    "observability", "error-handling", "backup-dr", "app-health", "pwa-mobile",
+    "environments", "automated-tests", "deployment", "pre-production-check",
+    "official-version-registry", "test-mode", "product-critic", "improve-mode", "module-manager"
+  ],
+  "productSpecificModules": [
+    "executive-cockpit", "areas-processes", "metrics-goals", "production-flow",
+    "quality-qa-cq", "regulatory", "diagnostic-360", "action-engine", "project-engine",
+    "training-bridge-projete", "data-hub", "daily-log", "scientific-publications",
+    "market-reputation-radar", "ai-specialists", "reference-library"
+  ],
+  "realIntegrationsStatus": {
+    "protheus": "NOT_CONNECTED",
+    "lims_qms": "NOT_CONNECTED",
+    "idp_sso": "NOT_CONNECTED",
+    "database": "NOT_CONNECTED",
+    "electronic_signature": "NOT_CONNECTED",
+    "external_ai": "DISABLED_UNTIL_AUTHORIZATION"
+  }
+}
