@@ -2,25 +2,31 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0d3b72">
 <title>PHARMÉDICE OPS 360 — LAMOU IA</title>
 <style>
-:root{--n:#0d3b72;--b:#3d7fc9;--i:#17324d;--line:#dbe6ef;--green:#16764c;--orange:#b66d18;--red:#b72f3e}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f5f8fb;color:var(--i)}header{background:#fff;border-bottom:1px solid var(--line);padding:14px 20px;position:sticky;top:0}main{max-width:1100px;margin:auto;padding:24px}.hero{background:linear-gradient(135deg,var(--n),var(--b));color:#fff;padding:28px;border-radius:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.tag{display:inline-block;padding:6px 9px;border-radius:999px;background:#f0eaff;color:#6740cc;font-size:10px;font-weight:800}.ok{color:var(--green)}.wait{color:var(--orange)}.bad{color:var(--red)}a{color:#1765c1;font-weight:800}@media(max-width:720px){.grid{grid-template-columns:1fr}.hero{padding:22px}}
+:root{--n:#0d3b72;--b:#3d7fc9;--i:#17324d;--line:#dbe6ef;--green:#16764c;--orange:#b66d18;--red:#b72f3e;--bg:#f5f8fb}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--i)}header{background:#fff;border-bottom:1px solid var(--line);padding:14px 20px;position:sticky;top:0;z-index:5}main{max-width:1100px;margin:auto;padding:24px}.hero{background:linear-gradient(135deg,var(--n),var(--b));color:#fff;padding:30px;border-radius:22px}.hero h1{margin:8px 0}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border-radius:11px;border:1px solid #fff5;text-decoration:none;font-weight:800}.btn.primary{background:#fff;color:var(--n)}.btn.ghost{color:#fff;background:#ffffff12}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.tag{display:inline-block;padding:6px 9px;border-radius:999px;background:#f0eaff;color:#6740cc;font-size:10px;font-weight:800}.ok{color:var(--green)}.wait{color:var(--orange)}.bad{color:var(--red)}.small{font-size:11px;color:#65788a;line-height:1.45}.footer{margin-top:18px;font-size:10px;color:#718396}@media(max-width:720px){main{padding:14px}.grid{grid-template-columns:1fr}.hero{padding:22px}.actions{flex-direction:column}.btn{width:100%}}
 </style>
 </head>
 <body>
 <header><strong>PHARMÉDICE OPS 360</strong> <span class="tag">LAMOU IA • CORE CONECTADO</span></header>
 <main>
-<section class="hero"><h1>Produto em desenvolvimento</h1><p>Arquitetura e contrato CORE estão conectados. A direção visual final continua em validação e não será confundida com release oficial.</p></section>
-<section class="grid">
-<article class="card"><h2>CORE</h2><p class="ok">✓ Runtime e manifesto conectados</p><p>Auth/RBAC/LGPD/AI Gateway/Health seguem o APP CORE CUSTOM.</p></article>
-<article class="card"><h2>Central LAMOU IA</h2><p class="ok">✓ Contrato de registro criado</p><p>Status correto: desenvolvimento. Canal OFICIAL continua vazio até release real.</p></article>
-<article class="card"><h2>Design</h2><p class="wait">◷ Em definição</p><p>V1 e V2 visuais anteriores estão rejeitadas como direção final.</p></article>
-<article class="card"><h2>Dados</h2><p class="ok">✓ Seed V6 validado</p><p>Áreas, cargos, processos, métricas, cenários e perfis de IA sintéticos.</p></article>
-<article class="card"><h2>Integrações reais</h2><p class="bad">○ Não conectadas</p><p>Protheus, LIMS/QMS, SSO, banco, assinatura e IA externa exigem homologação.</p></article>
-<article class="card"><h2>Próximo gate</h2><p>Design System → 3 telas-mãe → Manual do Usuário → Teste³ IA → homologação.</p></article>
+<section class="hero">
+<span class="tag">OFICIAL EM DESENVOLVIMENTO</span>
+<h1>PHARMÉDICE OPS 360</h1>
+<p>Gestão operacional farmacêutica por resultados, processos, qualidade, diagnóstico, dados e IA governada.</p>
+<div class="actions"><a class="btn primary" href="./teste/">Abrir DEMO funcional</a><a class="btn ghost" href="../">Abrir Central LAMOU IA</a></div>
 </section>
+<section class="grid">
+<article class="card"><h2>CORE</h2><p class="ok">✓ Conectado</p><p class="small">Runtime, manifesto, auditoria e contratos do APP CORE CUSTOM.</p></article>
+<article class="card"><h2>Arquitetura</h2><p class="ok">✓ Preservada</p><p class="small">Áreas, cargos, processos, métricas, Diagnóstico 360, IA e Data Hub.</p></article>
+<article class="card"><h2>Design</h2><p class="wait">◷ Em validação</p><p class="small">V1/V2 anteriores não são a direção visual oficial.</p></article>
+<article class="card"><h2>Dados</h2><p class="ok">✓ Seed DEMO</p><p class="small">Somente dados sintéticos no canal de teste.</p></article>
+<article class="card"><h2>Integrações reais</h2><p class="bad">○ Não conectadas</p><p class="small">Protheus, LIMS/QMS, SSO, banco, assinatura e IA externa aguardam homologação.</p></article>
+<article class="card"><h2>Próximo gate</h2><p class="small">Design System → telas-mãe → Manual do Usuário → Teste³ IA → homologação.</p></article>
+</section>
+<div class="footer">Canal oficial de desenvolvimento. Não utilizar para dados reais de paciente, colaborador ou produção.</div>
 </main>
 <script type="module" src="./core-bridge.js"></script>
 </body>
