@@ -1,0 +1,48 @@
+{
+  "appId": "smart-sourcing-ranking",
+  "name": "Smart Sourcing Ranking — TEST/DEMO",
+  "status": "EM_TESTE",
+  "inheritsFrom": {"name": "APP CORE CUSTOM", "version": "current"},
+  "environmentChannels": ["SIMULATION", "HOMOLOGATION", "REAL"],
+  "corePrinciples": [
+    "no_fake_actions",
+    "test_before_production",
+    "security_privacy_by_design",
+    "no_vendor_lock_in",
+    "auditability",
+    "data_minimization",
+    "anti_pay_to_win"
+  ],
+  "reusedCoreModules": [
+    "identity", "auth", "users", "organizations", "workspaces", "rbac-abac", "ui-shell", "design-system",
+    "accessibility", "persistence", "autosave-versioning", "files-media", "search-filters", "notifications",
+    "security", "lgpd", "audit-logs", "admin", "settings", "analytics", "observability", "error-handling",
+    "backup-dr", "app-health", "pwa-mobile", "environments", "automated-tests", "deployment", "test-mode",
+    "product-critic", "improve-mode", "module-manager"
+  ],
+  "newReusableCoreModules": [
+    "dynamic-requirement-schema-engine",
+    "preference-constraint-engine",
+    "explainable-scoring-engine",
+    "smart-alternative-constraint-relaxation-engine",
+    "benefits-entitlements-catalog",
+    "location-point-of-service-layer",
+    "proposal-negotiation-versioning-engine",
+    "trust-promise-vs-delivery-engine",
+    "reputation-engine",
+    "measurement-confidence-model"
+  ],
+  "productSpecificModules": [
+    "need-engine", "service-requirement-engine", "measurement-capture-layer", "match-engine", "benefits-engine",
+    "ecosystem-benefits-engine", "local-plus", "proposal-engine", "negotiation-engine", "ranking-engine",
+    "supplier-opportunities", "buyer-dashboard", "supplier-dashboard", "market-intelligence"
+  ],
+  "realIntegrationsStatus": {
+    "marketplaces": "NOT_CONNECTED",
+    "payments": "NOT_CONNECTED",
+    "maps_geolocation": "NOT_CONNECTED",
+    "ar_lidar": "SIMULATED_IN_DEMO",
+    "database": "LOCAL_FIRST_DEMO",
+    "external_ai": "DEMO_ONLY"
+  }
+}
