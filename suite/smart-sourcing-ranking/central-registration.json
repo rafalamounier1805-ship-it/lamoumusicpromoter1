@@ -1,0 +1,33 @@
+{
+  "central": "LAMOU IA — Central Oficial",
+  "product": {
+    "id": "smart-sourcing-ranking",
+    "name": "Ranking Inteligente — NOME EM DEFINIÇÃO",
+    "mark": "SSR",
+    "category": "Commerce • Marketplace • Procurement • IA",
+    "status": "test",
+    "version": "Prototype V0.1",
+    "color": "linear-gradient(135deg,#0b2f5b,#4f46e5)",
+    "description": "Plataforma de decisão de compra e contratação orientada por prioridades explícitas, com comparação, RFQ, negociação, produto pronto, serviço, sob medida, benefícios Local+, ranking explicável e reputação promessa-vs-entrega.",
+    "officialUrl": "",
+    "testPath": "./smart-sourcing-ranking/",
+    "coreCoverage": 90,
+    "history": [
+      "Conceito Meu Ranking — HISTÓRICO",
+      "QuoteOn — NAMING DESCARTADO/EM CONFLITO",
+      "Quarion/Quarion IA — NAMING DESCARTADO/EM CONFLITO",
+      "Arquitetura Funcional V0.1",
+      "Prompt Mestre Executável V0.1",
+      "Protótipo visual V0.1"
+    ],
+    "tags": ["Marketplace", "RFQ", "Negociação", "Ranking", "Omnichannel", "Local+", "Serviços", "Sob medida", "IA explicável"]
+  },
+  "project": {
+    "id": "p-smart-sourcing-ranking",
+    "name": "Smart Sourcing Ranking",
+    "area": "Commerce / Marketplace / Procurement",
+    "status": "Em teste",
+    "owner": "LAMOU IA",
+    "next": "Construir e validar MVP TESTE/DEMO, comparar direções visuais, executar smoke/E2E e só então definir naming e gate de produção."
+  }
+}
