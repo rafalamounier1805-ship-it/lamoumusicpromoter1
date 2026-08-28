@@ -1,0 +1,9 @@
+{
+  "name": "Ranking Inteligente — DEMO",
+  "short_name": "Ranking DEMO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#0b2f5b",
+  "icons": []
+}
