@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "branchPurpose": "DERIVED_PROPOSAL",
   "promotionAllowed": false,
-  "architectureSpecVersion": "2.3.0-draft",
+  "architectureSpecVersion": "2.4.0-draft",
   "manifestVersion": "2.1.1",
   "catalogVersion": "2.1.0",
   "runtimeVersion": "2.0.0",
