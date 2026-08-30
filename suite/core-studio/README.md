@@ -1,52 +1,62 @@
 # LAMOU CORE Studio — Registro Oficial da Base
 
-## O que este aplicativo é
-O LAMOU CORE Studio é a interface navegável do APP CORE CUSTOM. Ele **não cria aplicativos** e não possui catálogo de produtos finais.
+## Estado atual da derivada
+- Arquitetura/governança: `2.3.0-draft`.
+- Promoção: bloqueada até runtime/evidência suficientes.
+- 55 códigos governados.
+- Truth Guard executável no GitHub Actions.
+- Validador de DAG/registro e testes de fast-path/benefícios concluídos com sucesso.
 
-Sua função é manter a biblioteca mestre de capacidades reutilizáveis da LAMOU IA para construção de sites, aplicativos e sistemas.
+## Princípios
+O CORE é a biblioteca transversal dos aplicativos LAMOU. Módulo é capability; plugin/provider é implementação. Proposta não vira produção por documentação.
 
-## Relação com a Central
-- **Aba CORE da Central:** mostra a cobertura/aplicação da base transversal na própria Central e nos produtos.
-- **LAMOU CORE Studio:** aplicativo separado que documenta e governa a biblioteca completa da base.
-- **Projetos/aplicativos:** consomem os módulos do CORE; não são criados dentro do CORE Studio.
+## Cada código CORE deve informar
+- quando atua;
+- entradas/saídas;
+- dados/proteção;
+- `hardDepends` (bootstrap) e `relatedDepends` (relações);
+- Plan X/Y/Z/Safe;
+- contrato;
+- estado/evidência;
+- `contractLock`;
+- `fastPath`;
+- métricas de benefício.
 
-## Unidade principal: Módulo
-Cada módulo deve possuir:
-- nome e identificador;
-- categoria;
-- classificação CORE / recomendado / opcional;
-- descrição objetiva do que faz;
-- dependências;
-- plugins/engines/provedores usados;
-- substituições compatíveis;
-- regra de troca automática, semiautomática ou manual;
-- estratégia de continuidade se houver falha ou limite de plano gratuito;
-- política de versão do plugin;
-- versão do módulo;
-- histórico de versões baseado em evidência;
-- status e compatibilidade.
+## Travamento
+`LOCKED_CRITICAL_CONTRACT` trava compatibilidade do contrato, não impede melhoria interna. Breaking change exige nova major, migração, testes, reverse path e aprovação. `STABLE_VERSIONED_CONTRACT` admite evolução compatível. `EVOLVING_RESEARCH` não promove automaticamente.
 
-## Regra plugin != módulo
-Um módulo representa uma capacidade. Um plugin é apenas uma implementação possível dessa capacidade.
+## Dependências
+`CORE-DAG` valida `hardDepends` como DAG. Relações arquiteturais não devem virar dependências rígidas sem necessidade. Ciclos bloqueiam promoção.
 
-Exemplo: `AI Core / Gateway` continua sendo o módulo mesmo que o provedor mude entre OpenAI, Gemini, Anthropic, Workers AI ou modelo local.
+## Fast Path
+`CORE-ATTEST` define o conceito de Execution Passport. `CORE-FPATH` possui policy guard nesta branch. O atalho pode reutilizar trabalho estável já validado, mas nunca pula autorização em trust boundary, hard rules, integridade ou auditoria crítica. Contexto/TTL/policy/identidade alterados invalidam o atalho.
 
-## Regra de continuidade
-O uso de serviço gratuito ou free tier não pode fazer o aplicativo parar silenciosamente.
+## Benefícios
+`CORE-BEN` calcula ganho somente com baseline real. Sem baseline: `NÃO MENSURÁVEL`.
 
-O CORE deve prever uma das estratégias:
-1. fallback automático, quando o contrato técnico for compatível e seguro;
-2. fallback/degradação segura, quando a função for não crítica;
-3. migração controlada, quando houver dados, autenticação, cobrança, segurança ou outro risco de integridade.
+## Dados/performance
+Princípio: não mover o todo quando só uma parte mudou. Fluxo proposto: `DELTA → BUF → PROJ → ALLOC → STOR → COMMIT → VER → BDR`.
 
-Troca automática é proibida quando puder gerar perda de dados, quebra de login, duplicidade de cobrança, alteração de permissões ou redução de segurança.
+## Versões explícitas
+Ver `suite/core-version-policy.json`:
+- manifesto 2.1.1;
+- catálogo 2.1.0;
+- runtime 2.0.0;
+- arquitetura 2.3.0-draft.
 
-## Versões
-O manifesto oficial atual é CORE `2.1.0`.
+Dimensões podem ser diferentes, mas precisam corresponder às fontes e à política registrada.
 
-O catálogo não deve inventar versões históricas de módulos ou plugins. Uma versão anterior só entra no histórico quando houver evidência: commit, tag, release, changelog, lockfile, artefato ou registro equivalente.
-
-## Fonte
-- Interface: `suite/core-studio/index.html`
-- Catálogo de módulos/plugins: `suite/core-studio/modules.js`
-- Manifesto: `suite/app-core-manifest.json`
+## Arquivos
+- `suite/core-studio/index.html`
+- `suite/core-studio/modules.js`
+- `suite/core-studio/core-code-registry.js`
+- `suite/core-studio/core-governance.js`
+- `suite/core-studio/innovation-registry.js`
+- `suite/core-studio/architecture-center.html`
+- `suite/core-version-policy.json`
+- `scripts/validate-core-registry.mjs`
+- `scripts/test-core-governance.mjs`
+- `.github/workflows/core-truth-guard.yml`
+- `docs/core/LAMOU_CORE_MANUAL_MESTRE_V2_3_2026-08-30.md`
+- `docs/core/CODEX_PROMPT_MESTRE_LAMOU_CORE_V2_3_2026-08-30.md`
+- `docs/core/LAMOU_CORE_AUDITORIA_CODIGOS_FASTPATH_V2_3_2026-08-30.md`
