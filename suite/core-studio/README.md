@@ -46,7 +46,35 @@ O manifesto oficial atual é CORE `2.1.0`.
 
 O catálogo não deve inventar versões históricas de módulos ou plugins. Uma versão anterior só entra no histórico quando houver evidência: commit, tag, release, changelog, lockfile, artefato ou registro equivalente.
 
+## Derivada V2.2 — Arquitetura & Códigos
+A branch `core/innovation-center-security-v2` adiciona uma especificação derivada sem sobrescrever a baseline.
+
+Novos artefatos:
+- `suite/core-studio/architecture-center.html` — tela visual de arquitetura, códigos e diferenciais;
+- `suite/core-studio/core-code-registry.js` — catálogo de códigos com quando atua, entradas, saídas, dados, segurança, dependências, continuidade e contrato;
+- `suite/core-studio/innovation-registry.js` — registro de Base Conhecida / ✦ Diferencial LAMOU / Candidato a Pesquisa-IP;
+- `docs/core/LAMOU_CORE_MANUAL_MESTRE_V2_2_2026-08-30.md` — Manual Mestre;
+- `docs/core/CODEX_PROMPT_MESTRE_LAMOU_CORE_V2_2_2026-08-30.md` — prompt de implementação atualizado.
+
+### Regra da ficha por código
+Cada código deve abrir uma ficha com:
+1. Quando atua;
+2. Entrada & Saída;
+3. Dados & Segurança;
+4. Plan X/Y/Z/Safe e Dependências;
+5. Código/Contrato e source path quando houver.
+
+`PROPOSTO` continua significando especificação, não runtime. A promoção para IMPLEMENTADO/TESTADO/PRODUÇÃO depende do Truth Guard e de evidência real.
+
+### Dados e performance
+A derivada introduz a arquitetura incremental:
+`CORE-INDEX → CORE-DELTA → CORE-BUF → CORE-PROJ → CORE-SEC-ORCH → CORE-ALLOC → CORE-STOR → CORE-COMMIT → CORE-VER → CORE-BDR`.
+
+`CORE-BUF` é buffer transitório durável e nunca source of truth. Arquivos grandes devem preferir leitura por aba/range/chunk e gravação por delta quando tecnicamente seguro.
+
 ## Fonte
-- Interface: `suite/core-studio/index.html`
+- Interface baseline: `suite/core-studio/index.html`
+- Centro de arquitetura derivado: `suite/core-studio/architecture-center.html`
 - Catálogo de módulos/plugins: `suite/core-studio/modules.js`
+- Catálogo de códigos V2.2: `suite/core-studio/core-code-registry.js`
 - Manifesto: `suite/app-core-manifest.json`
