@@ -1,99 +1,62 @@
 # LAMOU CORE Studio — Registro Oficial da Base
 
-## O que este aplicativo é
-O LAMOU CORE Studio é a interface navegável do APP CORE CUSTOM. Ele **não cria aplicativos** e não possui catálogo de produtos finais.
+## Estado atual da derivada
+- Arquitetura/governança: `2.3.0-draft`.
+- Promoção: bloqueada até runtime/evidência suficientes.
+- 55 códigos governados.
+- Truth Guard executável no GitHub Actions.
+- Validador de DAG/registro e testes de fast-path/benefícios concluídos com sucesso.
 
-Sua função é manter a biblioteca mestre de capacidades reutilizáveis da LAMOU IA para construção de sites, aplicativos e sistemas.
+## Princípios
+O CORE é a biblioteca transversal dos aplicativos LAMOU. Módulo é capability; plugin/provider é implementação. Proposta não vira produção por documentação.
 
-## Relação com a Central
-- **Aba CORE da Central:** mostra a cobertura/aplicação da base transversal na própria Central e nos produtos.
-- **LAMOU CORE Studio:** aplicativo separado que documenta e governa a biblioteca completa da base.
-- **Projetos/aplicativos:** consomem os módulos do CORE; não são criados dentro do CORE Studio.
-
-## Unidade principal: Módulo
-Cada módulo deve possuir nome, identificador, categoria, classificação, descrição, dependências, plugins/provedores, substituições, continuidade, política de versão, histórico e evidência.
-
-## Unidade técnica: Código CORE
-Cada código deve possuir:
-- código e nome;
+## Cada código CORE deve informar
 - quando atua;
-- entradas e saídas;
-- dados/proteções;
-- `hardDepends` para bootstrap e `relatedDepends` para relações arquiteturais;
-- Plan X/Y/Z/Safe quando aplicável;
-- contrato técnico;
-- nível de travamento do contrato;
-- política de fast-path;
-- métricas de benefício/ganho;
-- estado de evidência.
+- entradas/saídas;
+- dados/proteção;
+- `hardDepends` (bootstrap) e `relatedDepends` (relações);
+- Plan X/Y/Z/Safe;
+- contrato;
+- estado/evidência;
+- `contractLock`;
+- `fastPath`;
+- métricas de benefício.
 
-## Contrato travado ≠ código congelado
-Códigos críticos usam `LOCKED_CRITICAL_CONTRACT`: o contrato público não pode sofrer quebra silenciosa. A implementação pode ser otimizada ou substituída atrás do contrato. Breaking change exige nova major, migração, testes, reverse path e aprovação.
+## Travamento
+`LOCKED_CRITICAL_CONTRACT` trava compatibilidade do contrato, não impede melhoria interna. Breaking change exige nova major, migração, testes, reverse path e aprovação. `STABLE_VERSIONED_CONTRACT` admite evolução compatível. `EVOLVING_RESEARCH` não promove automaticamente.
 
-Códigos estáveis usam `STABLE_VERSIONED_CONTRACT`. Candidatos a pesquisa/IP usam `EVOLVING_RESEARCH` e não recebem promoção automática.
+## Dependências
+`CORE-DAG` valida `hardDepends` como DAG. Relações arquiteturais não devem virar dependências rígidas sem necessidade. Ciclos bloqueiam promoção.
 
-## CORE-DAG — dependências sem trava
-O campo legado `depends` misturava relações lógicas com dependências rígidas e criava ciclos conceituais. A V2.3 separa:
-- `hardDepends`: ordem de bootstrap, obrigatoriamente acíclica;
-- `relatedDepends`: integração/consulta/relação, sem bloquear inicialização.
+## Fast Path
+`CORE-ATTEST` define o conceito de Execution Passport. `CORE-FPATH` possui policy guard nesta branch. O atalho pode reutilizar trabalho estável já validado, mas nunca pula autorização em trust boundary, hard rules, integridade ou auditoria crítica. Contexto/TTL/policy/identidade alterados invalidam o atalho.
 
-O validador `scripts/validate-core-registry.mjs` bloqueia promoção se houver código duplicado, campo obrigatório ausente, hard dependency inexistente ou ciclo de bootstrap.
+## Benefícios
+`CORE-BEN` calcula ganho somente com baseline real. Sem baseline: `NÃO MENSURÁVEL`.
 
-## CORE-FPATH — rota rápida verificada
-Fast-path **não é bypass de segurança**. Ele reutiliza trabalho já validado quando existe Execution Passport válido, contexto estável, baixo risco e TTL vigente.
+## Dados/performance
+Princípio: não mover o todo quando só uma parte mudou. Fluxo proposto: `DELTA → BUF → PROJ → ALLOC → STOR → COMMIT → VER → BDR`.
 
-Pode reutilizar, conforme código/contexto:
-- resolução de provider estável;
-- schema/metadata já verificados;
-- policy compilada;
-- leitura parcial/delta no lugar de full fetch.
+## Versões explícitas
+Ver `suite/core-version-policy.json`:
+- manifesto 2.1.1;
+- catálogo 2.1.0;
+- runtime 2.0.0;
+- arquitetura 2.3.0-draft.
 
-Nunca pula:
-- hard rules;
-- autorização em fronteira de confiança;
-- integridade;
-- pagamento/consentimento;
-- mudança de privilégio;
-- uso/rotação de segredo e assinatura crítica;
-- auditoria obrigatória.
+Dimensões podem ser diferentes, mas precisam corresponder às fontes e à política registrada.
 
-Mudança de usuário, tenant, role, policy version, risco, data class, code version ou TTL invalida o fast-path.
-
-## CORE-BEN — benefícios e ganhos
-Toda proposta pode declarar benefício esperado, mas ganho só é confirmado com baseline + telemetria.
-
-Fórmulas padrão:
-- menor é melhor: `(baseline - atual) / baseline × 100`;
-- maior é melhor: `(atual - baseline) / baseline × 100`;
-- tempo economizado: diferença de espera × volume;
-- bytes economizados: diferença de transferência × volume.
-
-Sem baseline real, o estado é `NÃO MENSURÁVEL`.
-
-## Regra plugin != módulo
-Um módulo representa uma capacidade. Um plugin é uma implementação possível. O módulo continua existindo quando o provider muda.
-
-## Continuidade
-Serviço gratuito, limite de quota ou provider indisponível não pode parar o aplicativo silenciosamente. Fallback só é automático quando contrato e segurança permitem. Dados, autenticação, cobrança e segurança crítica exigem migração/continuidade controlada.
-
-## Verdade de versão
-As dimensões de versão são explícitas em `suite/core-version-policy.json`: manifesto, catálogo, runtime e arquitetura podem evoluir em ritmos diferentes, mas os valores precisam corresponder às fontes reais. Promoção permanece bloqueada nesta derivada até existir evidência suficiente de runtime/teste/release.
-
-## Truth Guard executável nesta derivada
-Workflow: `.github/workflows/core-truth-guard.yml`.
-
-Valida:
-- registro/DAG;
-- version policy;
-- regras de fast-path;
-- fórmulas de benefício.
-
-## Fonte
-- Interface: `suite/core-studio/index.html`
-- Catálogo de módulos/plugins: `suite/core-studio/modules.js`
-- Catálogo de códigos: `suite/core-studio/core-code-registry.js`
-- Governança V2.3: `suite/core-studio/core-governance.js`
-- Centro visual: `suite/core-studio/architecture-center.html`
-- Manifesto: `suite/app-core-manifest.json`
-- Política de versões: `suite/core-version-policy.json`
-- Auditoria completa: `docs/core/LAMOU_CORE_AUDITORIA_CODIGOS_FASTPATH_V2_3_2026-08-30.md`
+## Arquivos
+- `suite/core-studio/index.html`
+- `suite/core-studio/modules.js`
+- `suite/core-studio/core-code-registry.js`
+- `suite/core-studio/core-governance.js`
+- `suite/core-studio/innovation-registry.js`
+- `suite/core-studio/architecture-center.html`
+- `suite/core-version-policy.json`
+- `scripts/validate-core-registry.mjs`
+- `scripts/test-core-governance.mjs`
+- `.github/workflows/core-truth-guard.yml`
+- `docs/core/LAMOU_CORE_MANUAL_MESTRE_V2_3_2026-08-30.md`
+- `docs/core/CODEX_PROMPT_MESTRE_LAMOU_CORE_V2_3_2026-08-30.md`
+- `docs/core/LAMOU_CORE_AUDITORIA_CODIGOS_FASTPATH_V2_3_2026-08-30.md`
