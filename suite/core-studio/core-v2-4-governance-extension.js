@@ -40,4 +40,5 @@ for(const raw of (window.CORE_V24_ADDITIONS||[])){
  existing.add(raw.code);
 }
 window.CORE_V24={version:'2.4.0-draft',addedCodes:['CORE-UPD','CORE-BKP','CORE-SIGN','CORE-OBS','CORE-MEDIA','CORE-FEED'],status:'DERIVED_NOT_PRODUCTION'};
+if(window.CORE_GOVERNANCE) window.CORE_GOVERNANCE.version=window.CORE_V24.version;
 })();
