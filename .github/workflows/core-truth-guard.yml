@@ -1,0 +1,34 @@
+name: CORE Truth Guard
+on:
+  pull_request:
+    paths:
+      - 'suite/core-studio/**'
+      - 'suite/core-runtime.js'
+      - 'suite/app-core-manifest.json'
+      - 'suite/core-version-policy.json'
+      - 'scripts/validate-core-registry.mjs'
+      - 'scripts/test-core-governance.mjs'
+      - '.github/workflows/core-truth-guard.yml'
+  push:
+    branches:
+      - 'core/**'
+    paths:
+      - 'suite/core-studio/**'
+      - 'suite/core-runtime.js'
+      - 'suite/app-core-manifest.json'
+      - 'suite/core-version-policy.json'
+      - 'scripts/validate-core-registry.mjs'
+      - 'scripts/test-core-governance.mjs'
+      - '.github/workflows/core-truth-guard.yml'
+jobs:
+  validate-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate CORE registry and dependency DAG
+        run: node scripts/validate-core-registry.mjs
+      - name: Test fast-path and benefit rules
+        run: node scripts/test-core-governance.mjs
