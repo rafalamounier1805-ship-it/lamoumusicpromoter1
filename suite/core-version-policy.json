@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "branchPurpose": "DERIVED_PROPOSAL",
+  "promotionAllowed": false,
+  "architectureSpecVersion": "2.3.0-draft",
+  "manifestVersion": "2.1.1",
+  "catalogVersion": "2.1.0",
+  "runtimeVersion": "2.0.0",
+  "rule": "Version dimensions are explicit. They do not need to be equal, but the policy must match the actual source declarations. Promotion remains blocked until implementation/test evidence supports a new runtime release."
+}
