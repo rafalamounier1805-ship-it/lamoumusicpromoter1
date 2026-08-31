@@ -1,0 +1,12 @@
+{
+  "contract_id": "LAMOU-GOLD-SCOPE-LOCK-V1.0",
+  "contract_sha256": "cac830e6b5f39ea440b190e88db6e28e42853424d7c13e807073a3286971ca37",
+  "repository": "rafalamounier1805-ship-it/lamoumusicpromoter1",
+  "branch": "governance/gold-scope-lock-v1",
+  "default_branch_preserved": "main",
+  "application_binding": "Lamou Music Promoter / Composer OS plus historical multi-app/CORE artifacts",
+  "binding_status": "GOVERNANCE_BOUND_REPOSITORY_RECONCILIATION_REQUIRED",
+  "merge_status": "NOT_MERGED",
+  "required_gates": ["SCOPE_FIDELITY","POLICY","DESIGN_REGRESSION","LINKAGE","REPOSITORY_TRUTH","FUNCTIONAL_TRUTH","SECURITY_DATA","BUILD_COMPLETENESS","EVIDENCE","TRUTH_VERSION"],
+  "warning": "Repository history contains artifacts/commits for multiple products; exact per-app source paths must be reconciled before production claims."
+}
