@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "product": "COMPOSER OS",
+  "rule": "Only a build with status ACTIVE_VERIFIED may be presented or deployed as the official runnable version.",
+  "active": {
+    "status": "NONE_UNTIL_RUN_VERIFIED",
+    "version": null,
+    "branch": null,
+    "commit_sha": null,
+    "build_id": null,
+    "evidence_ref": null
+  },
+  "candidate": {
+    "status": "CANDIDATE_NOT_RUN",
+    "branch": "composer-os/p0-real-foundation",
+    "derived_from": "composer-os-v2",
+    "required_gate": "issue-3 RUN CONTRACT"
+  },
+  "history": [
+    {
+      "branch": "history/composer-os-v2-ux-baseline",
+      "status": "HISTORICAL_UX_NON_EXECUTABLE",
+      "reason": "Preserved UX baseline; localStorage/demo is not production evidence."
+    },
+    {
+      "branch": "archive/legacy-pre-composer-os",
+      "status": "LEGACY_SNAPSHOT_NON_EXECUTABLE",
+      "reason": "Snapshot of pre-Composer-OS main for traceability only."
+    }
+  ]
+}
