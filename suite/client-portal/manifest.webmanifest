@@ -1,0 +1,14 @@
+{
+  "name": "LAMOU — Portal do Cliente",
+  "short_name": "LAMOU",
+  "description": "Portal oficial do cliente LAMOU",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f9fc",
+  "theme_color": "#f7f9fc",
+  "lang": "pt-BR",
+  "icons": [
+    {"src":"./assets/lamou-logo.webp","sizes":"420x420","type":"image/webp","purpose":"any maskable"}
+  ]
+}
