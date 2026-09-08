@@ -1,0 +1,9 @@
+{
+  "name": "COMPOSER OS",
+  "short_name": "Composer OS",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0e13",
+  "theme_color": "#0a0e13",
+  "description": "Workspace de gestão de catálogo, direitos, mercado e carreira para compositores independentes."
+}

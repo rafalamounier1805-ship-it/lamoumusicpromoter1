@@ -1,0 +1,1 @@
+COMPOSER OS v2.1 source is maintained on branch composer-os-v2. Production deployment currently lives on Vercel but GitHub-triggered CI/CD has not yet been configured. See composer-os/CHANGELOG.md and PR #10.
