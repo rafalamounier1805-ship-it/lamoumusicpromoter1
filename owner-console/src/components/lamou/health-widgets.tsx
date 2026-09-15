@@ -15,11 +15,15 @@ import {
 } from "@/lib/lamou/health-model";
 import { cn } from "@/lib/utils";
 
+/**
+ * Cor representa evidência/estado, não ausência de conexão.
+ * Vermelho é reservado a bloqueio/falha/erro real; HealthStatus não possui um estado de falha.
+ */
 export const STATUS_TONE: Record<HealthStatus, Tone> = {
   verificado: "ok",
   parcial: "attention",
   "nao-verificado": "neutral",
-  "nao-conectado": "critical",
+  "nao-conectado": "neutral",
 };
 
 const URGENCY_TONE: Record<NextAction["urgency"], Tone> = {
@@ -134,6 +138,12 @@ export function CoverageStack() {
   );
 }
 
+function domainTone(items: (typeof HEALTH_INDICATORS)[number][]): Tone {
+  if (items.every((item) => item.status === "verificado")) return "ok";
+  if (items.some((item) => item.status === "parcial")) return "attention";
+  return "neutral";
+}
+
 /** Barras por domínio: quantos indicadores comprovados sobre o total do domínio. */
 export function DomainBars({ onSelect }: { onSelect?: (indicatorId: string) => void }) {
   const domains = Array.from(new Set(HEALTH_INDICATORS.map((i) => i.domain)));
@@ -142,17 +152,13 @@ export function DomainBars({ onSelect }: { onSelect?: (indicatorId: string) => v
       {domains.map((d) => {
         const items = HEALTH_INDICATORS.filter((i) => i.domain === d);
         const done = items.filter((i) => i.status === "verificado").length;
-        const worst = items.some((i) => i.status === "nao-conectado")
-          ? "critical"
-          : items.some((i) => i.status === "parcial" || i.status === "nao-verificado")
-            ? "attention"
-            : "ok";
+        const tone = domainTone(items);
         const first = items[0]!;
         const Icon = first.icon;
         const body = (
           <>
             <span className="flex items-center gap-2 text-xs">
-              <Icon className={cn("h-3.5 w-3.5", TONE_TEXT[worst])} aria-hidden="true" />
+              <Icon className={cn("h-3.5 w-3.5", TONE_TEXT[tone])} aria-hidden="true" />
               <span className="min-w-0 flex-1">{d}</span>
               <span className="font-mono text-[10px] text-muted-foreground">
                 {done} de {items.length} comprovados
@@ -160,7 +166,7 @@ export function DomainBars({ onSelect }: { onSelect?: (indicatorId: string) => v
             </span>
             <span className="mt-1.5 flex h-2 w-full overflow-hidden rounded-full border border-border/50">
               <span
-                className={cn(TONE_FILL[done > 0 ? "ok" : worst])}
+                className={cn(TONE_FILL[done > 0 ? "ok" : tone])}
                 style={{ width: `${Math.max((done / items.length) * 100, done > 0 ? 6 : 100)}%` }}
                 aria-hidden="true"
               />
@@ -202,7 +208,7 @@ export function OverallHealth({ onOpen, selected }: { onOpen?: () => void; selec
         <InfoTip text="Score único do ecossistema. Só pode existir com metodologia de peso publicada e série histórica; sem isso mostramos cobertura de evidência, não saúde." />
       </div>
       <p className="mt-2 font-display text-lg font-semibold text-muted-foreground">
-        não calculável ainda
+        NÃO CALCULÁVEL
       </p>
       <p className="text-[11px] text-muted-foreground">{c.reason}</p>
       <div className="mt-3">
@@ -271,8 +277,8 @@ export function NextActionsPanel({ limit = 4 }: { limit?: number }) {
     >
       <p className="flex items-start gap-2 text-xs text-muted-foreground">
         <ListChecks className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
-        Cada ação nasce de um indicador real e leva a uma rota existente. Esforço não é estimado
-        porque não há base histórica para estimar.
+        Cada ação nasce de um indicador e leva a uma rota existente. Impacto quantitativo só é
+        mostrado quando o denominador está declarado; esforço não é estimado sem base histórica.
       </p>
       <ul className="mt-2 space-y-2">
         {NEXT_ACTIONS.slice(0, limit).map((a) => (
