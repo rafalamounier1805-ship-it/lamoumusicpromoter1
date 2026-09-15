@@ -29,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { filterCognitiveModules, type CognitiveFilterMode } from "@/lib/lamou/cognitive";
 import {
   MODULES,
   CASES,
@@ -50,7 +51,7 @@ const SEV_TONE: Record<Severity, string> = {
   falha: "border-destructive/60 text-destructive",
 };
 
-const CRITICAL: Severity[] = ["probabilidade", "critico", "falha"];
+const ATTENTION_SEVERITIES: Severity[] = ["probabilidade", "critico", "falha"];
 const HARD_CRITICAL: Severity[] = ["critico", "falha"];
 
 const GOV_ROUTES = [
@@ -79,7 +80,6 @@ interface GovItem {
   routeLabel: string;
 }
 
-const openCritical = MODULES.filter((m) => CRITICAL.includes(m.severity));
 const hardCritical = MODULES.filter((m) => HARD_CRITICAL.includes(m.severity));
 const activeContracts = CONTRACTS.filter((c) => c.status === "ativo");
 const openPlans = ACTION_PLANS.filter((p) => p.status !== "CONCLUÍDO" && p.status !== "CANCELADO");
@@ -89,14 +89,14 @@ const GOVERNANCE: GovItem[] = [
   {
     id: "GEST-FALHAS",
     title: "Falhas & criticidade",
-    value: `${openCritical.length} de ${MODULES.length}`,
-    target: `${hardCritical.length} em criticidade dura (crítico/falha) · meta: 0`,
+    value: `${hardCritical.length} de ${MODULES.length}`,
+    target: `${hardCritical.length} em crítico/falha · meta: 0`,
     definition:
-      "Módulos gerenciais em probabilidade, crítico ou falha. Denominador: total de módulos exibidos no cockpit.",
+      "Módulos gerenciais exclusivamente em estado crítico ou falha. Probabilidade é atenção e possui filtro próprio.",
     truth: "SYNTHETIC_DEMO",
-    tone: hardCritical.length > 0 ? "critical" : openCritical.length > 0 ? "attention" : "ok",
+    tone: hardCritical.length > 0 ? "critical" : "ok",
     source: "Fixtures de módulos do cockpit (SYNTHETIC_DEMO). Telemetria real não conectada.",
-    body: "Quantos módulos gerenciais estão em criticidade aberta. A investigação técnica, com indicadores e evidências, acontece no CORE.",
+    body: "Quantos módulos gerenciais estão em criticidade dura. A lista detalhada contém exatamente os itens que compõem o número mostrado.",
     route: "/core/health",
     routeLabel: "Abrir Indicadores de Saúde do CORE",
   },
@@ -163,7 +163,7 @@ const GOVERNANCE: GovItem[] = [
     truth: "SYNTHETIC_DEMO",
     tone: "neutral",
     source: "Registro de versões da candidata. Promoção automática não existe.",
-    body: "Estado das versões: baseline congelada, candidatas e rollback. Nenhuma promoção acontece sem gate explícito.",
+    body: "Estado das versões: baseline congelada, candidatas e rollback. Não há histórico de promoção comprovado nesta leitura; use a superfície real de Versões.",
     route: "/owner/versions",
     routeLabel: "Abrir Versões",
   },
@@ -181,6 +181,8 @@ const GOVERNANCE: GovItem[] = [
     routeLabel: "Abrir Oportunidades",
   },
 ];
+
+const PRIMARY_GOVERNANCE = GOVERNANCE.filter((item) => item.id !== "GEST-OPORTUNIDADES");
 
 const GOV_ICONS: Record<string, LucideIcon> = {
   "GEST-FALHAS": AlertTriangle,
@@ -223,18 +225,23 @@ export const Route = createFileRoute("/owner/")({
 
 function Cockpit() {
   const [criticalOnly, setCriticalOnly] = useState(false);
+  const [probabilityOnly, setProbabilityOnly] = useState(false);
   const [treated, setTreated] = useState<string[]>([]);
   const [sel, setSel] = useState<Sel>(null);
+
+  const filterMode: CognitiveFilterMode = criticalOnly
+    ? "critical"
+    : probabilityOnly
+      ? "probability"
+      : "all";
 
   const modules = useMemo(() => {
     const withPendings = MODULES.map((m) => ({
       ...m,
       openPendings: m.pendings.filter((p) => !p.resolved),
     }));
-    return criticalOnly
-      ? withPendings.filter((m) => m.openPendings.length > 0 || CRITICAL.includes(m.severity))
-      : withPendings;
-  }, [criticalOnly]);
+    return filterCognitiveModules(withPendings, filterMode);
+  }, [filterMode]);
 
   const openTotal = modules.reduce((a, m) => a + m.openPendings.length, 0);
   const totalPendings = MODULES.reduce((a, m) => a + m.pendings.length, 0);
@@ -245,18 +252,21 @@ function Cockpit() {
       id: "KPI-MODULOS",
       label: "Módulos exibidos",
       definition:
-        "Quantos módulos gerenciais a Central está mostrando agora, sobre o total conhecido nas fixtures. O filtro “somente críticos” reduz esse número.",
+        "Quantos módulos gerenciais a Central está mostrando agora, sobre o total conhecido nas fixtures. Crítico significa apenas crítico/falha; probabilidade possui filtro próprio.",
       value: `${modules.length} de ${MODULES.length}`,
-      target: criticalOnly
-        ? "filtro de críticos ativo · meta não se aplica"
-        : `${MODULES.length} conhecidos · meta de exibição: ${MODULES.length}`,
-      trend: criticalOnly ? "filtrado" : "completo",
+      target:
+        filterMode === "critical"
+          ? "somente crítico/falha · meta não se aplica"
+          : filterMode === "probability"
+            ? "somente probabilidade · meta não se aplica"
+            : `${MODULES.length} conhecidos · meta de exibição: ${MODULES.length}`,
+      trend: filterMode === "all" ? "completo" : "filtrado",
       meaning:
-        "Mede cobertura de leitura: se menos módulos aparecem do que os conhecidos, a visão está parcial.",
+        "Mede cobertura de leitura: se menos módulos aparecem do que os conhecidos, a visão está parcial por filtro explícito.",
       source: "Fixtures de módulos do cockpit (demo-data).",
       updatedAt: "atualizado com o carregamento da tela",
       owner: "responsável: proprietário",
-      truth: modules.length === MODULES.length ? "FACT/EVIDENCED" : "PARTIAL",
+      truth: "SYNTHETIC_DEMO",
       tone: modules.length === MODULES.length ? "ok" : "attention",
       ratio: { value: modules.length, total: MODULES.length },
     },
@@ -298,7 +308,7 @@ function Cockpit() {
         "Versões em estado CANDIDATA aguardando gate. Nenhuma promoção acontece automaticamente.",
       value: `${candidates.length} de ${VERSIONS.length}`,
       target: "SALVAR ≠ PROMOVER · promoção exige gate completo",
-      trend: "sem histórico de promoções",
+      trend: "sem histórico de promoções comprovado nesta leitura",
       meaning: "Indica quanto está pronto para avaliação, não quanto está aprovado.",
       source: "Registro de versões da candidata.",
       updatedAt: "sem data de verificação registrada",
@@ -309,23 +319,41 @@ function Cockpit() {
     },
   ];
 
-  function listTab(rows: { id: string; label: string; extra?: string; tone?: string }[]) {
+  function listTab(
+    rows: { id: string; label: string; extra?: string; tone?: string }[],
+    onOpen?: (id: string) => void,
+  ) {
     return (
       <ul className="space-y-1">
-        {rows.map((r) => (
-          <li
-            key={r.id}
-            className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/50 bg-surface-1/40 p-2"
-          >
-            <span className="font-mono text-[10px] text-muted-foreground">{r.id}</span>
-            <span className="min-w-0 flex-1">{r.label}</span>
-            {r.extra ? (
-              <Badge variant="outline" className={cn("text-[10px]", r.tone)}>
-                {r.extra}
-              </Badge>
-            ) : null}
-          </li>
-        ))}
+        {rows.map((r) => {
+          const content = (
+            <>
+              <span className="font-mono text-[10px] text-muted-foreground">{r.id}</span>
+              <span className="min-w-0 flex-1 text-left">{r.label}</span>
+              {r.extra ? (
+                <Badge variant="outline" className={cn("text-[10px]", r.tone)}>
+                  {r.extra}
+                </Badge>
+              ) : null}
+            </>
+          );
+
+          return (
+            <li key={r.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-2">
+              {onOpen ? (
+                <button
+                  type="button"
+                  onClick={() => onOpen(r.id)}
+                  className="flex w-full flex-wrap items-center gap-1.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  {content}
+                </button>
+              ) : (
+                <div className="flex flex-wrap items-center gap-1.5">{content}</div>
+              )}
+            </li>
+          );
+        })}
       </ul>
     );
   }
@@ -366,6 +394,41 @@ function Cockpit() {
                 }))
               : candidates.map((v) => ({ id: v.id, label: v.label, extra: v.state }));
 
+      const itemsContent =
+        kpi.id === "KPI-MODULOS" ? (
+          listTab(rows, (id) => setSel({ kind: "module", id }))
+        ) : kpi.id === "KPI-OCORRENCIAS" ? (
+          <ul className="space-y-1">
+            {CASES.filter((c) => c.occurrence).map((c) => (
+              <li key={c.id}>
+                <Link
+                  to="/owner/mapa-vivo"
+                  search={{ case_id: c.id }}
+                  className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/50 bg-surface-1/40 p-2 outline-none transition-colors hover:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <span className="font-mono text-[10px] text-muted-foreground">{c.id}</span>
+                  <span className="min-w-0 flex-1">{c.title}</span>
+                  <Badge variant="outline" className={cn("text-[10px]", SEV_TONE[c.severity])}>
+                    {SEVERITY_LABEL[c.severity]}
+                  </Badge>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : kpi.id === "KPI-CANDIDATAS" ? (
+          <div className="space-y-3">
+            {listTab(rows)}
+            <p className="text-[11px] text-muted-foreground">
+              Sem histórico de promoção comprovado nesta leitura. O destino operacional é a superfície real de Versões.
+            </p>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/owner/versions">Abrir Versões</Link>
+            </Button>
+          </div>
+        ) : (
+          listTab(rows)
+        );
+
       const tabs: ColumnTab[] = [
         {
           id: "resumo",
@@ -386,7 +449,7 @@ function Cockpit() {
             rows.length === 0 ? (
               <p className="text-muted-foreground">Nenhum item neste agregador agora.</p>
             ) : (
-              listTab(rows)
+              itemsContent
             ),
         },
         {
@@ -448,6 +511,23 @@ function Cockpit() {
             </>
           ),
         },
+        ...(g.id === "GEST-FALHAS"
+          ? [
+              {
+                id: "itens",
+                label: `Itens (${hardCritical.length})`,
+                content: listTab(
+                  hardCritical.map((m) => ({
+                    id: m.id,
+                    label: m.name,
+                    extra: SEVERITY_LABEL[m.severity],
+                    tone: SEV_TONE[m.severity],
+                  })),
+                  (id) => setSel({ kind: "module", id }),
+                ),
+              } satisfies ColumnTab,
+            ]
+          : []),
         {
           id: "fonte",
           label: "Fonte",
@@ -658,9 +738,29 @@ function Cockpit() {
           <>
             <DemoBadge />
             <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-card/70 px-3 py-1.5">
-              <Switch id="critical-only" checked={criticalOnly} onCheckedChange={setCriticalOnly} />
+              <Switch
+                id="critical-only"
+                checked={criticalOnly}
+                onCheckedChange={(checked) => {
+                  setCriticalOnly(checked);
+                  if (checked) setProbabilityOnly(false);
+                }}
+              />
               <Label htmlFor="critical-only" className="text-xs">
                 Somente críticos
+              </Label>
+            </div>
+            <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-card/70 px-3 py-1.5">
+              <Switch
+                id="probability-only"
+                checked={probabilityOnly}
+                onCheckedChange={(checked) => {
+                  setProbabilityOnly(checked);
+                  if (checked) setCriticalOnly(false);
+                }}
+              />
+              <Label htmlFor="probability-only" className="text-xs">
+                Somente probabilidade
               </Label>
             </div>
           </>
@@ -702,7 +802,7 @@ function Cockpit() {
             no LAMOU CORE.
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
-            {GOVERNANCE.map((g) => (
+            {PRIMARY_GOVERNANCE.map((g) => (
               <InteractiveCard
                 key={g.id}
                 selected={sel?.kind === "gestao" && sel.id === g.id}
@@ -744,13 +844,20 @@ function Cockpit() {
               </InteractiveCard>
             ))}
           </div>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/50 pt-3">
+            <p className="text-[11px] text-muted-foreground">
+              Oportunidades permanece na superfície própria como leitura secundária; não compõe o bloco principal do Cognitive.
+            </p>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/owner/opportunities">Abrir Oportunidades</Link>
+            </Button>
+          </div>
         </Panel>
 
         {modules.length === 0 ? (
-          <Panel title="Nenhuma criticidade aberta">
+          <Panel title={filterMode === "probability" ? "Nenhuma probabilidade aberta" : "Nenhuma criticidade aberta"}>
             <p className="text-sm text-muted-foreground">
-              Com o filtro de somente críticos ativo, nada exige atenção agora. Desligue o filtro
-              para ver a visão geral.
+              O filtro ativo não encontrou módulos neste estado. Desligue o filtro para voltar à visão geral.
             </p>
           </Panel>
         ) : (
@@ -762,7 +869,7 @@ function Cockpit() {
                   "motion-safe:transition-shadow rounded-xl border bg-card/70 p-4 backdrop-blur",
                   HARD_CRITICAL.includes(m.severity)
                     ? "border-destructive/40"
-                    : CRITICAL.includes(m.severity)
+                    : ATTENTION_SEVERITIES.includes(m.severity)
                       ? "border-warning/40"
                       : "border-border/60",
                 )}
@@ -783,7 +890,7 @@ function Cockpit() {
                   <p className="mt-2 text-xs text-muted-foreground">{m.summary}</p>
                 </button>
 
-                {!criticalOnly && m.metrics.length ? (
+                {filterMode === "all" && m.metrics.length ? (
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     {m.metrics.map((mt) => (
                       <div key={mt.label} className="rounded-lg bg-surface-1/50 p-2">
@@ -843,12 +950,14 @@ function Cockpit() {
             }
           >
             <div className="space-y-2">
-              {CASES.filter((c) => CRITICAL.includes(c.severity))
+              {CASES.filter((c) => ATTENTION_SEVERITIES.includes(c.severity))
                 .slice(0, 5)
                 .map((c) => (
-                  <div
+                  <Link
                     key={c.id}
-                    className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 bg-surface-1/40 p-3 text-sm"
+                    to="/owner/mapa-vivo"
+                    search={{ case_id: c.id }}
+                    className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 bg-surface-1/40 p-3 text-sm outline-none transition-colors hover:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span className="min-w-0 flex-1">
                       {c.id} · {c.title}
@@ -857,7 +966,7 @@ function Cockpit() {
                       {SEVERITY_LABEL[c.severity]}
                     </Badge>
                     <DemoBadge label="DEMO" />
-                  </div>
+                  </Link>
                 ))}
             </div>
           </Panel>

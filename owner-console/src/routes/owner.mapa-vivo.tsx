@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { CaseFile } from "@/components/lamou/case-file";
@@ -19,7 +19,18 @@ const SEV_DOT: Record<Severity, string> = {
   falha: "bg-destructive",
 };
 
+type MapaVivoSearch = {
+  case_id?: string;
+};
+
+function parseMapaVivoSearch(search: Record<string, unknown>): MapaVivoSearch {
+  return typeof search.case_id === "string" && search.case_id.trim()
+    ? { case_id: search.case_id }
+    : {};
+}
+
 export const Route = createFileRoute("/owner/mapa-vivo")({
+  validateSearch: parseMapaVivoSearch,
   head: () => ({
     meta: [
       { title: "Mapa Vivo — LAMOU IA Central" },
@@ -42,8 +53,15 @@ export const Route = createFileRoute("/owner/mapa-vivo")({
 
 function MapaVivo() {
   const { cases } = useLamou();
+  const { case_id: caseId } = Route.useSearch();
   const [selected, setSelected] = useState<string | null>(null);
   const [layer, setLayer] = useState<"todos" | "padrao" | "cubo">("todos");
+
+  useEffect(() => {
+    if (caseId && cases.some((item) => item.id === caseId)) {
+      setSelected(caseId);
+    }
+  }, [caseId, cases]);
 
   const nodes = cases.filter((c) => layer === "todos" || c.layer === layer);
 
