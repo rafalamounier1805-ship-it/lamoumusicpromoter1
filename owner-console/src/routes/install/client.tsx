@@ -17,7 +17,6 @@ import {
   Mail,
   Package,
   Plug,
-  RefreshCw,
   ScrollText,
   ShieldCheck,
   UserCog,
@@ -56,7 +55,6 @@ const VERSION = "CORE CLIENTE (sintetizado) · CANDIDATE_NOT_PROMOTED";
 /* ------------------------------------------------------------- 1 pacote/empresa */
 
 function StepPackage() {
-  const [reloading, setReloading] = useState(false);
   const checks = [
     {
       icon: Package,
@@ -73,7 +71,7 @@ function StepPackage() {
       source: "CLI-CHK-0002 · origem: capacidade do CORE",
       updatedAt: "sem execução",
       truth: "NOT_CONNECTED" as TruthState,
-      detail: "Sem banco e sem orquestrador conectados, a capacidade não pode ser consultada.",
+      detail: "Sem backend de provisionamento conectado, a capacidade não pode ser consultada.",
     },
     {
       icon: Building2,
@@ -81,7 +79,7 @@ function StepPackage() {
       source: "CLI-CHK-0003 · origem: cadastro local",
       updatedAt: "nesta sessão",
       truth: "NOT_VERIFIED" as TruthState,
-      detail: "Dados informados na próxima etapa; nada é persistido fora deste navegador.",
+      detail: "Dados informados na próxima etapa; nada é persistido como tenant real por esta jornada.",
     },
     {
       icon: FlaskConical,
@@ -90,39 +88,22 @@ function StepPackage() {
       updatedAt: "documento vivo",
       truth: "DOCUMENTED_ONLY" as TruthState,
       detail:
-        "Ambiente TESTE e ambiente OFICIAL são separados por política. A separação real depende de provisionamento.",
+        "Ambiente TESTE e ambiente OFICIAL são separados por política. A separação real depende de provisionamento e evidência.",
     },
   ];
   return (
     <StepSection
       icon={Package}
       title="Pacote e empresa do cliente"
-      description="Pré-requisitos do provisionamento, com ID e origem de cada item."
-      action={
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={reloading}
-          onClick={() => {
-            setReloading(true);
-            setTimeout(() => setReloading(false), 900);
-          }}
-          aria-label="Reverificar pré-requisitos do cliente"
-        >
-          <RefreshCw
-            className={reloading ? "mr-1 h-4 w-4 animate-spin" : "mr-1 h-4 w-4"}
-            aria-hidden="true"
-          />
-          {reloading ? "Verificando…" : "Reverificar"}
-        </Button>
-      }
+      description="Pré-requisitos do provisionamento, com ID e origem de cada item. Não existe botão de reverificação sem backend real."
     >
       {checks.map((c) => (
         <CheckRow key={c.label} {...c} />
       ))}
       <Note tone="warning">
-        Esta é a jornada do proprietário para provisionar um cliente. Ela não é a instalação do
-        proprietário e não é o Portal do Cliente.
+        A reverificação automática foi removida: sem backend de provisionamento, atualizar um timer
+        não constitui teste. Esta é a jornada do proprietário para provisionar um cliente; ela não é
+        a instalação do proprietário e não é o Portal do Cliente.
       </Note>
     </StepSection>
   );
@@ -297,7 +278,8 @@ function StepAccess() {
           <UserCog className="mr-1 h-4 w-4" aria-hidden="true" /> Adicionar usuário
         </Button>
         <Note>
-          Convites não são enviados: autenticação e e-mail transacional estão NOT_CONNECTED.
+          Convites não são enviados: o provisionamento de usuários e o e-mail transacional do
+          cliente estão NOT_CONNECTED.
         </Note>
       </StepSection>
 
@@ -373,7 +355,7 @@ function StepContract() {
           {[
             { label: "Contrato assinado anexado", truth: "NOT_CONNECTED" },
             { label: "Entitlements aplicados ao tenant", truth: "NOT_VERIFIED" },
-            { label: "Pagamento / faturamento", truth: "NOT_CONNECTED" },
+            { label: "Pagamento / faturamento do cliente", truth: "NOT_CONNECTED" },
             { label: "Vigência e renovação", truth: "DOCUMENTED_ONLY" },
           ].map((r) => (
             <div
@@ -435,7 +417,7 @@ function StepApis() {
                 {o.label}
               </Label>
               <p className="text-xs text-muted-foreground">
-                Escopo mínimo · timeout 30s · fallback manual · NOT_CONNECTED neste build
+                Escopo mínimo · timeout 30s · fallback manual · NOT_CONNECTED neste provisionamento
               </p>
             </div>
             <Switch
@@ -482,7 +464,10 @@ function StepApis() {
             <Input id="cli-dom" placeholder="cliente.exemplo" className="font-mono" />
           </div>
         </div>
-        <Note>Configurações permanecem nesta tela: não há banco do cliente conectado.</Note>
+        <Note>
+          Preferências permanecem locais nesta jornada: o backend de provisionamento do cliente não
+          está conectado.
+        </Note>
       </StepSection>
     </div>
   );
@@ -562,15 +547,15 @@ const CLIENT_READINESS: Row[] = [
     source: "CLI-TST-01",
     state: "NOT_CONNECTED",
     evidence: "nenhuma",
-    blocker: "autenticação ausente",
-    action: "Conectar autenticação",
+    blocker: "provisionamento de usuário do tenant ausente",
+    action: "Conectar autenticação do tenant",
   },
   {
     item: "Teste negativo de isolamento",
     source: "CLI-TST-02",
     state: "NOT_VERIFIED",
     evidence: "nenhuma",
-    blocker: "depende do banco",
+    blocker: "depende do tenant provisionado",
     action: "Executar acesso cruzado",
   },
   {
@@ -578,7 +563,7 @@ const CLIENT_READINESS: Row[] = [
     source: "CLI-TST-03",
     state: "NOT_VERIFIED",
     evidence: "nenhuma",
-    blocker: "sem banco provisionado",
+    blocker: "sem tenant real provisionado",
     action: "Escrever e testar políticas",
   },
   {
@@ -586,7 +571,7 @@ const CLIENT_READINESS: Row[] = [
     source: "CLI-TST-04",
     state: "NOT_CONNECTED",
     evidence: "nenhuma",
-    blocker: "storage ausente",
+    blocker: "storage do tenant ausente",
     action: "Definir rotina",
   },
   {
@@ -602,7 +587,7 @@ const CLIENT_READINESS: Row[] = [
     source: "CLI-TST-06",
     state: "NOT_VERIFIED",
     evidence: "seleção local",
-    blocker: "sem persistência",
+    blocker: "sem persistência no tenant",
     action: "Validar após provisionar",
   },
   {
@@ -649,13 +634,7 @@ function StepClientTests() {
                 <TableCell className="font-mono text-[11px] text-muted-foreground">
                   {r.source}
                 </TableCell>
-                <TableCell
-                  className={
-                    r.state === "NOT_CONNECTED"
-                      ? "font-mono text-[11px] text-destructive"
-                      : "font-mono text-[11px] text-muted-foreground"
-                  }
-                >
+                <TableCell className="font-mono text-[11px] text-muted-foreground">
                   {r.state}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">{r.evidence}</TableCell>
@@ -683,6 +662,27 @@ function ClientAside() {
           label="Prontidão do cliente"
           sub="0 de 8 itens com evidência."
         />
+      </div>
+      <div className="rounded-2xl border border-border bg-card p-4">
+        <h3 className="text-sm font-semibold">Estado pós-instalação</h3>
+        <dl className="mt-3 space-y-2 text-xs">
+          <div className="flex items-center justify-between gap-2">
+            <dt>Ativação</dt>
+            <dd><TruthBadge truth="BLOCKED" /></dd>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <dt>Provisionamento backend</dt>
+            <dd><TruthBadge truth="NOT_CONNECTED" /></dd>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <dt>Isolamento / RLS</dt>
+            <dd><TruthBadge truth="NOT_VERIFIED" /></dd>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <dt>Portal do Cliente</dt>
+            <dd><TruthBadge truth="NOT_CONNECTED" /></dd>
+          </div>
+        </dl>
       </div>
       <div className="rounded-2xl border border-border bg-card p-4">
         <h3 className="text-sm font-semibold">Depois da ativação</h3>
@@ -797,7 +797,7 @@ export const Route = createFileRoute("/install/client")({
       themeKey="lamou.install.client.theme"
       finishTo="/owner/clients"
       finishLabel="Voltar para Clientes"
-      finishDisabledReason="Ativação bloqueada: ambiente do cliente não provisionado e sem evidência de teste."
+      finishDisabledReason="Ativação bloqueada: ambiente do cliente não provisionado, isolamento não verificado e sem evidência de teste."
       launcher={{
         kicker: "Proprietário · provisionamento de cliente",
         headline: "Vamos preparar o ambiente deste cliente.",
@@ -855,7 +855,7 @@ export const Route = createFileRoute("/install/client")({
         ],
         startLabel: "Iniciar provisionamento",
         footNote:
-          "Dados informados aqui ficam apenas neste navegador. Nenhum ambiente, usuário, cobrança ou integração é criado enquanto os serviços estiverem NOT_CONNECTED.",
+          "Dados informados aqui ficam apenas neste navegador. Nenhum ambiente, usuário, cobrança ou integração é criado enquanto o backend de provisionamento estiver NOT_CONNECTED.",
       }}
     />
   ),
