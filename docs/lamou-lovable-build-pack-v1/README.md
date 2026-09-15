@@ -24,11 +24,16 @@ Se Lovable for removido, o sistema deve continuar compilando, testando, mantendo
 3. `CALL_CONTRACT_STANDARD.json`
 4. `VA_CONTRACT_STANDARD.json`
 5. `ASSET_REGISTRY.json`
-6. `LOVABLE_MASTER_PROMPT.md`
+6. `VISUAL_LOCK_IMPORT.md`
+7. `LOVABLE_MASTER_PROMPT.md`
 
 ## Visual Locks
 
-Os previews ficam em `visual-locks/`. Os originais em alta resolucao permanecem no pacote mestre entregue ao Owner. Imagem e referencia de estrutura/direcao; a implementacao deve usar componentes reais, responsivos e acessiveis, nunca screenshot clicavel.
+Os arquivos full-resolution acompanham o **LAMOU Build Pack V1** entregue ao Owner e cada um esta identificado em `ASSET_REGISTRY.json` com ID, papel e SHA256. Eles nao ficam presos ao Lovable.
+
+No import inicial, os assets devem ser copiados para o repositorio do produto (`public/assets/visual-locks/`) ou para storage proprio governado pela LAMOU, mantendo o mesmo `asset_id`, hash, proveniencia e binding. Imagem e referencia de estrutura/direcao; a implementacao deve usar componentes reais, responsivos e acessiveis, nunca um screenshot clicavel.
+
+Os binarios full-resolution ainda nao foram commitados neste branch de documentacao; o pacote mestre e o registro de hashes sao a fonte do handoff visual nesta candidata. Nao declarar um binding de asset como concluido antes do import + verificacao de hash.
 
 ## Verdade operacional
 
