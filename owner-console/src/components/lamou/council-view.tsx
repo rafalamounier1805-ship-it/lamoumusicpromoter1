@@ -2,16 +2,16 @@ import { Brain, CheckCircle2, CircleSlash2, ShieldCheck, Users } from "lucide-re
 
 import { Panel, TruthBadge } from "@/components/lamou/shell";
 import { Badge } from "@/components/ui/badge";
+import { CALL_REGISTRY } from "@/lib/lamou/call-registry";
 import { PROFESSIONAL_ROLES } from "@/lib/lamou/council-data";
 import {
   COUNCIL_PIPELINE,
   EFFECTIVE_COUNCIL_RUNS,
   planCouncilRun,
 } from "@/lib/lamou/council-runtime";
-import { CALL_REGISTRY } from "@/lib/lamou/registry";
 
 export function CouncilView() {
-  const providerCall = CALL_REGISTRY.find((call) => call.id === "CALL-0003");
+  const providerCall = CALL_REGISTRY.find((call) => call.id === "CALL-0003C");
   const providerConnected = providerCall?.status === "IMPLEMENTED_VERIFIED";
   const plan = planCouncilRun({
     taskType: "arquitetura",
@@ -50,7 +50,7 @@ export function CouncilView() {
         </Panel>
         <Panel title="Provider de IA">
           <p className="font-display text-lg font-semibold">{plan.providerState}</p>
-          <p className="mt-1 text-xs text-muted-foreground">origem: CALL-0003</p>
+          <p className="mt-1 text-xs text-muted-foreground">origem: CALL-0003C</p>
         </Panel>
         <Panel title="Aprovação humana">
           <p className="font-display text-lg font-semibold">OBRIGATÓRIA</p>
