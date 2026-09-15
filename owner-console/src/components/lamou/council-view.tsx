@@ -63,7 +63,10 @@ export function CouncilView() {
           {COUNCIL_PIPELINE.map((stage, index) => {
             const blocked = plan.blockedStages.some((value) => value.startsWith(stage.label));
             return (
-              <li key={stage.id} className="rounded-xl border border-border/60 bg-card/60 p-3 text-xs">
+              <li
+                key={stage.id}
+                className="rounded-xl border border-border/60 bg-card/60 p-3 text-xs"
+              >
                 <div className="flex items-center gap-2">
                   {blocked ? (
                     <CircleSlash2 className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
@@ -75,7 +78,9 @@ export function CouncilView() {
                   </span>
                 </div>
                 <p className="mt-2 font-medium">{stage.label}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground">execução: {stage.execution}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  execução: {stage.execution}
+                </p>
               </li>
             );
           })}
@@ -130,7 +135,10 @@ export function CouncilView() {
         </p>
         <div className="space-y-2">
           {EFFECTIVE_COUNCIL_RUNS.map((run) => (
-            <div key={run.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-sm">
+            <div
+              key={run.id}
+              className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-sm"
+            >
               <div className="flex flex-wrap items-center gap-2">
                 <Brain className="h-4 w-4 text-primary" aria-hidden="true" />
                 <span className="min-w-0 flex-1 font-medium">
