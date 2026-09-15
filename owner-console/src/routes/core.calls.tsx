@@ -320,7 +320,9 @@ function CallsPage() {
         <ul className="space-y-1 text-sm text-muted-foreground">
           <li>Os 12 cenários são obrigatórios por CALL; ausência permanece NOT_RUN.</li>
           <li>PASS exige evidence_id, build e environment no próprio resultado.</li>
-          <li>Build e environment da evidência precisam coincidir com o último teste do contrato.</li>
+          <li>
+            Build e environment da evidência precisam coincidir com o último teste do contrato.
+          </li>
           <li>Segredos continuam server-side; nenhum token/chave é exibido nesta superfície.</li>
           <li>SALVAR ≠ PROMOVER.</li>
         </ul>
