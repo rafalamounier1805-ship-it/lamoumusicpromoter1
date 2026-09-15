@@ -6,7 +6,7 @@ Levar as imagens/modelos visuais do LAMOU para o projeto construido no Lovable *
 
 ## Fonte
 
-Os arquivos full-resolution estao no `LAMOU_BUILD_PACK_V1.zip` e sao identificados por `ASSET_REGISTRY.json`.
+Os arquivos full-resolution estao no `LAMOU_BUILD_PACK_V1_CANDIDATA.zip` e sao identificados por `ASSET_REGISTRY.json`.
 
 ## Procedimento
 
@@ -20,14 +20,19 @@ Os arquivos full-resolution estao no `LAMOU_BUILD_PACK_V1.zip` e sao identificad
 8. Rode verificacao de hash, responsividade, acessibilidade e regressao visual.
 9. Somente apos evidencia marque o binding como `VERIFIED`.
 
-## Visual Locks atuais
+## Visual Locks / referencias atuais
 
-- `ASSET-005` - Instalacao do Proprietario.
+- `ASSET-001` - Biblioteca de icones LAMOU IA.
+- `ASSET-002` - Showroom.
 - `ASSET-003` / `ASSET-006` - Instalacao/Onboarding do Cliente.
 - `ASSET-004` - LAMOU IA Owner / Mapa Vivo.
-- `ASSET-001` - Biblioteca de icones.
-- `ASSET-007` - Orbit / LifeOS, referencia visual.
-- `ASSET-002` - Showroom, referencia visual.
+- `ASSET-005` - Instalacao do Proprietario.
+- `ASSET-007` - Orbit / LifeOS, Neural Flow.
+- `ASSET-008` - CORE Proprietario / arquitetura.
+- `ASSET-009` - Testes, Qualidade, Validation Gate e Lab.
+- `ASSET-010` - Opportunity Intelligence / ficha da oportunidade.
+- `ASSET-011` - Opportunity Intelligence / validacao por gates.
+- `ASSET-012` - Orbit / LifeOS, opcoes A/B/C de layout.
 
 ## Regra de independencia
 
