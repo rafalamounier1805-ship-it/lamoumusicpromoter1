@@ -79,7 +79,8 @@ function StepPackage() {
       source: "CLI-CHK-0003 · origem: cadastro local",
       updatedAt: "nesta sessão",
       truth: "NOT_VERIFIED" as TruthState,
-      detail: "Dados informados na próxima etapa; nada é persistido como tenant real por esta jornada.",
+      detail:
+        "Dados informados na próxima etapa; nada é persistido como tenant real por esta jornada.",
     },
     {
       icon: FlaskConical,
@@ -668,19 +669,27 @@ function ClientAside() {
         <dl className="mt-3 space-y-2 text-xs">
           <div className="flex items-center justify-between gap-2">
             <dt>Ativação</dt>
-            <dd><TruthBadge truth="BLOCKED" /></dd>
+            <dd>
+              <TruthBadge truth="BLOCKED" />
+            </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
             <dt>Provisionamento backend</dt>
-            <dd><TruthBadge truth="NOT_CONNECTED" /></dd>
+            <dd>
+              <TruthBadge truth="NOT_CONNECTED" />
+            </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
             <dt>Isolamento / RLS</dt>
-            <dd><TruthBadge truth="NOT_VERIFIED" /></dd>
+            <dd>
+              <TruthBadge truth="NOT_VERIFIED" />
+            </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
             <dt>Portal do Cliente</dt>
-            <dd><TruthBadge truth="NOT_CONNECTED" /></dd>
+            <dd>
+              <TruthBadge truth="NOT_CONNECTED" />
+            </dd>
           </div>
         </dl>
       </div>
