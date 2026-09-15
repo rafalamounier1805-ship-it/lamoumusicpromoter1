@@ -132,7 +132,7 @@ export function planCouncilRun(input: CouncilPlanInput): CouncilPlan {
     executionMode,
     blockedStages,
     humanApprovalRequired: true,
-    truth: input.providerConnected ? (input.toolsConnected ? "PARTIAL" : "PARTIAL") : "NOT_CONNECTED",
+    truth: input.providerConnected ? "PARTIAL" : "NOT_CONNECTED",
     reasons,
   };
 }
