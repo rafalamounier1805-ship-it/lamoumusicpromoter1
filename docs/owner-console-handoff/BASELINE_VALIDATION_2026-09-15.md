@@ -2,50 +2,51 @@
 
 Date: 2026-09-15  
 Branch: `candidate/lamou-owner-console-codex-2026-09-15`  
-Status: `BASELINE_RECORDED / CANDIDATE_NOT_PROMOTED`
+Status: **BASELINE_CI_PASS / CANDIDATE_NOT_PROMOTED**
 
 ## Scope
 
-This records the first local validation after importing the Lovable snapshot `532025926ff73e837c5f38be08fd76665ff457e5` into `owner-console/`. It is baseline evidence, not a production approval.
+This document records technical baseline evidence for the Owner Console imported from Lovable snapshot `532025926ff73e837c5f38be08fd76665ff457e5` into `owner-console/`. It is evidence that the candidate installs, type-checks, lints and builds; it is not production approval or integration verification.
 
-## Environment
+## Historical first pass
 
-- Node: `v24.19.0`
-- npm: `11.9.0`
-- Bun: unavailable in this execution environment (`bun: command not found`)
-- Dependency fallback used: `npm install --package-lock=false --ignore-scripts`
-- Result: 440 packages installed; no source or lockfile change was created.
+The first local/container validation used npm because Bun was unavailable in that environment. Production build and TypeScript passed, while lint exposed 487 errors and 18 warnings. Decomposition showed 486 `prettier/prettier` formatting errors, one `prefer-const` error and 18 Fast Refresh warnings.
 
-The project supplies `bun.lock`. Its exact Bun installation path remains **NOT_VERIFIED** here because Bun is not installed in the execution environment.
+Formatting was subsequently isolated in commit `8c5ab8813be903e5bdab4ff948060a62a37c8012`, preserving the imported baseline in Git history. The remaining `prefer-const` blocker was fixed minimally in commit `2921711ee1de1e209be28f47e1b41805f7781556`.
 
-## Results
+## Final CI revalidation
 
-| Check | Command | Result | Evidence |
-| --- | --- | --- | --- |
-| Source text sync | Lovable file inventory and Git tree comparison | PARTIAL | 178 text files present under `owner-console/`; `.env` excluded; `public/favicon.ico` binary pending |
-| Dependency install | `npm install --package-lock=false --ignore-scripts` | PASS | 440 packages installed |
-| Production build | `npm run build` | PASS | Vite completed client and SSR build |
-| Type check | `npx tsc --noEmit` | PASS | exit code 0 |
-| Lint | `./node_modules/.bin/eslint . --format json` | FAIL | exit code 1; 487 errors and 18 warnings across 45 files |
-| Automated tests | repository inventory | NOT_AVAILABLE | no test scripts and no `*.test.*` or `*.spec.*` files were found |
-| Real integrations | no credentials or connected services used | NOT_VERIFIED | no backend/provider/auth claim is made |
+GitHub Actions workflow: `Owner Console Candidate CI`  
+Run: `35023150728`  
+Verified code commit: `2921711ee1de1e209be28f47e1b41805f7781556`
 
-## Build observations
+| Check | Command / mechanism | Result |
+| --- | --- | --- |
+| Checkout candidate | GitHub Actions | PASS |
+| Bun setup | `oven-sh/setup-bun@v2` | PASS |
+| Dependency install | `bun install --frozen-lockfile` | PASS |
+| TypeScript | `bunx tsc --noEmit` | PASS |
+| Lint | `bun run lint` | PASS |
+| Production build | `bun run build` | PASS |
+| Automated application tests | repository inventory | NOT_AVAILABLE |
+| Real integrations/providers | not exercised by this CI | NOT_VERIFIED |
 
-- Vite reports a deprecated `createServerFn().inputValidator()` call in `src/lib/lamou/provider-check.functions.ts`.
-- The largest client chunk is approximately 634 kB minified / 180 kB gzip, above Vite's 500 kB advisory threshold.
-- The missing binary favicon did not prevent this baseline build; it remains a source-provenance gap, not a verified replacement.
+The successful CI installation used Bun `1.4.2`. Lint still reports 18 `react-refresh/only-export-components` warnings, but no lint errors; the lint command exits successfully.
 
-## Lint decomposition
+## Source completeness notes
 
-- 486 errors: `prettier/prettier`
-- 1 error: `prefer-const`
-- 18 warnings: `react-refresh/only-export-components`
-
-Formatting has **not** been bulk-rewritten in this baseline commit. The handoff requires product correctness to be fixed first; any formatter-wide change must be isolated and reviewed separately.
+- `.env` is intentionally excluded and must stay outside GitHub.
+- `public/favicon.ico` remains a binary provenance exception. It did not block install, typecheck, lint or build and must not be recreated and called original without provenance.
+- The executable source/configuration required for Codex work is present under `owner-console/`.
 
 ## Gate decision
 
-`BUILD_BASELINE = PARTIAL_PASS`.
+`BUILD_BASELINE = PASS` for installation, static TypeScript validation, lint and production build.
 
-Build and TypeScript parsing pass. Lint fails, no automated test suite exists, the binary source copy is incomplete, and real integrations have not been exercised. The candidate is safe to continue into evidence-backed P0 work, but it is not ready for promotion or production deployment.
+`TEST_BASELINE = NOT_AVAILABLE` because an automated application test suite is not present yet.
+
+`INTEGRATION_BASELINE = NOT_VERIFIED` because this CI did not exercise credentials, real providers, runtime Auth/RLS behavior, external services or business workflows.
+
+`CODEX_ENTRY_GATE = OPEN`.
+
+No publication or promotion was performed. **SALVAR ≠ PROMOVER.**

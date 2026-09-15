@@ -1,9 +1,29 @@
 # START HERE — LAMOU Owner Console
 
-Status: **CANDIDATE_NOT_PROMOTED**
+Status: **CODEX_READY / CANDIDATE_NOT_PROMOTED**
 
-1. Work: leia `HANDOFF_WORK_LAMOU_OWNER_2026-09-15.md` e sincronize/exporte o source completo do Lovable snapshot `532025926ff73e837c5f38be08fd76665ff457e5` para esta branch.
-2. Confirme o source contra `LOVABLE_SNAPSHOT_MANIFEST_5320259.md`.
-3. Codex: somente depois do sync, leia `HANDOFF_CODEX_LAMOU_OWNER_2026-09-15.md` + `../PROMPT_MESTRE_FINALIZACAO_OWNER_2026-09-15.md` e execute a ordem P0.
-4. `AUDITORIA_FECHAMENTO_LAMOU_OWNER_2026-09-15.md` é a fotografia crítica de referência.
-5. Não publicar, não promover, não tocar em `main`/FROZEN. SALVAR ≠ PROMOVER.
+## Work/source stage — completed
+
+The Work/source-sync prerequisite is complete enough for code execution and no longer blocks Codex.
+
+- Lovable snapshot: `532025926ff73e837c5f38be08fd76665ff457e5`
+- Source location in this branch: `owner-console/`
+- Verified code baseline: `2921711ee1de1e209be28f47e1b41805f7781556`
+- GitHub Actions run `35023150728`: install PASS, TypeScript PASS, lint PASS, build PASS.
+- `.env`/secrets excluded by design.
+- `public/favicon.ico` remains a documented non-build-critical binary provenance exception.
+
+## Codex — start now
+
+1. Work only on branch `candidate/lamou-owner-console-codex-2026-09-15` and inside `owner-console/` unless a handoff/evidence file must be updated.
+2. Read `HANDOFF_CODEX_LAMOU_OWNER_2026-09-15.md`.
+3. Read `AUDITORIA_FECHAMENTO_LAMOU_OWNER_2026-09-15.md`, `SOURCE_AVAILABILITY_GATE.md`, `BASELINE_VALIDATION_2026-09-15.md` and `../PROMPT_MESTRE_FINALIZACAO_OWNER_2026-09-15.md`.
+4. Use GitHub issue #19 as the execution queue and Definition of Done.
+5. Execute the P0 order without rebuilding approved work from scratch.
+6. Re-run install/typecheck/lint/build and add tests/evidence for every implemented change.
+7. Preserve truth states. No fake connection, PASS, metric, probability, evidence or integration.
+8. Do not publish, deploy, promote or touch `main`/FROZEN.
+
+`AUDITORIA_FECHAMENTO_LAMOU_OWNER_2026-09-15.md` remains the critical reference for the product gaps.
+
+**SALVAR ≠ PROMOVER.**
