@@ -26,7 +26,9 @@ describe("installation readiness reconciliation", () => {
   });
 
   test("ativação completa do Owner continua bloqueada enquanto gates faltam", () => {
-    expect(OWNER_POST_INSTALL.find((item) => item.id === "owner-activation")?.truth).toBe("BLOCKED");
+    expect(OWNER_POST_INSTALL.find((item) => item.id === "owner-activation")?.truth).toBe(
+      "BLOCKED",
+    );
   });
 
   test("cliente não ganha tenant, RLS ou portal sem provisionamento real", () => {
