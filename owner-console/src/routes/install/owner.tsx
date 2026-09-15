@@ -80,6 +80,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { TruthState } from "@/lib/lamou/council-data";
+import { OWNER_INSTALL_CURRENT, OWNER_POST_INSTALL } from "@/lib/lamou/install-readiness";
 
 const VERSION = "CORE SOL v0.2 · CANDIDATE_NOT_PROMOTED";
 
@@ -229,7 +230,7 @@ const CHECKS: {
     updatedAt: "nesta sessão",
     truth: "PARTIAL",
     detail:
-      "A interface carregou a partir da própria origem, o que comprova conectividade com o preview. Não há teste de conectividade com serviços externos.",
+      "A interface carregou a partir da própria origem, o que comprova conectividade com o preview. Não há teste de conectividade com todos os serviços externos.",
   },
   {
     icon: Cpu,
@@ -243,11 +244,11 @@ const CHECKS: {
   {
     icon: KeyRound,
     label: "Permissões iniciais",
-    source: "CHK-0004 · origem: política declarada do proprietário",
-    updatedAt: "documento vivo",
-    truth: "DOCUMENTED_ONLY",
+    source: OWNER_INSTALL_CURRENT.auth.source,
+    updatedAt: "evidência atual da candidata",
+    truth: OWNER_INSTALL_CURRENT.auth.truth,
     detail:
-      "As permissões do proprietário estão descritas na governança, mas não existe provedor de identidade conectado para concedê-las de fato.",
+      "Conta, sessão e perfil do proprietário possuem evidência real; MFA e a matriz completa de autorização ainda precisam de validação antes da ativação.",
   },
   {
     icon: Fingerprint,
@@ -261,11 +262,11 @@ const CHECKS: {
   {
     icon: Plug,
     label: "Compatibilidade de serviços",
-    source: "CHK-0006 · origem: catálogo de providers do CORE",
-    updatedAt: "sem execução",
-    truth: "NOT_CONNECTED",
+    source: "CHK-0006 · Health Model / catálogo de providers do CORE",
+    updatedAt: "evidência atual da candidata",
+    truth: "PARTIAL",
     detail:
-      "Banco, autenticação, provider de IA, storage e observabilidade não estão conectados; a compatibilidade não pode ser afirmada.",
+      "Banco, autenticação, provider de IA e observabilidade possuem evidência parcial; storage geral de evidências, assinatura, isolamento e outros serviços continuam pendentes.",
   },
 ];
 
@@ -312,7 +313,7 @@ function StepVerify() {
             }
             nextStep={
               c.label === "Permissões iniciais"
-                ? "Revisar papéis e acessos na área de Segurança."
+                ? "Concluir MFA e revisar papéis e acessos na área de Segurança."
                 : c.truth === "NOT_CONNECTED"
                   ? "Conectar o serviço técnico responsável antes da ativação."
                   : "Anexar evidência verificável na área de Testes do CORE."
@@ -337,8 +338,8 @@ function StepVerify() {
           />
         ))}
         <Note tone="warning">
-          Sem serviço de assinatura e sem serviços de plataforma conectados, esta etapa não pode
-          resultar em aprovação. Os estados acima são reais para este build.
+          A candidata já possui alguns serviços parcialmente comprovados, mas assinatura, MFA,
+          isolamento, storage geral de evidências e gates completos ainda impedem uma ativação real.
         </Note>
       </StepSection>
     </div>
@@ -524,7 +525,8 @@ function StepIdentity() {
               aria-describedby="photo-h"
             />
             <p id="photo-h" className="text-xs text-muted-foreground">
-              Preview local; a persistência depende do storage, hoje NOT_CONNECTED.
+              Prévia local. O fluxo real de perfil acima possui storage privado próprio; selecionar
+              um arquivo aqui não o persiste automaticamente.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-surface-1 p-3">
@@ -565,8 +567,8 @@ function StepIdentity() {
           </div>
         </div>
         <Note>
-          Os dados ficam apenas nesta tela: não há banco conectado para persistir identidade
-          (NOT_CONNECTED).
+          A prévia local não substitui o perfil persistido. A disponibilidade real do perfil é
+          informada pelo painel de autenticação e pelo Health Model.
         </Note>
       </StepSection>
     </div>
@@ -772,19 +774,19 @@ function StepSecurity() {
           {[
             {
               label: "Recuperação de acesso por e-mail verificado",
-              truth: "NOT_CONNECTED",
+              truth: "IMPLEMENTED_NOT_VERIFIED",
               source: "AUTH-REC-01",
-              definition: "Canal de recuperação que depende do provedor de identidade.",
-              next: "Conectar autenticação e validar o e-mail.",
+              definition: "Canal de recuperação implementado no provedor de identidade; exige e-mail validado.",
+              next: "Validar o e-mail e executar o fluxo completo de recuperação.",
               destination: "/owner/security" as const,
             },
             {
               label: "Fluxo “esqueci a senha”",
-              truth: "NOT_CONNECTED",
+              truth: "IMPLEMENTED_NOT_VERIFIED",
               source: "AUTH-REC-02",
-              definition: "Redefinição segura de credencial; ainda não existe fluxo executável.",
-              next: "Implementar o fluxo no serviço de autenticação.",
-              destination: undefined,
+              definition: "Solicitação de recuperação existe; falta validar a jornada ponta a ponta nesta candidata.",
+              next: "Executar o fluxo real e anexar evidência.",
+              destination: "/owner/security" as const,
             },
             {
               label: "Chave do proprietário (plano B offline)",
@@ -802,13 +804,12 @@ function StepSecurity() {
               source={r.source}
               truth={r.truth}
               definition={r.definition}
-              impact="Sem este controle, a recuperação real permanece indisponível."
+              impact="Sem validação ponta a ponta, a recuperação não pode sustentar o gate de ativação."
               owner="Segurança do proprietário"
-              updatedAt="sem execução"
+              updatedAt="evidência atual da candidata"
               nextStep={r.next}
               destination={r.destination}
               actionLabel={r.destination === "/owner/documents" ? "Abrir origem" : "Configurar"}
-              disabledReason="A autenticação ainda não oferece este fluxo nesta candidata."
             />
           ))}
         </div>
@@ -995,7 +996,7 @@ const PROVIDERS = [
     scope: "análise de casos, hipóteses, rascunhos",
     quota: "quota/custo por token — não configurado",
     fallback: "timeout 30s · sem fallback definido",
-    truth: "NOT_CONNECTED",
+    truth: "PARTIAL",
   },
   {
     icon: HardDrive,
@@ -1028,11 +1029,11 @@ type ProviderCandidate = (typeof PROVIDERS)[number];
 function ProviderImpactPreview({ provider }: { provider: ProviderCandidate }) {
   return (
     <SubstitutionImpactPreview
-      currentLabel="Nenhum provider conectado"
+      currentLabel="Estado corrente da integração"
       candidateLabel={provider.label}
       risk="Alto enquanto compatibilidade, segurança e recovery não forem testados."
       fallback={provider.fallback}
-      evidence="Fonte: LABTEST LT-PROV-0001 · atualização documental: 12/09/2026 · 0 testes concluídos de 4 pendentes. Estado NOT_CONNECTED."
+      evidence="Fonte: Health Model/LABTEST. Checagem de provider pode existir, mas execução governada de IA e testes de substituição continuam pendentes."
     />
   );
 }
@@ -1166,10 +1167,10 @@ function StepConsents() {
               source={`CORE Provider Registry · ${p.scope}`}
               truth={p.truth}
               definition={`Provider previsto para ${p.scope}. ${p.quota}; ${p.fallback}.`}
-              impact="Sem conexão, esta capacidade não executa nem produz evidência."
+              impact="O truth-state indica o que já foi medido; capabilities não comprovadas permanecem fora do gate."
               owner="Configurações técnicas do CORE"
-              updatedAt="sem execução"
-              nextStep="Configurar provider, escopo, limite, timeout e fallback."
+              updatedAt="Health Model desta candidata"
+              nextStep="Configurar/validar provider, escopo, limite, timeout e fallback."
               destination="/owner/integrations"
               actionLabel="Configurar"
             />
@@ -1177,8 +1178,8 @@ function StepConsents() {
           </div>
         ))}
         <Note tone="warning">
-          IA pessoal e comparação de modelos aparecem aqui como opção de teste. Enquanto não houver
-          provider conectado, nenhuma resposta de IA é produzida nem simulada.
+          Existe evidência parcial de provider, mas Conselho/agentes externos continuam sem execução
+          ponta a ponta. Medir provider não equivale a declarar IA conectada em toda a plataforma.
         </Note>
       </StepSection>
     </div>
@@ -1405,33 +1406,33 @@ const CORE_MODULES = [
 const CORE_CONNECTIONS = [
   {
     label: "Banco de dados do proprietário",
-    truth: "NOT_CONNECTED",
+    truth: OWNER_INSTALL_CURRENT.database.truth,
     to: "/owner/settings" as const,
-    source: "CORE-DATA-01",
+    source: OWNER_INSTALL_CURRENT.database.source,
   },
   {
     label: "Autenticação e MFA",
-    truth: "NOT_CONNECTED",
+    truth: OWNER_INSTALL_CURRENT.auth.truth,
     to: "/owner/security" as const,
-    source: "CORE-AUTH-01",
+    source: OWNER_INSTALL_CURRENT.auth.source,
   },
   {
     label: "Provider de IA",
-    truth: "NOT_CONNECTED",
+    truth: OWNER_INSTALL_CURRENT.aiProvider.truth,
     to: "/owner/integrations" as const,
-    source: "CORE-AI-01",
+    source: OWNER_INSTALL_CURRENT.aiProvider.source,
   },
   {
-    label: "Storage de evidências",
-    truth: "NOT_CONNECTED",
+    label: "Storage geral de evidências",
+    truth: OWNER_INSTALL_CURRENT.evidenceStorage.truth,
     to: "/owner/settings" as const,
-    source: "CORE-STO-01",
+    source: OWNER_INSTALL_CURRENT.evidenceStorage.source,
   },
   {
     label: "Observabilidade",
-    truth: "NOT_CONNECTED",
+    truth: OWNER_INSTALL_CURRENT.observability.truth,
     to: "/core/observability" as const,
-    source: "CORE-OBS-01",
+    source: OWNER_INSTALL_CURRENT.observability.source,
   },
   {
     label: "Controle local / PC do proprietário (bridge)",
@@ -1508,7 +1509,7 @@ function StepCore() {
       <StepSection
         icon={Network}
         title="Providers, plugins, adapters e conexões"
-        description="Estado real de cada conexão do CORE do proprietário."
+        description="Estado reconciliado com a evidência atual do Health Model."
       >
         <div className="grid gap-2">
           {CORE_CONNECTIONS.map((c) => (
@@ -1519,16 +1520,16 @@ function StepCore() {
               source={c.source}
               truth={c.truth}
               definition="Conexão técnica necessária para uma capacidade real do ambiente."
-              impact="Enquanto desconectada, a função relacionada não executa."
+              impact="O estado exibido vem da evidência atual; capacidades não comprovadas continuam fora do gate."
               owner="Configuração técnica do CORE"
-              updatedAt="sem execução"
+              updatedAt="Health Model desta candidata"
               nextStep={
                 c.to
-                  ? "Abrir a superfície responsável e configurar a conexão."
+                  ? "Abrir a superfície responsável e concluir a evidência faltante."
                   : "Aguardar uma bridge segura e auditável."
               }
               destination={c.to}
-              actionLabel="Configurar"
+              actionLabel="Revisar / configurar"
               disabledReason="Não existe bridge local segura nesta candidata; o tratamento futuro pertence à arquitetura técnica do CORE."
             />
           ))}
@@ -1581,7 +1582,7 @@ const READINESS: ReadinessRow[] = [
     item: "UI e navegação",
     source: "TST-UI-01 · percurso manual no preview",
     state: "IMPLEMENTED_NOT_VERIFIED",
-    evidence: "sem relatório anexado",
+    evidence: "sem relatório automatizado anexado",
     blocker: "—",
     action: "Registrar evidência no Teste³",
     destination: "/core/tests",
@@ -1597,82 +1598,82 @@ const READINESS: ReadinessRow[] = [
   },
   {
     item: "Autenticação e MFA",
-    source: "TST-AUTH-01",
-    state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "provedor de identidade ausente",
-    action: "Configurar autenticação",
+    source: OWNER_INSTALL_CURRENT.auth.source,
+    state: OWNER_INSTALL_CURRENT.auth.truth,
+    evidence: OWNER_INSTALL_CURRENT.auth.evidence,
+    blocker: "MFA ainda não validado",
+    action: "Concluir e validar MFA",
     destination: "/owner/security",
   },
   {
     item: "Banco de dados",
-    source: "TST-DB-01",
-    state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "banco não provisionado",
-    action: "Provisionar banco",
+    source: OWNER_INSTALL_CURRENT.database.source,
+    state: OWNER_INSTALL_CURRENT.database.truth,
+    evidence: OWNER_INSTALL_CURRENT.database.evidence,
+    blocker: "cobertura total e isolamento ainda incompletos",
+    action: "Migrar fixtures restantes e provar RLS",
     destination: "/owner/settings",
   },
   {
     item: "RLS e isolamento",
-    source: "TST-RLS-01",
-    state: "NOT_VERIFIED",
-    evidence: "nenhuma",
-    blocker: "depende do banco",
-    action: "Escrever políticas e teste negativo",
+    source: "TST-RLS-01 / HS-SEGURANCA",
+    state: OWNER_INSTALL_CURRENT.security.truth,
+    evidence: OWNER_INSTALL_CURRENT.security.evidence,
+    blocker: "teste negativo entre tenants ainda não executado",
+    action: "Executar teste negativo de isolamento",
     destination: "/core/tests",
   },
   {
     item: "APIs e CALLs",
-    source: "CALL Registry",
+    source: "CALL Registry canônico",
     state: "NOT_VERIFIED",
-    evidence: "contratos documentados",
-    blocker: "sem execução",
+    evidence: "contratos e 12 cenários definidos; 0 suites completas PASS",
+    blocker: "sem execução completa por CALL",
     action: "Rodar suíte de CALLs",
     destination: "/core/tests",
   },
   {
     item: "Provider de IA",
-    source: "TST-AI-01",
-    state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "provider ausente",
-    action: "Conectar provider no CORE",
-    destination: "/owner/integrations",
+    source: OWNER_INSTALL_CURRENT.aiProvider.source,
+    state: OWNER_INSTALL_CURRENT.aiProvider.truth,
+    evidence: OWNER_INSTALL_CURRENT.aiProvider.evidence,
+    blocker: "nenhum agente/conselho externo executado ponta a ponta",
+    action: "Executar fluxo governado com evidência",
+    destination: "/core/settings",
   },
   {
-    item: "Storage de evidências",
-    source: "TST-STO-01",
-    state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "bucket inexistente",
-    action: "Criar storage",
+    item: "Storage geral de evidências",
+    source: OWNER_INSTALL_CURRENT.evidenceStorage.source,
+    state: OWNER_INSTALL_CURRENT.evidenceStorage.truth,
+    evidence: OWNER_INSTALL_CURRENT.evidenceStorage.evidence,
+    blocker: "repositório geral de evidências não conectado",
+    action: "Conectar storage de evidências",
     destination: "/owner/settings",
   },
   {
     item: "Observabilidade",
-    source: "TST-OBS-01",
-    state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "telemetria ausente",
-    action: "Instrumentar CORE",
+    source: OWNER_INSTALL_CURRENT.observability.source,
+    state: OWNER_INSTALL_CURRENT.observability.truth,
+    evidence: OWNER_INSTALL_CURRENT.observability.evidence,
+    blocker: "cobertura e agregação externa ainda incompletas",
+    action: "Completar tracing e cobertura",
     destination: "/core/observability",
   },
   {
     item: "Backup e restauração",
     source: "TST-BKP-01",
     state: "NOT_CONNECTED",
-    evidence: "nenhuma",
-    blocker: "depende do banco",
+    evidence: "nenhuma rotina/restore comprovado",
+    blocker: "rotina real não conectada",
     action: "Definir rotina e teste de restore",
   },
   {
     item: "Recuperação e fallback",
     source: "TST-FAIL-01",
     state: "NOT_VERIFIED",
-    evidence: "nenhuma",
+    evidence: "nenhuma execução de cenário completo",
     blocker: "sem cenário executado",
-    action: "Definir cenários de falha",
+    action: "Definir e executar cenários de falha",
   },
   {
     item: "Separação Owner × Cliente",
@@ -1695,11 +1696,12 @@ const READINESS: ReadinessRow[] = [
 ];
 
 const STATE_TONE: Record<string, string> = {
-  NOT_CONNECTED: "text-destructive",
+  NOT_CONNECTED: "text-muted-foreground",
   BLOCKED: "text-destructive",
   NOT_VERIFIED: "text-muted-foreground",
   PARTIAL: "text-warning",
   IMPLEMENTED_NOT_VERIFIED: "text-warning",
+  IMPLEMENTED_VERIFIED: "text-success",
 };
 
 function StepTests() {
@@ -1763,8 +1765,9 @@ function StepTests() {
           </Table>
         </div>
         <Note tone="blocked">
-          Ativação do ambiente bloqueada: {blockers} itens têm bloqueador ativo e nenhum teste
-          automatizado foi executado neste build.
+          Ativação do ambiente bloqueada: {blockers} itens ainda possuem gate ou requisito pendente.
+          Estados NOT_CONNECTED são neutros por si só; o bloqueio vem dos requisitos obrigatórios
+          sem evidência.
         </Note>
       </StepSection>
     </div>
@@ -1780,7 +1783,7 @@ function TestsAside() {
         <ReadinessDonut
           percent={0}
           label="Prontidão técnica"
-          sub="0 de 13 itens com evidência aprovada."
+          sub="Gate final ainda bloqueado; evidência parcial não equivale a ativação."
         />
       </div>
       <div className="rounded-2xl border border-border bg-card p-4">
@@ -1799,14 +1802,25 @@ function TestsAside() {
             </Badge>
           </li>
           <li className="flex items-center justify-between gap-2">
-            <span>Bloqueadores NOT_CONNECTED</span>
-            <Badge
-              variant="outline"
-              className="border-destructive/40 font-mono text-[10px] text-destructive"
-            >
+            <span>Itens NOT_CONNECTED</span>
+            <Badge variant="outline" className="font-mono text-[10px] text-muted-foreground">
               {notConnected}
             </Badge>
           </li>
+        </ul>
+      </div>
+      <div className="rounded-2xl border border-border bg-card p-4">
+        <h3 className="text-sm font-semibold">Estado pós-instalação</h3>
+        <ul className="mt-3 space-y-2 text-xs">
+          {OWNER_POST_INSTALL.map((item) => (
+            <li key={item.id} className="flex items-center justify-between gap-2">
+              <span className="min-w-0">
+                {item.label}
+                <span className="ml-1 text-[10px] text-muted-foreground">({item.class})</span>
+              </span>
+              <TruthBadge truth={item.truth} />
+            </li>
+          ))}
         </ul>
       </div>
     </div>
@@ -1909,7 +1923,7 @@ export const Route = createFileRoute("/install/owner")({
       showJourneyProgress={false}
       finishTo="/owner"
       finishLabel="Abrir LAMOU IA Central"
-      finishDisabledReason="Ativação bloqueada: existem itens NOT_CONNECTED e nenhuma evidência de teste."
+      finishDisabledReason="Ativação bloqueada: MFA não validado, isolamento/RLS sem teste negativo, storage geral/backup sem execução e gate de evidências incompleto."
       launcher={{
         kicker: "Ambiente do Proprietário · instalação privada",
         headline: "Seu pacote está pronto para instalar.",
@@ -1956,8 +1970,9 @@ export const Route = createFileRoute("/install/owner")({
           },
           {
             label: "Estado desta jornada",
-            value: "Interface real, integrações ainda ausentes",
-            truth: "IMPLEMENTED_NOT_VERIFIED",
+            value:
+              "Interface real; banco, auth, provider e observabilidade parcialmente comprovados; gates técnicos ainda pendentes",
+            truth: "PARTIAL",
           },
           {
             label: "Governança",
@@ -1967,7 +1982,7 @@ export const Route = createFileRoute("/install/owner")({
         ],
         startLabel: "Iniciar instalação",
         footNote:
-          "Ao iniciar, você entra em uma linha de etapas com progresso salvo neste navegador. Nenhuma ativação real acontece enquanto houver requisitos NOT_CONNECTED.",
+          "Ao iniciar, você entra em uma linha de etapas com progresso salvo neste navegador. Concluir a jornada não ativa nem promove enquanto os gates técnicos obrigatórios estiverem pendentes.",
       }}
     />
   ),
