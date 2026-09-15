@@ -31,9 +31,7 @@ export interface ExperimentValidation {
   canSendToGate: boolean;
 }
 
-export function validateOneChangeExperiment(
-  experiment: OneChangeExperiment,
-): ExperimentValidation {
+export function validateOneChangeExperiment(experiment: OneChangeExperiment): ExperimentValidation {
   const errors: string[] = [];
 
   if (!experiment.baselinePinned) errors.push("BASELINE_NOT_PINNED");
