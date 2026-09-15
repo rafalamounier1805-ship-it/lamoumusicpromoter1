@@ -1,7 +1,7 @@
 # SOURCE AVAILABILITY GATE — LAMOU Owner Console
 
 Date: 2026-09-15
-Status: **PARTIAL_SOURCE_SYNC / BASELINE_NOT_YET_TESTED**
+Status: **PARTIAL_SOURCE_SYNC / BUILD_BASELINE_PARTIAL_PASS**
 Truth state: **EVIDENCE-BASED**
 
 ## Verified source
@@ -20,17 +20,16 @@ Truth state: **EVIDENCE-BASED**
 3. Required build/configuration and source folders are present, including `package.json`, `bun.lock`, `drizzle/`, `src/`, and `supabase/config.toml`.
 4. `.env` was excluded by design and must remain outside GitHub. No values were copied.
 5. `public/favicon.ico` remains a binary provenance gap: the available connector only returned lossy decoded text, not transferable bytes.
-6. No deployment, publication, promotion, or change to `main` occurred.
+6. Baseline results: npm dependency fallback PASS, production build PASS, TypeScript PASS, lint FAIL, automated tests NOT_AVAILABLE.
+7. No deployment, publication, promotion, or change to `main` occurred.
 
 ## Gate decision
 
-The source is sufficient to begin a **local baseline install/build/test assessment**, but `SOURCE_SYNC = PASS` is not yet justified because byte-identical binary transfer is incomplete and build evidence does not yet exist.
+The source is sufficient to begin evidence-backed P0 work. `SOURCE_SYNC = PASS` is still not justified because byte-identical binary transfer is incomplete. `BUILD_BASELINE = PARTIAL_PASS`: build and type check pass, but lint, automated tests, and real integration evidence remain incomplete.
 
-Next steps:
+See:
 
-1. Acquire the original binary favicon through an export/download-capable path or record a deliberate replacement decision.
-2. Clone/check out the candidate locally.
-3. Run dependency installation, typecheck, lint and build; register the baseline outcomes.
-4. Only then begin the Codex P0 changes. Preserve `main` and FROZEN baselines.
+- `SOURCE_SYNC_REPORT_2026-09-15.md`
+- `BASELINE_VALIDATION_2026-09-15.md`
 
-See `SOURCE_SYNC_REPORT_2026-09-15.md` for the file-level comparison.
+Preserve `main` and FROZEN baselines. SALVAR ≠ PROMOVER.
