@@ -1,61 +1,17 @@
 {
   "registry": "LAMOU_BUILD_PACK_ASSET_REGISTRY_V1",
   "assets": [
-    {
-      "asset_id": "ASSET-001",
-      "file": "assets/BIBLIOTECA_ICONES_LAMOU_IA.png",
-      "role": "VISUAL_LOCK_ICON_LIBRARY",
-      "sha256": "fcd3051f18dbd16e1e7d4dd8b465ba918f5ad24ce0713b52f53f3624b8dfde17",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-002",
-      "file": "assets/Dashboard SaaS LAMOU Showroom em destaque.png",
-      "role": "REFERENCE_SHOWROOM_VISUAL",
-      "sha256": "8bc1370e0c3035e526b751a846b7c6fd0fd065600d6993c7f3f7265d7bdc0907",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-003",
-      "file": "assets/Fluxo de Instalação do Cliente LAMOU IA.png",
-      "role": "VISUAL_LOCK_CLIENT_INSTALL",
-      "sha256": "e75502500d730dc82c04729d7f8ddaa210bbb4139131b83769c6a87f8b17a032",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-004",
-      "file": "assets/Mapa Vivo do Ecossistema LAMOU IA.png",
-      "role": "VISUAL_LOCK_LAMOU_IA_OWNER_MAP",
-      "sha256": "79216b36d39eb7b3f986a9ee4ca93a54f972fd21e9a88a7f0d546c624dcec70c",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-005",
-      "file": "assets/Painel de Instalação LAMOU IA CENTRAL.png",
-      "role": "VISUAL_LOCK_OWNER_INSTALL",
-      "sha256": "302a1975ee72deb8364941f64b64e2312b1434f343dec14e312e586080fa14cf",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-006",
-      "file": "assets/Storyboard de Onboarding SaaS LAMOU IA Central.png",
-      "role": "VISUAL_LOCK_CLIENT_INSTALL",
-      "sha256": "bec8a6643da083a103fbb3d7942282232a9eb057d2d403a0df6c537cf2643c04",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    },
-    {
-      "asset_id": "ASSET-007",
-      "file": "assets/neural_flow.jpg",
-      "role": "REFERENCE_ORBIT_LIFEOS_VISUAL",
-      "sha256": "b136278cb7eaa73e8f6161112404b834e9ddc55d4faf374135e96e7383b79e0a",
-      "status": "REFERENCE_LOCK_NOT_PROMOTED",
-      "source": "LAMOU Library recovered 2026-09-15"
-    }
+    {"asset_id":"ASSET-001","file":"assets/BIBLIOTECA_ICONES_LAMOU_IA.png","role":"VISUAL_LOCK_ICON_LIBRARY","sha256":"fcd3051f18dbd16e1e7d4dd8b465ba918f5ad24ce0713b52f53f3624b8dfde17","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-002","file":"assets/Dashboard SaaS LAMOU Showroom em destaque.png","role":"REFERENCE_SHOWROOM_VISUAL","sha256":"8bc1370e0c3035e526b751a846b7c6fd0fd065600d6993c7f3f7265d7bdc0907","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-003","file":"assets/Fluxo de Instalação do Cliente LAMOU IA.png","role":"VISUAL_LOCK_CLIENT_INSTALL","sha256":"e75502500d730dc82c04729d7f8ddaa210bbb4139131b83769c6a87f8b17a032","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-004","file":"assets/Mapa Vivo do Ecossistema LAMOU IA.png","role":"VISUAL_LOCK_LAMOU_IA_OWNER_MAP","sha256":"79216b36d39eb7b3f986a9ee4ca93a54f972fd21e9a88a7f0d546c624dcec70c","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-005","file":"assets/Painel de Instalação LAMOU IA CENTRAL.png","role":"VISUAL_LOCK_OWNER_INSTALL","sha256":"302a1975ee72deb8364941f64b64e2312b1434f343dec14e312e586080fa14cf","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-006","file":"assets/Storyboard de Onboarding SaaS LAMOU IA Central.png","role":"VISUAL_LOCK_CLIENT_INSTALL","sha256":"bec8a6643da083a103fbb3d7942282232a9eb057d2d403a0df6c537cf2643c04","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-007","file":"assets/neural_flow.jpg","role":"REFERENCE_ORBIT_LIFEOS_VISUAL","sha256":"b136278cb7eaa73e8f6161112404b834e9ddc55d4faf374135e96e7383b79e0a","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-008","file":"assets/CORE_V2_4_ARQUITETURA_SERIA_INTELIGENTE.png","role":"REFERENCE_CORE_ARCHITECTURE","sha256":"3ea9531655dd1119186528b4fe76a552f812c3d378885b303e3b6aeb58280447","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-009","file":"assets/02_Qualidade_e_Testes_v10_TARGET.png","role":"REFERENCE_TESTS_QUALITY_VALIDATION","sha256":"8abb781e107dc4b8385e63897a49f0200e4cd688ab7f539bbe014ae90e4cd203","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-010","file":"assets/03_TELA_FICHA_OPPORTUNITY_V0_1.png","role":"REFERENCE_OPPORTUNITY_DETAIL","sha256":"3d40a3a00477453814b4b59460f1dcc0d53df70d7b970afc958d9755ab9647a0","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-011","file":"assets/04_TELA_VALIDACAO_OPPORTUNITY_V0_1.png","role":"REFERENCE_OPPORTUNITY_VALIDATION","sha256":"2e77decefaae74afab35173e8936c6483431d1695c775d26994f3a5bbda4ec71","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"},
+    {"asset_id":"ASSET-012","file":"assets/Opcoes_Layout_Visual_LAMOU_Life_OS.png","role":"REFERENCE_ORBIT_LIFEOS_LAYOUT_OPTIONS","sha256":"b78d91fbbe2ba819a7131732ae8ac249c533e3f590cae534a4b539a0fae0c801","status":"REFERENCE_LOCK_NOT_PROMOTED","source":"LAMOU Library recovered 2026-09-15"}
   ]
 }
