@@ -1,243 +1,193 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { DemoBadge, PageHeader, Panel, TruthBadge } from "@/components/lamou/shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { APPS } from "@/lib/lamou/demo-data";
-import { appRoute } from "@/lib/lamou/nav";
 import { APP_PAGES } from "@/lib/lamou/pages";
 import { WAVE1_APPS } from "@/lib/lamou/registry";
 import { SEVERITY_LABEL } from "@/lib/lamou/types";
 
-export { APP_ROUTES } from "@/lib/lamou/nav";
-
 export const Route = createFileRoute("/owner/apps")({
   head: () => ({
     meta: [
-      { title: "Aplicativos — LAMOU IA Central" },
+      { title: "Inventário reconciliado de Aplicativos — LAMOU IA Central" },
       {
         name: "description",
         content:
-          "Portfólio gerencial dos aplicativos LAMOU: ID, objetivo, status, versão, clientes, saúde, valor comprovado, testes, CORE usado e ações.",
+          "Rota de compatibilidade somente-leitura para preservar os registros legados de aplicativos. A superfície gerencial canônica é Central > Produtos.",
       },
-      { property: "og:title", content: "Aplicativos — LAMOU IA Central" },
-      {
-        property: "og:description",
-        content:
-          "Portfólio gerencial de aplicativos do proprietário: a Central gerencia o produto; a arquitetura técnica fica no CORE.",
-      },
+      { property: "og:title", content: "Inventário reconciliado de Aplicativos — LAMOU IA" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: AppsPage,
+  component: AppsCompatibilityPage,
 });
 
-function product(name: string) {
-  return APPS.find((p) => p.name.toLowerCase() === name.toLowerCase()) ?? null;
-}
-
-function binding(name: string) {
-  return WAVE1_APPS.find((w) => name.toLowerCase().includes(w.name.toLowerCase())) ?? null;
-}
-
-function AppsPage() {
-  const [openFicha, setOpenFicha] = useState<string | null>(null);
-
+function AppsCompatibilityPage() {
   return (
     <AppShell group="owner">
       <PageHeader
-        title="Aplicativos"
-        subtitle="Portfólio gerencial de aplicativos do proprietário. A Central gerencia o produto; a arquitetura técnica de cada app fica no LAMOU CORE."
-        right={<DemoBadge />}
+        title="Aplicativos — inventário reconciliado"
+        subtitle="Rota de compatibilidade somente-leitura. A experiência gerencial canônica foi unificada em Central > Produtos; os registros anteriores permanecem visíveis aqui para não perder proveniência nem dados."
+        right={
+          <Button asChild size="sm">
+            <Link to="/owner/products">Abrir Produtos</Link>
+          </Button>
+        }
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {APP_PAGES.map((a) => {
-          const p = product(a.name);
-          const b = binding(a.name);
-          const executable = a.truth.startsWith("IMPLEMENTED");
-          const ficha = openFicha === a.slug;
-
-          return (
-            <article
-              key={a.slug}
-              className="flex flex-col rounded-xl border border-border/60 bg-card/70 p-4 backdrop-blur"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <p className="font-display text-sm font-semibold">{a.name}</p>
-                <TruthBadge truth={a.truth} />
-              </div>
-              <p className="mt-1 font-mono text-[10px] text-muted-foreground">{a.id}</p>
-              <p className="mt-2 flex-1 text-xs text-muted-foreground">{a.purpose}</p>
-
-              <dl className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
-                <Cell label="Status" value={p ? `${p.status}` : "sem ficha de produto"} />
-                <Cell label="Versão" value={p ? `v${p.version}` : "não reconciliada"} />
-                <Cell
-                  label="Clientes"
-                  value={p && p.clients.length ? p.clients.join(", ") : "nenhum"}
-                />
-                <Cell label="Saúde" value={p ? SEVERITY_LABEL[p.health] : "não avaliada"} />
-                <Cell
-                  label="Testes / evidências"
-                  value={
-                    p ? `${p.tests.passed} ok / ${p.tests.failed} falhas (DEMO)` : "sem execução"
-                  }
-                />
-                <Cell
-                  label="CORE usado"
-                  value={
-                    p
-                      ? p.coreUsed
-                          .map((c) => (c === "padrao" ? "CORE Padrão" : "CORE Cubo"))
-                          .join(", ")
-                      : "binding não reconciliado"
-                  }
-                />
-              </dl>
-
-              <div className="mt-3 rounded-lg border border-border/50 bg-surface-1/40 p-2">
-                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Valor / resultado
-                </p>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                  <span className="text-muted-foreground">
-                    nenhum resultado comprovado neste build
-                  </span>
-                  <TruthBadge truth="NOT_VERIFIED" />
-                </div>
-              </div>
-
-              {!executable ? (
-                <p className="mt-3 rounded-lg border border-warning/40 bg-warning/10 p-2 text-[11px] text-warning">
-                  APP NÃO IMPLEMENTADO / FICHA TÉCNICA — a rota abre a especificação do produto, não
-                  uma execução real.
-                </p>
-              ) : null}
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Button asChild size="sm">
-                  <Link to={appRoute(a.slug)}>Abrir aplicativo</Link>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  aria-expanded={ficha}
-                  onClick={() => setOpenFicha(ficha ? null : a.slug)}
-                >
-                  Ficha do produto
-                </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link to="/owner/plans">Resultados</Link>
-                </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link to="/owner/clients">Clientes</Link>
-                </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link to="/owner/versions">Versões</Link>
-                </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link to="/owner/tests">Qualidade &amp; Evidências</Link>
-                </Button>
-              </div>
-
-              {ficha ? (
-                <div className="mt-3 space-y-2 rounded-lg border border-border/50 bg-surface-1/40 p-3 text-[11px] text-muted-foreground">
-                  <p>
-                    <span className="text-foreground">Objetivo: </span>
-                    {a.purpose}
-                  </p>
-                  <p>
-                    <span className="text-foreground">Estado declarado: </span>
-                    {a.status}
-                  </p>
-                  <p>
-                    <span className="text-foreground">Classificação de roadmap: </span>
-                    Wave 1{b?.chainStep ? ` · etapa ${b.chainStep} da cadeia` : ""}
-                  </p>
-                  <p>
-                    <span className="text-foreground">Capabilities CORE declaradas: </span>
-                    {b ? b.capabilities.join(", ") : "não reconciliadas"}
-                  </p>
-                  <p>
-                    <span className="text-foreground">Documentos: </span>
-                    {a.docs.join(", ")}
-                  </p>
-                  <Button asChild size="sm" variant="outline">
-                    <Link to="/core/apps">Ver binding técnico no CORE</Link>
-                  </Button>
-                </div>
-              ) : null}
-            </article>
-          );
-        })}
+      <div className="flex flex-wrap gap-2">
+        <TruthBadge truth="DOCUMENTED_ONLY" />
+        <DemoBadge label="PRESERVAÇÃO / RECONCILIAÇÃO" />
       </div>
 
-      <Panel title="Fichas de produto (fixtures do catálogo)">
-        <div className="space-y-3">
-          {APPS.map((p) => (
-            <div key={p.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+      <Panel title={`Fichas de aplicativo preservadas (${APP_PAGES.length})`}>
+        <p className="text-xs text-muted-foreground">
+          Fonte: `APP_PAGES`. Estes registros não criam um segundo modelo gerencial; servem como
+          evidência de reconciliação do catálogo existente.
+        </p>
+        <div className="mt-3 space-y-2">
+          {APP_PAGES.map((app) => (
+            <article
+              key={app.slug}
+              className="rounded-lg border border-border/50 bg-surface-1/40 p-3"
+            >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="min-w-0 flex-1 text-sm font-medium">
-                  {p.id} · {p.name}
-                </span>
-                <Badge variant="outline" className="text-[10px]">
-                  v{p.version} · {p.status}
+                <span className="min-w-0 flex-1 text-sm font-medium">{app.name}</span>
+                <Badge variant="outline" className="font-mono text-[10px]">
+                  {app.id}
                 </Badge>
-                <Badge variant="outline" className="text-[10px]">
-                  saúde: {SEVERITY_LABEL[p.health]}
-                </Badge>
-                <DemoBadge label="DEMO" />
+                <TruthBadge truth={app.truth} />
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">{p.summary}</p>
-              <div className="mt-2 grid gap-2 text-[11px] text-muted-foreground md:grid-cols-2">
-                <p>
-                  <span className="text-foreground">CORE usado: </span>
-                  {p.coreUsed.map((c) => (c === "padrao" ? "CORE Padrão" : "CORE Cubo")).join(", ")}
-                </p>
-                <p>
-                  <span className="text-foreground">Tecnologia: </span>
-                  {p.tech.join(", ")}
-                </p>
-                <p>
-                  <span className="text-foreground">Clientes: </span>
-                  {p.clients.length ? p.clients.join(", ") : "nenhum"}
-                </p>
-                <p>
-                  <span className="text-foreground">Testes: </span>
-                  {p.tests.passed} aprovados / {p.tests.failed} reprovados
-                </p>
-                <p>
-                  <span className="text-foreground">Documentos: </span>
-                  {p.docs.join(", ")}
-                </p>
-                <p>
-                  <span className="text-foreground">Canais: </span>
-                  {p.channels.map((c) => `${c.channel}${c.route ? "" : " (sem rota)"}`).join(", ")}
-                </p>
-              </div>
-            </div>
+              <p className="mt-2 text-xs text-muted-foreground">{app.purpose}</p>
+              <dl className="mt-2 grid gap-2 text-[11px] sm:grid-cols-2">
+                <Cell label="Slug" value={app.slug} />
+                <Cell label="Cadeia" value={app.chain} />
+                <Cell label="Estado declarado" value={app.status} />
+                <Cell label="Documentos" value={app.docs.join(", ") || "nenhum"} />
+                <Cell
+                  label="CALLs declarados"
+                  value={app.calls.map((call) => `${call.label} [${call.truth}]`).join(" · ")}
+                />
+                <Cell label="Próximo passo" value={app.next.join(" · ") || "não definido"} />
+              </dl>
+            </article>
           ))}
         </div>
       </Panel>
 
-      <Panel title="Limite desta camada">
+      <Panel title={`Wave 1 / Registry preservado (${WAVE1_APPS.length})`}>
+        <p className="text-xs text-muted-foreground">
+          Fonte: `WAVE1_APPS`. IDs, capabilities e truth-states continuam disponíveis para comparar
+          com a ficha canônica de Produtos e com os bindings do CORE.
+        </p>
+        <div className="mt-3 space-y-2">
+          {WAVE1_APPS.map((app) => (
+            <article
+              key={`${app.id}-${app.name}`}
+              className="rounded-lg border border-border/50 bg-surface-1/40 p-3"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="min-w-0 flex-1 text-sm font-medium">{app.name}</span>
+                <Badge variant="outline" className="font-mono text-[10px]">
+                  {app.id}
+                </Badge>
+                <TruthBadge truth={app.truth} />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">{app.purpose}</p>
+              <dl className="mt-2 grid gap-2 text-[11px] sm:grid-cols-2">
+                <Cell
+                  label="Etapa da cadeia"
+                  value={app.chainStep === null ? "transversal" : String(app.chainStep)}
+                />
+                <Cell label="Shell" value={app.shell} />
+                <Cell label="Rota declarada" value={app.route ?? "não reconciliada"} />
+                <Cell label="Capabilities" value={app.capabilities.join(", ")} />
+                <Cell label="Nota" value={app.note ?? "sem nota"} />
+              </dl>
+            </article>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel title={`Fixtures históricas de produto/app (${APPS.length})`}>
+        <p className="text-xs text-muted-foreground">
+          Fonte: `demo-data.APPS`. Os números abaixo continuam explicitamente DEMO e não comprovam
+          produção, clientes reais, saúde real ou promoção.
+        </p>
+        <div className="mt-3 space-y-2">
+          {APPS.map((app) => (
+            <article
+              key={app.id}
+              className="rounded-lg border border-border/50 bg-surface-1/40 p-3"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="min-w-0 flex-1 text-sm font-medium">{app.name}</span>
+                <Badge variant="outline" className="font-mono text-[10px]">
+                  {app.id}
+                </Badge>
+                <Badge variant="outline" className="text-[10px]">
+                  v{app.version} · {app.status}
+                </Badge>
+                <DemoBadge label="SYNTHETIC_DEMO" />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">{app.summary}</p>
+              <dl className="mt-2 grid gap-2 text-[11px] sm:grid-cols-2">
+                <Cell label="Saúde (fixture)" value={SEVERITY_LABEL[app.health]} />
+                <Cell
+                  label="CORE usado"
+                  value={app.coreUsed
+                    .map((core) => (core === "padrao" ? "CORE Padrão" : "CORE Cubo"))
+                    .join(", ")}
+                />
+                <Cell label="Tecnologia" value={app.tech.join(", ")} />
+                <Cell label="Clientes (fixture)" value={app.clients.join(", ") || "nenhum"} />
+                <Cell
+                  label="Testes (fixture)"
+                  value={`${app.tests.passed} aprovados / ${app.tests.failed} reprovados`}
+                />
+                <Cell label="Documentos" value={app.docs.join(", ")} />
+                <Cell
+                  label="Canais"
+                  value={app.channels
+                    .map((channel) => `${channel.channel}: ${channel.route ?? "sem rota"}`)
+                    .join(" · ")}
+                />
+                <Cell
+                  label="Histórico"
+                  value={app.history.map((event) => `${event.at}: ${event.text}`).join(" · ")}
+                />
+              </dl>
+            </article>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel title="Regra de superfície">
         <div className="space-y-2 text-xs text-muted-foreground">
           <p>
-            A Central gerencia portfólio, valor, clientes e qualidade. Bindings, CALLs, providers,
-            dados, permissões e observabilidade ficam em{" "}
-            <Link className="text-primary underline" to="/core/apps">
-              LAMOU CORE &gt; Apps &amp; Bindings
-            </Link>
-            .
+            Gestão do produto, saúde, qualidade, uso, clientes, versão, evidências e evolução:
+            Central &gt; Produtos.
           </p>
           <p>
-            Aplicativos licenciados de cliente permanecem fora daqui: eles pertencem ao Portal LAMOU
-            IA Cliente, com CORE Cliente próprio.
+            Bindings, providers, CALLs e arquitetura técnica: LAMOU CORE. Candidatas/experimentos:
+            LABTEST.
           </p>
+          <p>Nenhum registro desta rota promove versão ou altera truth-state.</p>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button asChild size="sm">
+            <Link to="/owner/products">Produtos — superfície canônica</Link>
+          </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/core/apps">Bindings técnicos no CORE</Link>
+          </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/labtest">Candidatas no LABTEST</Link>
+          </Button>
         </div>
       </Panel>
     </AppShell>
@@ -246,7 +196,7 @@ function AppsPage() {
 
 function Cell({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-border/50 bg-surface-1/40 p-2">
+    <div className="rounded-lg border border-border/50 bg-background/40 p-2">
       <dt className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="mt-0.5 break-words">{value}</dd>
     </div>

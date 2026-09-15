@@ -153,7 +153,16 @@ export const APP_ROUTES = {
 } as const;
 
 export type AppSlug = keyof typeof APP_ROUTES;
+export type AppRoute = (typeof APP_ROUTES)[AppSlug];
 
-export function appRoute(slug: string): (typeof APP_ROUTES)[AppSlug] {
-  return APP_ROUTES[slug as AppSlug] ?? "/apps/research-scout";
+/**
+ * Resolve somente slugs explicitamente registrados. Slug desconhecido é erro de catálogo:
+ * nunca deve abrir Research Scout (ou qualquer outro app) silenciosamente.
+ */
+export function appRoute(slug: string): AppRoute {
+  const route = APP_ROUTES[slug as AppSlug];
+  if (!route) {
+    throw new Error(`APP_ROUTE_NOT_REGISTERED:${slug}`);
+  }
+  return route;
 }
