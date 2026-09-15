@@ -173,7 +173,9 @@ function CallDetail({ call }: { call: CallContract }) {
           <TruthBadge truth={errors.length ? "BLOCKED" : "DOCUMENTED_ONLY"} />
         </div>
         <p className="mt-1 text-muted-foreground">
-          {errors.length ? errors.join(" · ") : "estrutura obrigatória completa; execução ainda depende dos testes"}
+          {errors.length
+            ? errors.join(" · ")
+            : "estrutura obrigatória completa; execução ainda depende dos testes"}
         </p>
       </div>
     </div>
@@ -200,6 +202,28 @@ function CallsPage() {
     call.tests.some((test) => test.result === "PASS"),
   ).length;
   const invalid = CALL_REGISTRY.filter((call) => validateCallContract(call).length > 0).length;
+  const kpis = [
+    {
+      label: "CALLs canônicas",
+      value: String(CALL_REGISTRY.length),
+      truth: "FACT/EVIDENCED",
+    },
+    {
+      label: "Cenários por CALL",
+      value: String(CALL_TEST_SCENARIOS.length),
+      truth: "FACT/EVIDENCED",
+    },
+    {
+      label: "Com teste PASS",
+      value: String(passing),
+      truth: passing ? "PARTIAL" : "NOT_VERIFIED",
+    },
+    {
+      label: "Contratos estruturalmente inválidos",
+      value: String(invalid),
+      truth: invalid ? "BLOCKED" : "FACT/EVIDENCED",
+    },
+  ];
 
   return (
     <AppShell group="core">
@@ -217,17 +241,12 @@ function CallsPage() {
       />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {[
-          ["CALLs canônicas", String(CALL_REGISTRY.length), "FACT/EVIDENCED"],
-          ["Cenários por CALL", String(CALL_TEST_SCENARIOS.length), "FACT/EVIDENCED"],
-          ["Com teste PASS", String(passing), passing ? "PARTIAL" : "NOT_VERIFIED"],
-          ["Contratos estruturalmente inválidos", String(invalid), invalid ? "BLOCKED" : "FACT/EVIDENCED"],
-        ].map(([label, value, truth]) => (
-          <div key={label} className="rounded-xl border border-border/60 bg-card/70 p-4">
-            <p className="text-xs text-muted-foreground">{label}</p>
-            <p className="mt-1 font-display text-2xl font-semibold">{value}</p>
+        {kpis.map((kpi) => (
+          <div key={kpi.label} className="rounded-xl border border-border/60 bg-card/70 p-4">
+            <p className="text-xs text-muted-foreground">{kpi.label}</p>
+            <p className="mt-1 font-display text-2xl font-semibold">{kpi.value}</p>
             <div className="mt-2">
-              <TruthBadge truth={truth} />
+              <TruthBadge truth={kpi.truth} />
             </div>
           </div>
         ))}
