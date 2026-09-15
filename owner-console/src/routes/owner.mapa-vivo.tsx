@@ -24,9 +24,8 @@ type MapaVivoSearch = {
 };
 
 function parseMapaVivoSearch(search: Record<string, unknown>): MapaVivoSearch {
-  return typeof search.case_id === "string" && search.case_id.trim()
-    ? { case_id: search.case_id }
-    : {};
+  const caseId = search["case_id"];
+  return typeof caseId === "string" && caseId.trim() ? { case_id: caseId } : {};
 }
 
 export const Route = createFileRoute("/owner/mapa-vivo")({
