@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   format:
-    if: ${{ !contains(github.event.head_commit.message, 'chore(owner-console): autoformat baseline') }}
     runs-on: ubuntu-latest
     defaults:
       run:
