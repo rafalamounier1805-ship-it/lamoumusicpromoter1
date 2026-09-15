@@ -103,10 +103,7 @@ export function CaseFile({ caseId, onClose }: { caseId: string; onClose: () => v
               <Field label="Responsável" value={owner} />
               <Field label="Criticidade" value={SEVERITY_LABEL[item.severity]} />
               <Field label="Sinal detectado" value={item.signal} />
-              <Field
-                label="Destino atual"
-                value={item.destination ?? "ainda não encaminhado"}
-              />
+              <Field label="Destino atual" value={item.destination ?? "ainda não encaminhado"} />
             </dl>
           </Block>
 

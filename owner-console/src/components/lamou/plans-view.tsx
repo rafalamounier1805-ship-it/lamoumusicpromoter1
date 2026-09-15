@@ -80,7 +80,8 @@ export function PlansView({
   group: NavGroup;
   selectedCaseId?: string | undefined;
 }) {
-  const { cases, plans, projects, improvements, referrals, testRequests, routeCase } = useLamou();
+  const { cases, plans, projects, improvements, referrals, testRequests, routeCase } =
+    useLamou();
   const routed = cases.filter((c) => c.destination);
   const selectedCase = selectedCaseId ? cases.find((c) => c.id === selectedCaseId) : undefined;
   const selectedExtra = selectedCase ? caseExtra(selectedCase.id) : undefined;
@@ -128,7 +129,9 @@ export function PlansView({
             </div>
 
             <div className="rounded-xl border border-primary/30 bg-primary/5 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide">Facts recebidos do Mapa</p>
+              <p className="text-xs font-semibold uppercase tracking-wide">
+                Facts recebidos do Mapa
+              </p>
               <p className="mt-1 text-[11px] text-muted-foreground">
                 Contrato de entrada restrito. Nenhuma hipótese, análise de IA, decisão ou plano foi
                 transferido automaticamente.
@@ -157,7 +160,9 @@ export function PlansView({
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide">Cadeia técnica no CORE</p>
+              <p className="text-xs font-semibold uppercase tracking-wide">
+                Cadeia técnica no CORE
+              </p>
               <ol className="mt-2 flex flex-wrap gap-1">
                 {TECHNICAL_CHAIN.map((stage, index) => (
                   <li
@@ -195,7 +200,10 @@ export function PlansView({
               />
               <Field label="Teste" value="NOT_VERIFIED — nenhum teste executado por esta ação" />
               <Field label="Decisão" value="pendente de análise técnica" />
-              <Field label="Ação" value={selectedPlan ? `Plano ${selectedPlan.id} existente` : "não definida"} />
+              <Field
+                label="Ação"
+                value={selectedPlan ? `Plano ${selectedPlan.id} existente` : "não definida"}
+              />
               <Field label="Resultado" value="não disponível" />
               <Field label="Eficácia" value="não disponível" />
               <Field label="Aprendizado" value="não disponível" />
@@ -207,7 +215,9 @@ export function PlansView({
                 disabled={Boolean(selectedPlan)}
                 onClick={() => routeCase(selectedCase.id, "plano")}
               >
-                {selectedPlan ? `Plano ${selectedPlan.id} já criado` : "Criar Plano de Ação no CORE"}
+                {selectedPlan
+                  ? `Plano ${selectedPlan.id} já criado`
+                  : "Criar Plano de Ação no CORE"}
               </Button>
               <Button asChild size="sm" variant="outline">
                 <Link to="/core/tests">Abrir Testes & Qualidade</Link>
