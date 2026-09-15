@@ -80,12 +80,12 @@ export function PlansView({
   group: NavGroup;
   selectedCaseId?: string | undefined;
 }) {
-  const { cases, plans, projects, improvements, referrals, testRequests, routeCase } =
-    useLamou();
+  const { cases, plans, projects, improvements, referrals, testRequests, routeCase } = useLamou();
   const routed = cases.filter((c) => c.destination);
   const selectedCase = selectedCaseId ? cases.find((c) => c.id === selectedCaseId) : undefined;
   const selectedExtra = selectedCase ? caseExtra(selectedCase.id) : undefined;
-  const facts = selectedCase && selectedExtra ? mapCaseToCoreFacts(selectedCase, selectedExtra) : null;
+  const facts =
+    selectedCase && selectedExtra ? mapCaseToCoreFacts(selectedCase, selectedExtra) : null;
   const selectedPlan = selectedCase
     ? plans.find((plan) => plan.originCaseId === selectedCase.id)
     : undefined;
