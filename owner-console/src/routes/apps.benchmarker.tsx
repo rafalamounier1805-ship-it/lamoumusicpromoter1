@@ -10,16 +10,30 @@ export const Route = createFileRoute("/apps/benchmarker")({
   head: () => ({
     meta: [
       { title: "Benchmarker — LAMOU" },
-      { name: "description", content: "Comparação estruturada entre soluções, versões e alternativas com critérios explícitos." },
+      {
+        name: "description",
+        content:
+          "Comparação estruturada entre soluções, versões e alternativas com critérios explícitos.",
+      },
       { property: "og:title", content: "Benchmarker — LAMOU" },
-      { property: "og:description", content: "Comparação estruturada entre soluções, versões e alternativas com critérios explícitos." },
+      {
+        property: "og:description",
+        content:
+          "Comparação estruturada entre soluções, versões e alternativas com critérios explícitos.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (
     <AppShell group="apps">
-      <AppPage spec={appSpecToPage(app)} id={app.id} chain={app.chain} docs={app.docs} calls={app.calls} />
+      <AppPage
+        spec={appSpecToPage(app)}
+        id={app.id}
+        chain={app.chain}
+        docs={app.docs}
+        calls={app.calls}
+      />
     </AppShell>
   ),
 });

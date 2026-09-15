@@ -10,9 +10,17 @@ export const Route = createFileRoute("/owner/integrations")({
   head: () => ({
     meta: [
       { title: "Integrações — LAMOU IA Central" },
-      { name: "description", content: "Estado real de cada integração do ecossistema LAMOU, sem declarar conexão sem evidência." },
+      {
+        name: "description",
+        content:
+          "Estado real de cada integração do ecossistema LAMOU, sem declarar conexão sem evidência.",
+      },
       { property: "og:title", content: "Integrações — LAMOU IA Central" },
-      { property: "og:description", content: "Estado real de cada integração do ecossistema LAMOU, sem declarar conexão sem evidência." },
+      {
+        property: "og:description",
+        content:
+          "Estado real de cada integração do ecossistema LAMOU, sem declarar conexão sem evidência.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -10,9 +10,17 @@ export const Route = createFileRoute("/core/tests")({
   head: () => ({
     meta: [
       { title: "Testes, Validation & Evidence — LAMOU CORE" },
-      { name: "description", content: "Matriz obrigatória de testes por chamada e exigência de evidência para qualquer promoção." },
+      {
+        name: "description",
+        content:
+          "Matriz obrigatória de testes por chamada e exigência de evidência para qualquer promoção.",
+      },
       { property: "og:title", content: "Testes, Validation & Evidence — LAMOU CORE" },
-      { property: "og:description", content: "Matriz obrigatória de testes por chamada e exigência de evidência para qualquer promoção." },
+      {
+        property: "og:description",
+        content:
+          "Matriz obrigatória de testes por chamada e exigência de evidência para qualquer promoção.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

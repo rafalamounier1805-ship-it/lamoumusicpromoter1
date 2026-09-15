@@ -381,14 +381,24 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
     folder: "00_MASTER",
     files: ["MASTER_DOCUMENT.md", "PRODUCT_MANIFEST.md", "VERSION_MANIFEST.md", "CHANGELOG.md"],
   },
-  { folder: "10_PRODUCT", files: ["PRODUCT_SPEC.md", "BUSINESS_RULES.md", "USER_ROLES.md", "ACCEPTANCE.md"] },
+  {
+    folder: "10_PRODUCT",
+    files: ["PRODUCT_SPEC.md", "BUSINESS_RULES.md", "USER_ROLES.md", "ACCEPTANCE.md"],
+  },
   {
     folder: "20_ARCHITECTURE",
     files: ["ARCHITECTURE.md", "APP_CORE_BINDINGS.md", "DEPENDENCIES.md", "DATA_FLOW.md"],
   },
   {
     folder: "30_CONTRACTS",
-    files: ["CALL_REGISTRY.md", "API_CONTRACTS.md", "TOOL_CONTRACTS.md", "AI_CONTRACTS.md", "WEBHOOK_CONTRACTS.md", "EVENT_CONTRACTS.md"],
+    files: [
+      "CALL_REGISTRY.md",
+      "API_CONTRACTS.md",
+      "TOOL_CONTRACTS.md",
+      "AI_CONTRACTS.md",
+      "WEBHOOK_CONTRACTS.md",
+      "EVENT_CONTRACTS.md",
+    ],
   },
   { folder: "40_DATA", files: ["DATA_CONTRACT.md", "SCHEMAS.md", "RLS.md", "RETENTION.md"] },
   {
@@ -397,14 +407,27 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
   },
   {
     folder: "60_TESTS",
-    files: ["TEST_MASTER_PLAN.md", "TEST_CASES.md", "API_CALL_TESTS.md", "NEGATIVE_TESTS.md", "SECURITY_TESTS.md", "E2E_TESTS.md"],
+    files: [
+      "TEST_MASTER_PLAN.md",
+      "TEST_CASES.md",
+      "API_CALL_TESTS.md",
+      "NEGATIVE_TESTS.md",
+      "SECURITY_TESTS.md",
+      "E2E_TESTS.md",
+    ],
   },
   {
     folder: "70_VALIDATION",
     files: ["VALIDATION_CONTRACT.md", "GATES.md", "EVIDENCE_REQUIREMENTS.md", "TRUTH_STATE.md"],
   },
-  { folder: "80_AI", files: ["AI_MODEL_CONTRACT.md", "PROMPTS.md", "SKILLS.md", "AGENTS.md", "EVALS.md"] },
-  { folder: "90_UI", files: ["VISUAL_BINDING.md", "ROUTES.md", "SCREEN_SPEC.md", "ASSET_BINDINGS.md"] },
+  {
+    folder: "80_AI",
+    files: ["AI_MODEL_CONTRACT.md", "PROMPTS.md", "SKILLS.md", "AGENTS.md", "EVALS.md"],
+  },
+  {
+    folder: "90_UI",
+    files: ["VISUAL_BINDING.md", "ROUTES.md", "SCREEN_SPEC.md", "ASSET_BINDINGS.md"],
+  },
   {
     folder: "95_OPERATIONS",
     files: ["OBSERVABILITY.md", "BACKUP_RESTORE.md", "DEPLOYMENT.md", "RUNBOOK.md"],
@@ -412,8 +435,16 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
 ];
 
 export const VISUAL_LOCKS: { file: string; surface: string; read: boolean }[] = [
-  { file: "LAMOU_VISUAL_LOCK_OWNER_INSTALL.png", surface: "Instalação do Proprietário", read: false },
-  { file: "LAMOU_VISUAL_LOCK_OWNER_ONBOARDING_STORYBOARD.png", surface: "Onboarding Owner", read: false },
+  {
+    file: "LAMOU_VISUAL_LOCK_OWNER_INSTALL.png",
+    surface: "Instalação do Proprietário",
+    read: false,
+  },
+  {
+    file: "LAMOU_VISUAL_LOCK_OWNER_ONBOARDING_STORYBOARD.png",
+    surface: "Onboarding Owner",
+    read: false,
+  },
   { file: "LAMOU_VISUAL_LOCK_CLIENT_INSTALL.png", surface: "Instalação do Cliente", read: false },
   { file: "LAMOU_VISUAL_LOCK_MAPA_VIVO_OWNER.png", surface: "Mapa Vivo Owner", read: false },
   { file: "LAMOU_VISUAL_LOCK_ICON_LIBRARY.png", surface: "Biblioteca Visual", read: false },
@@ -421,6 +452,14 @@ export const VISUAL_LOCKS: { file: string; surface: string; read: boolean }[] = 
   { file: "LAMOU_VISUAL_LOCK_CORE_ARCHITECTURE.png", surface: "Arquitetura CORE", read: false },
   { file: "LAMOU_VISUAL_LOCK_QUALITY_TESTS.png", surface: "Testes & Qualidade", read: false },
   { file: "LAMOU_VISUAL_LOCK_ORBIT_LIFEOS.png", surface: "Orbit / LifeOS", read: false },
-  { file: "LAMOU_VISUAL_LOCK_OPPORTUNITY_FICHA.png", surface: "Ficha de Oportunidade", read: false },
-  { file: "LAMOU_VISUAL_LOCK_OPPORTUNITY_VALIDATION.png", surface: "Validação de Oportunidade", read: false },
+  {
+    file: "LAMOU_VISUAL_LOCK_OPPORTUNITY_FICHA.png",
+    surface: "Ficha de Oportunidade",
+    read: false,
+  },
+  {
+    file: "LAMOU_VISUAL_LOCK_OPPORTUNITY_VALIDATION.png",
+    surface: "Validação de Oportunidade",
+    read: false,
+  },
 ];

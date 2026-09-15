@@ -10,9 +10,17 @@ export const Route = createFileRoute("/core/")({
   head: () => ({
     meta: [
       { title: "LAMOU CORE — Visão Geral do Proprietário" },
-      { name: "description", content: "Camada técnica do CORE proprietário: capabilities, contratos, SOL e LUA com estados verificáveis." },
+      {
+        name: "description",
+        content:
+          "Camada técnica do CORE proprietário: capabilities, contratos, SOL e LUA com estados verificáveis.",
+      },
       { property: "og:title", content: "LAMOU CORE — Visão Geral do Proprietário" },
-      { property: "og:description", content: "Camada técnica do CORE proprietário: capabilities, contratos, SOL e LUA com estados verificáveis." },
+      {
+        property: "og:description",
+        content:
+          "Camada técnica do CORE proprietário: capabilities, contratos, SOL e LUA com estados verificáveis.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

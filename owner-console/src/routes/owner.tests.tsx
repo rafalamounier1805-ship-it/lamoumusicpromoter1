@@ -10,9 +10,17 @@ export const Route = createFileRoute("/owner/tests")({
   head: () => ({
     meta: [
       { title: "Testes & Qualidade — LAMOU IA Central" },
-      { name: "description", content: "Visão consolidada de Teste³ IA, Validation Gate e Lab, com evidências e retestes." },
+      {
+        name: "description",
+        content:
+          "Visão consolidada de Teste³ IA, Validation Gate e Lab, com evidências e retestes.",
+      },
       { property: "og:title", content: "Testes & Qualidade — LAMOU IA Central" },
-      { property: "og:description", content: "Visão consolidada de Teste³ IA, Validation Gate e Lab, com evidências e retestes." },
+      {
+        property: "og:description",
+        content:
+          "Visão consolidada de Teste³ IA, Validation Gate e Lab, com evidências e retestes.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -39,13 +39,7 @@ export interface Evidence {
 }
 
 export type CaseStage =
-  | "origem"
-  | "sinal"
-  | "evidencia"
-  | "teste"
-  | "decisao"
-  | "acao"
-  | "resultado";
+  "origem" | "sinal" | "evidencia" | "teste" | "decisao" | "acao" | "resultado";
 
 export const CASE_STAGES: CaseStage[] = [
   "origem",
@@ -276,11 +270,7 @@ export interface TestRun {
 }
 
 export type ActionPlanStatus =
-  | "AGUARDANDO DEFINIÇÃO"
-  | "DEFINIDO"
-  | "EM EXECUÇÃO"
-  | "CONCLUÍDO"
-  | "CANCELADO";
+  "AGUARDANDO DEFINIÇÃO" | "DEFINIDO" | "EM EXECUÇÃO" | "CONCLUÍDO" | "CANCELADO";
 
 export interface ActionPlan {
   id: string;

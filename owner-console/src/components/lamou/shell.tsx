@@ -15,8 +15,19 @@ export function CoreMark({ className }: { className?: string }) {
           <stop offset="100%" stopColor="oklch(0.66 0.19 296)" />
         </linearGradient>
       </defs>
-      <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="url(#lamou-core)" strokeWidth="1.6" />
-      <path d="M16 2v12M16 14 3 9M16 14l13-5M16 14v16" fill="none" stroke="url(#lamou-core)" strokeWidth="1.1" opacity="0.75" />
+      <path
+        d="M16 2 29 9v14L16 30 3 23V9z"
+        fill="none"
+        stroke="url(#lamou-core)"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M16 2v12M16 14 3 9M16 14l13-5M16 14v16"
+        fill="none"
+        stroke="url(#lamou-core)"
+        strokeWidth="1.1"
+        opacity="0.75"
+      />
     </svg>
   );
 }
@@ -39,7 +50,10 @@ const TRUTH_TONE: Record<string, string> = {
 
 export function TruthBadge({ truth, hint }: { truth: TruthState | string; hint?: string }) {
   const badge = (
-    <Badge variant="outline" className={cn("font-mono text-[10px] tracking-wide", TRUTH_TONE[truth] ?? "")}>
+    <Badge
+      variant="outline"
+      className={cn("font-mono text-[10px] tracking-wide", TRUTH_TONE[truth] ?? "")}
+    >
       {truth}
     </Badge>
   );
@@ -47,7 +61,10 @@ export function TruthBadge({ truth, hint }: { truth: TruthState | string; hint?:
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span tabIndex={0} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span
+          tabIndex={0}
+          className="rounded outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
           {badge}
         </span>
       </TooltipTrigger>
@@ -98,7 +115,9 @@ export function Panel({
   return (
     <Card className={cn("border-border/60 bg-card/70 backdrop-blur", className)}>
       <CardHeader className="flex flex-row items-center justify-between gap-3 pb-3">
-        <CardTitle className="text-sm font-semibold tracking-wide text-foreground/90">{title}</CardTitle>
+        <CardTitle className="text-sm font-semibold tracking-wide text-foreground/90">
+          {title}
+        </CardTitle>
         {action}
       </CardHeader>
       <CardContent className="space-y-3 text-sm">{children}</CardContent>

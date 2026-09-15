@@ -10,16 +10,28 @@ export const Route = createFileRoute("/apps/meeting-architect")({
   head: () => ({
     meta: [
       { title: "Meeting Architect — LAMOU" },
-      { name: "description", content: "Estrutura reuniões diagnósticas com pauta, perguntas, evidências e decisões." },
+      {
+        name: "description",
+        content: "Estrutura reuniões diagnósticas com pauta, perguntas, evidências e decisões.",
+      },
       { property: "og:title", content: "Meeting Architect — LAMOU" },
-      { property: "og:description", content: "Estrutura reuniões diagnósticas com pauta, perguntas, evidências e decisões." },
+      {
+        property: "og:description",
+        content: "Estrutura reuniões diagnósticas com pauta, perguntas, evidências e decisões.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (
     <AppShell group="apps">
-      <AppPage spec={appSpecToPage(app)} id={app.id} chain={app.chain} docs={app.docs} calls={app.calls} />
+      <AppPage
+        spec={appSpecToPage(app)}
+        id={app.id}
+        chain={app.chain}
+        docs={app.docs}
+        calls={app.calls}
+      />
     </AppShell>
   ),
 });

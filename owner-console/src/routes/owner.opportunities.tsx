@@ -10,9 +10,17 @@ export const Route = createFileRoute("/owner/opportunities")({
   head: () => ({
     meta: [
       { title: "Oportunidades — LAMOU IA Central" },
-      { name: "description", content: "Cadeia Research Scout, Benchmarker e Opportunity Intelligence com ficha e gate de validação." },
+      {
+        name: "description",
+        content:
+          "Cadeia Research Scout, Benchmarker e Opportunity Intelligence com ficha e gate de validação.",
+      },
       { property: "og:title", content: "Oportunidades — LAMOU IA Central" },
-      { property: "og:description", content: "Cadeia Research Scout, Benchmarker e Opportunity Intelligence com ficha e gate de validação." },
+      {
+        property: "og:description",
+        content:
+          "Cadeia Research Scout, Benchmarker e Opportunity Intelligence com ficha e gate de validação.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -172,7 +172,10 @@ export const OWNER_PAGES: Record<string, PageSpec> = {
           { label: "Evidência externa", truth: "DOCUMENTED_ONLY" },
           { label: "Esforço, risco e custo", truth: "DOCUMENTED_ONLY" },
           { label: "Teste necessário e falsificador", truth: "DOCUMENTED_ONLY" },
-          { label: "Destino: projeto, versão, experimento, backlog ou estudo", truth: "DOCUMENTED_ONLY" },
+          {
+            label: "Destino: projeto, versão, experimento, backlog ou estudo",
+            truth: "DOCUMENTED_ONLY",
+          },
         ],
       },
       {
@@ -189,11 +192,15 @@ export const OWNER_PAGES: Record<string, PageSpec> = {
           label: v.file,
           value: v.surface,
           truth: v.read ? "EXTERNAL_EVIDENCE" : "NOT_VERIFIED",
-          note: v.read ? "Arquivo lido." : "Arquivo não lido nesta sessão — nenhum conector de Drive autorizado.",
+          note: v.read
+            ? "Arquivo lido."
+            : "Arquivo não lido nesta sessão — nenhum conector de Drive autorizado.",
         })),
       },
     ],
-    next: ["Autorizar leitura dos Visual Locks e reconciliar o APP-ID canônico de Opportunity Intelligence."],
+    next: [
+      "Autorizar leitura dos Visual Locks e reconciliar o APP-ID canônico de Opportunity Intelligence.",
+    ],
   },
   documents: {
     title: "Documentos & Documentação Viva",
@@ -392,7 +399,11 @@ export const CORE_PAGES: Record<string, PageSpec> = {
       "Camada técnica do proprietário. SOL é a referência operacional corrente; LUA reúne candidatas e experiências.",
     truth: "PARTIAL",
     kpis: [
-      { label: "Capabilities mapeadas", value: String(CALL_REGISTRY.length), truth: "FACT/EVIDENCED" },
+      {
+        label: "Capabilities mapeadas",
+        value: String(CALL_REGISTRY.length),
+        truth: "FACT/EVIDENCED",
+      },
       { label: "CALLs verificadas", value: "0", truth: "NOT_VERIFIED" },
       { label: "Apps Wave 1", value: String(WAVE1_APPS.length), truth: "FACT/EVIDENCED" },
       { label: "Backend runtime", value: "não conectado", truth: "NOT_CONNECTED" },
@@ -427,16 +438,33 @@ export const CORE_PAGES: Record<string, PageSpec> = {
   },
   architecture: {
     title: "Arquitetura Técnica",
-    subtitle: "Fundação compartilhada: superfícies, contratos, registries e limites entre Owner e Cliente.",
+    subtitle:
+      "Fundação compartilhada: superfícies, contratos, registries e limites entre Owner e Cliente.",
     truth: "PARTIAL",
     sections: [
       {
         title: "Superfícies oficiais",
         items: [
-          { label: "1. Instalação do Proprietário", value: "/install/owner", truth: "IMPLEMENTED_NOT_VERIFIED" },
-          { label: "1.1 Instalação do Cliente", value: "/install/client", truth: "IMPLEMENTED_NOT_VERIFIED" },
-          { label: "2. LAMOU IA Central — Proprietário", value: "/owner", truth: "IMPLEMENTED_NOT_VERIFIED" },
-          { label: "3. LAMOU CORE — Proprietário", value: "/core", truth: "IMPLEMENTED_NOT_VERIFIED" },
+          {
+            label: "1. Instalação do Proprietário",
+            value: "/install/owner",
+            truth: "IMPLEMENTED_NOT_VERIFIED",
+          },
+          {
+            label: "1.1 Instalação do Cliente",
+            value: "/install/client",
+            truth: "IMPLEMENTED_NOT_VERIFIED",
+          },
+          {
+            label: "2. LAMOU IA Central — Proprietário",
+            value: "/owner",
+            truth: "IMPLEMENTED_NOT_VERIFIED",
+          },
+          {
+            label: "3. LAMOU CORE — Proprietário",
+            value: "/core",
+            truth: "IMPLEMENTED_NOT_VERIFIED",
+          },
           {
             label: "3.1 LAMOU CORE — Cliente",
             value: "fora deste app",
@@ -487,7 +515,11 @@ export const CORE_PAGES: Record<string, PageSpec> = {
       {
         title: "Fontes",
         items: [
-          { label: "Fixtures locais SYNTHETIC_DEMO", truth: DEMO, note: "Único dado presente nesta candidata." },
+          {
+            label: "Fixtures locais SYNTHETIC_DEMO",
+            truth: DEMO,
+            note: "Único dado presente nesta candidata.",
+          },
           { label: "Postgres externo LAMOU", truth: "NOT_CONNECTED" },
           { label: "Storage de evidências", truth: "NOT_CONNECTED" },
         ],
@@ -537,7 +569,11 @@ export const CORE_PAGES: Record<string, PageSpec> = {
       {
         title: "Controles",
         items: [
-          { label: "Separação Owner × Cliente", truth: "FACT/EVIDENCED", note: "Nenhuma rota de cliente existe neste app." },
+          {
+            label: "Separação Owner × Cliente",
+            truth: "FACT/EVIDENCED",
+            note: "Nenhuma rota de cliente existe neste app.",
+          },
           { label: "RBAC por superfície", truth: "DOCUMENTED_ONLY" },
           { label: "ABAC por tenant e entitlement", truth: "DOCUMENTED_ONLY" },
           { label: "Isolamento de tenant testado", truth: "NOT_VERIFIED" },
@@ -554,7 +590,8 @@ export const CORE_PAGES: Record<string, PageSpec> = {
   },
   tests: {
     title: "Testes, Validation & Evidence",
-    subtitle: "Cada CALL gera testes de sucesso, não autorizado, schema inválido, timeout, indisponibilidade, isolamento e recuperação.",
+    subtitle:
+      "Cada CALL gera testes de sucesso, não autorizado, schema inválido, timeout, indisponibilidade, isolamento e recuperação.",
     truth: "NOT_VERIFIED",
     sections: [
       {
@@ -588,7 +625,11 @@ export const CORE_PAGES: Record<string, PageSpec> = {
         items: [
           { label: "Log estruturado por CALL", truth: "NOT_CONNECTED" },
           { label: "Métricas de latência e custo", truth: "NOT_CONNECTED" },
-          { label: "Erros de runtime da UI", truth: "PARTIAL", note: "Captura de erro do app existe; agregação externa não." },
+          {
+            label: "Erros de runtime da UI",
+            truth: "PARTIAL",
+            note: "Captura de erro do app existe; agregação externa não.",
+          },
           { label: "Analytics de produto", truth: "NOT_CONNECTED" },
         ],
       },
@@ -602,7 +643,11 @@ export const CORE_PAGES: Record<string, PageSpec> = {
       {
         title: "Estado",
         items: [
-          { label: "Candidata corrente", value: "candidate/lamou-owner-platform", truth: "IMPLEMENTED_NOT_VERIFIED" },
+          {
+            label: "Candidata corrente",
+            value: "candidate/lamou-owner-platform",
+            truth: "IMPLEMENTED_NOT_VERIFIED",
+          },
           { label: "Baseline FROZEN preservada", truth: "FACT/EVIDENCED" },
           { label: "Backup / restore automatizado", truth: "NOT_CONNECTED" },
           { label: "Rollback testado", truth: "NOT_VERIFIED" },
@@ -799,7 +844,8 @@ export const APP_PAGES: AppPageSpec[] = [
     slug: "orbit",
     id: "APP-ORBIT",
     name: "Orbit / Agenda / LifeOS",
-    purpose: "Agenda e sistema de vida operacional do proprietário. Não é Version nem Intelligence 360.",
+    purpose:
+      "Agenda e sistema de vida operacional do proprietário. Não é Version nem Intelligence 360.",
     chain: "Apoio transversal.",
     truth: "NOT_VERIFIED",
     status: "Rota real com ficha; agenda não conectada.",

@@ -95,7 +95,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "dados-ia", use: "Feature store multidimensional com proveniência" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 72, engineeringPlausibility: 60, lamouEvidence: null, lamouReadiness: 15 },
+    matrix: {
+      externalScience: 72,
+      engineeringPlausibility: 60,
+      lamouEvidence: null,
+      lamouReadiness: 15,
+    },
     matrixNote: "Base externa forte; nenhuma evidência interna executada.",
   },
   {
@@ -121,7 +126,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "matematica", use: "Agregação multicritério explicável" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 68, engineeringPlausibility: 64, lamouEvidence: null, lamouReadiness: 18 },
+    matrix: {
+      externalScience: 68,
+      engineeringPlausibility: 64,
+      lamouEvidence: null,
+      lamouReadiness: 18,
+    },
     matrixNote: "Mecanismo padrão em engenharia; hipótese LAMOU não medida.",
   },
   {
@@ -129,14 +139,16 @@ export const LAB_CONCEPTS: LabConcept[] = [
     name: "Snapshot",
     layer: "LUA",
     problem: "Sem estado congelado verificável, evidência e rollback ficam sem âncora.",
-    mechanism: "Captura imutável com hash, escopo, autor e dependências para comparação e restauração.",
+    mechanism:
+      "Captura imutável com hash, escopo, autor e dependências para comparação e restauração.",
     existingScience: [
       "Content-addressed storage (Merkle/Git)",
       "Point-in-time recovery em bancos",
       "Copy-on-write filesystems",
     ],
     plausibleCombination: "Hash de conteúdo + PITR + Registry de linhagem LAMOU.",
-    lamouHypothesis: "Snapshot com linhagem torna gate de promoção auditável sem congelar a evolução.",
+    lamouHypothesis:
+      "Snapshot com linhagem torna gate de promoção auditável sem congelar a evolução.",
     risks: ["Retenção e custo", "Snapshot sem contexto vira lixo verificável"],
     falsifiers: ["Restore não reproduz o estado declarado em teste executado"],
     requiredTests: ["Backup/restore com verificação de hash", "Teste de rollback com evidência"],
@@ -145,7 +157,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "seguranca", use: "Integridade e resposta a incidente" },
     ],
     truth: "EXTERNAL_EVIDENCE",
-    matrix: { externalScience: 88, engineeringPlausibility: 78, lamouEvidence: null, lamouReadiness: 25 },
+    matrix: {
+      externalScience: 88,
+      engineeringPlausibility: 78,
+      lamouEvidence: null,
+      lamouReadiness: 25,
+    },
     matrixNote: "Ciência externa madura; execução interna ainda NOT_VERIFIED.",
   },
   {
@@ -153,19 +170,32 @@ export const LAB_CONCEPTS: LabConcept[] = [
     name: "Cubo Fantasma",
     layer: "LUA",
     problem: "Testar mudança estrutural sem contaminar o estado operacional corrente (SOL).",
-    mechanism: "Réplica sombra que recebe tráfego espelhado e divergências são medidas, não aplicadas.",
-    existingScience: ["Shadow deployment e dark launching", "Digital twin", "Chaos engineering controlado"],
+    mechanism:
+      "Réplica sombra que recebe tráfego espelhado e divergências são medidas, não aplicadas.",
+    existingScience: [
+      "Shadow deployment e dark launching",
+      "Digital twin",
+      "Chaos engineering controlado",
+    ],
     plausibleCombination: "Shadow traffic + digital twin + gates de validação LAMOU.",
     lamouHypothesis: "Sombra medida antecipa falha estrutural antes da promoção, sem risco ao SOL.",
     risks: ["Custo de duplicação", "Efeitos colaterais em integrações não idempotentes"],
     falsifiers: ["Falhas continuam aparecendo só em produção após sombra aprovar"],
-    requiredTests: ["Espelhamento com writes bloqueados", "Comparação de divergência sombra vs. real"],
+    requiredTests: [
+      "Espelhamento com writes bloqueados",
+      "Comparação de divergência sombra vs. real",
+    ],
     applications: [
       { area: "software", use: "Validação pré-promoção" },
       { area: "industria", use: "Gêmeo de processo para ajuste sem parar linha" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 80, engineeringPlausibility: 55, lamouEvidence: null, lamouReadiness: 12 },
+    matrix: {
+      externalScience: 80,
+      engineeringPlausibility: 55,
+      lamouEvidence: null,
+      lamouReadiness: 12,
+    },
     matrixNote: "Padrão externo existe; variante LAMOU não construída.",
   },
   {
@@ -173,8 +203,13 @@ export const LAB_CONCEPTS: LabConcept[] = [
     name: "Cubo da Relação",
     layer: "LUA",
     problem: "Relações entre casos, apps, clientes e evidências ficam implícitas e se perdem.",
-    mechanism: "Grafo tipado sobre o volume de estado, com peso por evidência e decaimento por obsolescência.",
-    existingScience: ["Knowledge graphs", "Causal discovery (limites conhecidos)", "Análise de redes"],
+    mechanism:
+      "Grafo tipado sobre o volume de estado, com peso por evidência e decaimento por obsolescência.",
+    existingScience: [
+      "Knowledge graphs",
+      "Causal discovery (limites conhecidos)",
+      "Análise de redes",
+    ],
     plausibleCombination: "Grafo de conhecimento + freshness/decay + provenance obrigatória.",
     lamouHypothesis: "Relação com peso de evidência reduz falso positivo de causa.",
     risks: ["Correlação lida como causa", "Grafo denso sem utilidade"],
@@ -185,7 +220,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "biologia", use: "Mapeamento de sistemas complexos (pesquisa)" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 70, engineeringPlausibility: 50, lamouEvidence: null, lamouReadiness: 10 },
+    matrix: {
+      externalScience: 70,
+      engineeringPlausibility: 50,
+      lamouEvidence: null,
+      lamouReadiness: 10,
+    },
     matrixNote: "Risco central: confundir similaridade com causa.",
   },
   {
@@ -210,7 +250,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "industria", use: "Continuidade de processo e manutenção" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 76, engineeringPlausibility: 58, lamouEvidence: null, lamouReadiness: 20 },
+    matrix: {
+      externalScience: 76,
+      engineeringPlausibility: 58,
+      lamouEvidence: null,
+      lamouReadiness: 20,
+    },
     matrixNote: "Drills LAMOU ainda não executados neste build.",
   },
   {
@@ -225,18 +270,31 @@ export const LAB_CONCEPTS: LabConcept[] = [
       "Multipath TCP / MPLS-TE",
       "Diversidade de caminho em redes ópticas",
     ],
-    plausibleCombination: "WDM + política de rota orientada a evidência + verificação de integridade por canal.",
+    plausibleCombination:
+      "WDM + política de rota orientada a evidência + verificação de integridade por canal.",
     lamouHypothesis:
       "Egresso multicanal com política orientada a evidência melhora continuidade sem degradar latência.",
-    risks: ["Custo de hardware óptico", "Complexidade de sincronização", "Sem bancada não há medida"],
+    risks: [
+      "Custo de hardware óptico",
+      "Complexidade de sincronização",
+      "Sem bancada não há medida",
+    ],
     falsifiers: ["Ganho de continuidade não aparece em bancada com carga controlada"],
-    requiredTests: ["Bancada óptica com medição de BER e latência por canal", "Teste de falha de canal"],
+    requiredTests: [
+      "Bancada óptica com medição de BER e latência por canal",
+      "Teste de falha de canal",
+    ],
     applications: [
       { area: "telecom", use: "Diversidade de egresso e continuidade" },
       { area: "fisica", use: "Estudo de limites de canal" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 84, engineeringPlausibility: 40, lamouEvidence: null, lamouReadiness: 5 },
+    matrix: {
+      externalScience: 84,
+      engineeringPlausibility: 40,
+      lamouEvidence: null,
+      lamouReadiness: 5,
+    },
     matrixNote: "Depende de bancada física inexistente hoje: evidência LAMOU INDETERMINADA.",
   },
   {
@@ -250,7 +308,8 @@ export const LAB_CONCEPTS: LabConcept[] = [
       "Regeneração de sinal em enlaces ópticos (analogia externa)",
       "CRDTs e reconciliação parcial",
     ],
-    plausibleCombination: "Event sourcing por ramo + snapshot com hash + reconciliação determinística.",
+    plausibleCombination:
+      "Event sourcing por ramo + snapshot com hash + reconciliação determinística.",
     lamouHypothesis: "Restore de ramo reduz janela de indisponibilidade vs. restore completo.",
     risks: ["Divergência silenciosa entre ramos", "Ordem de eventos e idempotência"],
     falsifiers: ["Restore de ramo produz estado divergente verificável"],
@@ -260,7 +319,12 @@ export const LAB_CONCEPTS: LabConcept[] = [
       { area: "farmaceutica", use: "Reconstituição de trilha de lote (pesquisa/validação)" },
     ],
     truth: "HYPOTHESIS",
-    matrix: { externalScience: 66, engineeringPlausibility: 45, lamouEvidence: null, lamouReadiness: 8 },
+    matrix: {
+      externalScience: 66,
+      engineeringPlausibility: 45,
+      lamouEvidence: null,
+      lamouReadiness: 8,
+    },
     matrixNote: "Nada implementado; apenas mecanismo descrito.",
   },
 ];
@@ -282,7 +346,8 @@ export const LAB_STUDIES: LabStudy[] = [
     title: "Snapshot: restore verificado por hash",
     conceptId: "LAB-SNAPSHOT",
     question: "O restore reproduz exatamente o estado declarado?",
-    design: "Snapshot de baseline, mutação controlada, restore, comparação de hash e diff de linhagem.",
+    design:
+      "Snapshot de baseline, mutação controlada, restore, comparação de hash e diff de linhagem.",
     status: "planejado",
     blocker: null,
     truth: "NOT_VERIFIED",
@@ -342,8 +407,20 @@ export const LAB_EVIDENCE: LabEvidenceItem[] = [
 ];
 
 export const LAB_PENDINGS: { id: string; text: string; truth: TruthState }[] = [
-  { id: "PEND-001", text: "Anexar referências externas com DOI/URL e data ao Evidence Store", truth: "NOT_VERIFIED" },
-  { id: "PEND-002", text: "Executar STU-001 (restore verificado) e registrar evidência", truth: "NOT_VERIFIED" },
+  {
+    id: "PEND-001",
+    text: "Anexar referências externas com DOI/URL e data ao Evidence Store",
+    truth: "NOT_VERIFIED",
+  },
+  {
+    id: "PEND-002",
+    text: "Executar STU-001 (restore verificado) e registrar evidência",
+    truth: "NOT_VERIFIED",
+  },
   { id: "PEND-003", text: "Bancada óptica para STU-003", truth: "BLOCKED" },
-  { id: "PEND-004", text: "Calibrar plausibilidade de engenharia (hoje heurística)", truth: "NOT_VERIFIED" },
+  {
+    id: "PEND-004",
+    text: "Calibrar plausibilidade de engenharia (hoje heurística)",
+    truth: "NOT_VERIFIED",
+  },
 ];

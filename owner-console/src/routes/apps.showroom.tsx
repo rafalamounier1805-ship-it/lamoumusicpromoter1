@@ -10,16 +10,28 @@ export const Route = createFileRoute("/apps/showroom")({
   head: () => ({
     meta: [
       { title: "Showroom — LAMOU" },
-      { name: "description", content: "Vitrine de soluções, provas e demonstrações do ecossistema LAMOU." },
+      {
+        name: "description",
+        content: "Vitrine de soluções, provas e demonstrações do ecossistema LAMOU.",
+      },
       { property: "og:title", content: "Showroom — LAMOU" },
-      { property: "og:description", content: "Vitrine de soluções, provas e demonstrações do ecossistema LAMOU." },
+      {
+        property: "og:description",
+        content: "Vitrine de soluções, provas e demonstrações do ecossistema LAMOU.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (
     <AppShell group="apps">
-      <AppPage spec={appSpecToPage(app)} id={app.id} chain={app.chain} docs={app.docs} calls={app.calls} />
+      <AppPage
+        spec={appSpecToPage(app)}
+        id={app.id}
+        chain={app.chain}
+        docs={app.docs}
+        calls={app.calls}
+      />
     </AppShell>
   ),
 });

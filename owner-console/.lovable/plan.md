@@ -1,9 +1,11 @@
 # Varredura funcional + UX — Instalação Owner
 
 ## Escopo
+
 Trabalhar somente em `/install/owner`, preservando as sete etapas, o launcher, a persistência local já existente e a regra de Visual Lock invisível no produto. Nenhuma integração será simulada, promovida ou publicada.
 
 ## Implementação
+
 1. Criar, dentro dos componentes já usados pela instalação, um padrão compacto de item acionável: ícone informativo com tooltip, estado, fonte, última verificação, impacto, responsável, próximo passo e detalhe expansível.
 2. Substituir ações genéricas por CTAs explícitos. Ligar somente destinos reais já existentes (`/owner`, `/owner/mapa-vivo`, `/owner/apps`, `/owner/plans`, `/owner/settings`, `/owner/security`, `/owner/documents`, `/owner/integrations`, `/core`, `/core/tests`, `/core/observability`, `/labtest`). Quando não houver destino executável, manter ação desabilitada com motivo e truth-state correto.
 3. Atualizar as sete etapas:
@@ -16,10 +18,12 @@ Trabalhar somente em `/install/owner`, preservando as sete etapas, o launcher, a
 5. Manter apenas a linha das sete etapas e o donut de Prontidão Técnica exclusivamente na etapa final.
 
 ## Validação
+
 - Percorrer as sete etapas em 1440×900, 768×1024 e 360×800.
 - Exercitar tooltips, detalhes, links reais, ações desabilitadas, avatar local, responsável alternativo e regras de senha.
 - Confirmar ausência de screenshots/Visual Lock, rotas inexistentes e erros de console.
 - Validar tipos, lint dos arquivos alterados e build automático.
 
 ## Estados preservados
+
 `CANDIDATE_NOT_PROMOTED`, `SALVAR ≠ PROMOVER`, `NOT_CONNECTED`, `NOT_VERIFIED`, `PARTIAL` e `DOCUMENTED_ONLY` permanecem explícitos. Ações externas continuam bloqueadas até conexão real.

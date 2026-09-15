@@ -28,8 +28,18 @@ export const MODULES: ModuleCard[] = [
     summary: "Cidade viva do ecossistema, casos e ocorrências em tempo de análise.",
     severity: "critico",
     pendings: [
-      { id: "p-map-1", label: "2 ocorrências piscando sem destino definido", severity: "critico", resolved: false },
-      { id: "p-map-2", label: "1 sinal de tendência sem evidência anexada", severity: "tendencia", resolved: false },
+      {
+        id: "p-map-1",
+        label: "2 ocorrências piscando sem destino definido",
+        severity: "critico",
+        resolved: false,
+      },
+      {
+        id: "p-map-2",
+        label: "1 sinal de tendência sem evidência anexada",
+        severity: "tendencia",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Casos abertos", value: "6", demo: true },
@@ -43,7 +53,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Catálogo dos produtos LAMOU com canais OFICIAL, DEMO e TESTE.",
     severity: "tendencia",
     pendings: [
-      { id: "p-app-1", label: "Canal DEMO sem rota real em 2 produtos", severity: "tendencia", resolved: false },
+      {
+        id: "p-app-1",
+        label: "Canal DEMO sem rota real em 2 produtos",
+        severity: "tendencia",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Produtos", value: "5", demo: true },
@@ -57,7 +72,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Cliente 360, ambientes TESTE e OFICIAL, preview client-safe.",
     severity: "probabilidade",
     pendings: [
-      { id: "p-cli-1", label: "Implantação parada na etapa de storage isolado", severity: "probabilidade", resolved: false },
+      {
+        id: "p-cli-1",
+        label: "Implantação parada na etapa de storage isolado",
+        severity: "probabilidade",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Clientes", value: "4", demo: true },
@@ -71,7 +91,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Contratos, planos, entitlements, licenças, pagamentos e uso.",
     severity: "tendencia",
     pendings: [
-      { id: "p-com-1", label: "1 contrato sem entitlement mapeado", severity: "tendencia", resolved: false },
+      {
+        id: "p-com-1",
+        label: "1 contrato sem entitlement mapeado",
+        severity: "tendencia",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Contratos ativos", value: "3", demo: true },
@@ -85,8 +110,18 @@ export const MODULES: ModuleCard[] = [
     summary: "Teste³ IA como executor transversal, evidências e reteste.",
     severity: "critico",
     pendings: [
-      { id: "p-tst-1", label: "1 reteste pendente após correção", severity: "critico", resolved: false },
-      { id: "p-tst-2", label: "1 resultado marcado como falso positivo sem revisão", severity: "probabilidade", resolved: false },
+      {
+        id: "p-tst-1",
+        label: "1 reteste pendente após correção",
+        severity: "critico",
+        resolved: false,
+      },
+      {
+        id: "p-tst-2",
+        label: "1 resultado marcado como falso positivo sem revisão",
+        severity: "probabilidade",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Execuções registradas", value: "7", demo: true },
@@ -100,7 +135,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Itens de ação com definição obrigatória e trilhas de melhoria.",
     severity: "critico",
     pendings: [
-      { id: "p-pln-1", label: "2 planos em AGUARDANDO DEFINIÇÃO", severity: "critico", resolved: false },
+      {
+        id: "p-pln-1",
+        label: "2 planos em AGUARDANDO DEFINIÇÃO",
+        severity: "critico",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Planos abertos", value: "3", demo: true },
@@ -114,7 +154,12 @@ export const MODULES: ModuleCard[] = [
     summary: "CORE Padrão e CORE Cubo como camadas distintas.",
     severity: "probabilidade",
     pendings: [
-      { id: "p-core-1", label: "Caleidoscópio com cenário adormecido a revalidar", severity: "probabilidade", resolved: false },
+      {
+        id: "p-core-1",
+        label: "Caleidoscópio com cenário adormecido a revalidar",
+        severity: "probabilidade",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Recursos experimentais", value: "6", demo: true },
@@ -128,7 +173,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Visão defensiva: integridade, isolamento, incidentes e evidências.",
     severity: "critico",
     pendings: [
-      { id: "p-sec-1", label: "1 alerta de integridade aberto", severity: "critico", resolved: false },
+      {
+        id: "p-sec-1",
+        label: "1 alerta de integridade aberto",
+        severity: "critico",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Alertas abertos", value: "2", demo: true },
@@ -142,7 +192,12 @@ export const MODULES: ModuleCard[] = [
     summary: "Baseline preservada, candidata, gate de promoção e rollback.",
     severity: "tendencia",
     pendings: [
-      { id: "p-ver-1", label: "Candidata aguardando gate de promoção", severity: "tendencia", resolved: false },
+      {
+        id: "p-ver-1",
+        label: "Candidata aguardando gate de promoção",
+        severity: "tendencia",
+        resolved: false,
+      },
     ],
     metrics: [
       { label: "Builds", value: "5", demo: true },
@@ -191,7 +246,10 @@ export const CASES: CaseNode[] = [
     signal: "Tempo de resposta subiu de forma sustentada em janelas consecutivas",
     description:
       "Sinal recorrente de latência no caminho de inferência. Ainda não há método fechado para converter recorrência em probabilidade.",
-    evidences: [ev("e1", "log", "Amostra de logs sintéticos de latência"), ev("e2", "métrica", "Série temporal DEMO")],
+    evidences: [
+      ev("e1", "log", "Amostra de logs sintéticos de latência"),
+      ev("e2", "métrica", "Série temporal DEMO"),
+    ],
     metrics: [
       { label: "Recorrência", value: "4 janelas", demo: true },
       { label: "Impacto percebido", value: "médio", demo: true },
@@ -308,7 +366,8 @@ export const CASES: CaseNode[] = [
     classification: "Resiliência",
     origin: "Rotina de drills",
     signal: "Cenário sem drill dentro da janela definida",
-    description: "Cenário de resiliência precisa de revalidação antes de ser considerado confiável.",
+    description:
+      "Cenário de resiliência precisa de revalidação antes de ser considerado confiável.",
     evidences: [],
     metrics: [{ label: "Dias sem drill", value: "62", demo: true }],
     actors: ["Caleidoscópio"],
@@ -527,7 +586,8 @@ export const CONTRACTS: Contract[] = [
     value: {
       current: "Receita recorrente contratada (valor não informado no app)",
       potential: "Expansão para módulos de analytics e comunicação",
-      method: "Valor atual = contrato assinado. Potencial = módulos elegíveis ainda não contratados.",
+      method:
+        "Valor atual = contrato assinado. Potencial = módulos elegíveis ainda não contratados.",
       evidence: "Contrato CT-2026-014 e catálogo de add-ons vigente.",
     },
   },

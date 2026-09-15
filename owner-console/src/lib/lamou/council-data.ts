@@ -118,8 +118,14 @@ const familyDefaults: Record<
     limits: ["Não converte estimativa heurística em probabilidade científica"],
   },
   ciencia: {
-    evidence: ["Referência externa com fonte/DOI/URL e data", "Ordem de grandeza e limites físicos"],
-    criteria: ["Mecanismo plausível e falsificável", "Distinção entre ciência existente e hipótese LAMOU"],
+    evidence: [
+      "Referência externa com fonte/DOI/URL e data",
+      "Ordem de grandeza e limites físicos",
+    ],
+    criteria: [
+      "Mecanismo plausível e falsificável",
+      "Distinção entre ciência existente e hipótese LAMOU",
+    ],
     redFlags: ["Violação de limite físico conhecido", "Mecanismo declarado sem teste possível"],
     dod: ["Hipótese, falsificadores e teste mínimo definidos", "Truth-state explícito"],
     limits: ["Não afirma resultado sem experimento"],
@@ -171,8 +177,17 @@ const seeds: RoleSeed[] = [
     "Product Manager",
     "produto",
     "Garantir que cada evolução resolva problema real do Owner e não vire escopo solto.",
-    ["Descoberta de problema", "Priorização por impacto", "Definição de critério de sucesso", "Trade-off escopo/risco"],
-    ["Qual problema exatamente deixa de existir?", "Como saberemos que resolveu?", "O que acontece se não fizermos?"],
+    [
+      "Descoberta de problema",
+      "Priorização por impacto",
+      "Definição de critério de sucesso",
+      "Trade-off escopo/risco",
+    ],
+    [
+      "Qual problema exatamente deixa de existir?",
+      "Como saberemos que resolveu?",
+      "O que acontece se não fizermos?",
+    ],
     ["Existe algo já no app que resolve parcialmente?", "Quem consome essa saída hoje?"],
     { produto: 95, ux: 70, inovacao: 65, financeiro: 55, arquitetura: 40 },
   ],
@@ -181,7 +196,12 @@ const seeds: RoleSeed[] = [
     "Product Designer",
     "produto",
     "Traduzir fluxo Owner em telas legíveis, sem botão fake e sem sobrecarga cognitiva.",
-    ["Fluxo e arquitetura de telas", "Hierarquia visual", "Estados vazios e de erro", "Consistência de padrão"],
+    [
+      "Fluxo e arquitetura de telas",
+      "Hierarquia visual",
+      "Estados vazios e de erro",
+      "Consistência de padrão",
+    ],
     ["Qual decisão o usuário toma nesta tela?", "Qual é o estado quando não há dado real?"],
     ["Essa tela precisa existir ou é uma aba?", "Há duplicidade com módulo existente?"],
     { ux: 95, produto: 75, implementacao: 45 },
@@ -191,7 +211,12 @@ const seeds: RoleSeed[] = [
     "UX Researcher",
     "produto",
     "Separar o que é evidência de uso do que é suposição do time.",
-    ["Roteiro de entrevista", "Análise qualitativa", "Teste de usabilidade", "Triangulação de sinais"],
+    [
+      "Roteiro de entrevista",
+      "Análise qualitativa",
+      "Teste de usabilidade",
+      "Triangulação de sinais",
+    ],
     ["Que evidência de uso já existe?", "Essa dor foi observada ou suposta?"],
     ["Qual amostra sustentaria essa conclusão?", "Que sinal falsificaria a hipótese?"],
     { ux: 90, produto: 70, "dados-ia": 40 },
@@ -211,7 +236,12 @@ const seeds: RoleSeed[] = [
     "Design System Architect",
     "produto",
     "Proteger tokens, códigos imutáveis de asset e evitar divergência visual.",
-    ["Tokens semânticos", "Versionamento de asset", "Change request de visual", "Governança de componentes"],
+    [
+      "Tokens semânticos",
+      "Versionamento de asset",
+      "Change request de visual",
+      "Governança de componentes",
+    ],
     ["Esse asset tem código e versão?", "A mudança exige change request?"],
     ["Existe componente equivalente para reuso?", "O asset está CONGELADO?"],
     { ux: 85, arquitetura: 60, qualidade: 45 },
@@ -271,7 +301,12 @@ const seeds: RoleSeed[] = [
     "Full-stack Engineer",
     "engenharia",
     "Fechar o fluxo ponta a ponta, da tela à tabela, sem botão fake.",
-    ["Fluxo ponta a ponta", "Contrato cliente-servidor", "Migração incremental", "Depuração cruzada"],
+    [
+      "Fluxo ponta a ponta",
+      "Contrato cliente-servidor",
+      "Migração incremental",
+      "Depuração cruzada",
+    ],
     ["O botão faz algo real hoje?", "Qual parte fica em modo local declarado?"],
     ["A persistência pode ser migrada agora?", "Qual estado é fonte de verdade?"],
     { implementacao: 90, arquitetura: 65, produto: 45 },
@@ -301,7 +336,12 @@ const seeds: RoleSeed[] = [
     "Data Engineer",
     "dados",
     "Garantir pipeline rastreável, com origem, data e reprocessamento.",
-    ["Ingestão e ETL", "Qualidade de dados", "Versionamento de dataset", "Observabilidade de pipeline"],
+    [
+      "Ingestão e ETL",
+      "Qualidade de dados",
+      "Versionamento de dataset",
+      "Observabilidade de pipeline",
+    ],
     ["De onde vem, com que frequência e quem escreve?", "Como reprocessamos?"],
     ["Há schema evolutivo?", "Qual volume esperado?"],
     { "dados-ia": 88, arquitetura: 60, implementacao: 55 },
@@ -351,7 +391,12 @@ const seeds: RoleSeed[] = [
     "Theoretical Physicist",
     "ciencia",
     "Checar se o conceito respeita leis físicas antes de virar engenharia.",
-    ["Formalismo teórico", "Simetrias e conservação", "Limites assintóticos", "Estimativa de ordem de grandeza"],
+    [
+      "Formalismo teórico",
+      "Simetrias e conservação",
+      "Limites assintóticos",
+      "Estimativa de ordem de grandeza",
+    ],
     ["Qual lei física limita isso?", "Qual é o limite superior teórico?"],
     ["Qual aproximação é aceitável?", "Existe análogo conhecido na literatura?"],
     { fisica: 96, matematica: 75, telecom: 55 },
@@ -361,8 +406,16 @@ const seeds: RoleSeed[] = [
     "Quantum Physics PhD Specialist",
     "ciencia",
     "Distinguir efeito quântico real de metáfora quântica.",
-    ["Estados e emaranhamento", "Decoerência e ruído", "Medição e no-cloning", "Metrologia quântica"],
-    ["Existe coerência mensurável nesse regime?", "Isso viola no-cloning ou apenas copia clássica?"],
+    [
+      "Estados e emaranhamento",
+      "Decoerência e ruído",
+      "Medição e no-cloning",
+      "Metrologia quântica",
+    ],
+    [
+      "Existe coerência mensurável nesse regime?",
+      "Isso viola no-cloning ou apenas copia clássica?",
+    ],
     ["Qual temperatura/ruído é tolerável?", "O ganho sobrevive à decoerência?"],
     { fisica: 94, telecom: 70, matematica: 60 },
   ],
@@ -371,7 +424,12 @@ const seeds: RoleSeed[] = [
     "Complex Systems Physicist",
     "ciencia",
     "Ler o sistema LAMOU como rede com emergência e transições.",
-    ["Redes e criticalidade", "Transição de fase", "Sinais precoces de ruptura", "Sistemas dinâmicos"],
+    [
+      "Redes e criticalidade",
+      "Transição de fase",
+      "Sinais precoces de ruptura",
+      "Sistemas dinâmicos",
+    ],
     ["Qual variável de ordem descreve o estado?", "Há sinal precoce antes da falha?"],
     ["O sistema está perto de criticalidade?", "Qual acoplamento domina?"],
     { fisica: 88, biologia: 75, matematica: 70, "dados-ia": 60 },
@@ -381,7 +439,12 @@ const seeds: RoleSeed[] = [
     "Experimental Physicist",
     "ciencia",
     "Definir o experimento mínimo que falsifica a hipótese.",
-    ["Desenho de bancada", "Instrumentação e calibração", "Controle de artefato", "Propagação de erro"],
+    [
+      "Desenho de bancada",
+      "Instrumentação e calibração",
+      "Controle de artefato",
+      "Propagação de erro",
+    ],
     ["Qual medição decide isso?", "Qual controle elimina artefato?"],
     ["Qual instrumento e incerteza?", "O experimento é repetível fora do laboratório?"],
     { fisica: 92, telecom: 65, qualidade: 60 },
@@ -391,7 +454,12 @@ const seeds: RoleSeed[] = [
     "Photonics / Optical Communications Engineer",
     "ciencia",
     "Avaliar caminhos ópticos, perdas e multiplexação com números reais.",
-    ["Fibra e amplificação", "WDM/roteamento óptico", "Orçamento de potência e OSNR", "Modulação e detecção"],
+    [
+      "Fibra e amplificação",
+      "WDM/roteamento óptico",
+      "Orçamento de potência e OSNR",
+      "Modulação e detecção",
+    ],
     ["Qual é o orçamento de potência e perda por ramo?", "Qual penalidade de OSNR ao dividir?"],
     ["Precisa de regeneração ou amplificação por ramo?", "Qual latência acrescentada?"],
     { telecom: 96, fisica: 80, arquitetura: 45 },
@@ -441,7 +509,12 @@ const seeds: RoleSeed[] = [
     "Pharmaceutical Process Engineer",
     "industria",
     "Ligar parâmetro de processo a atributo de qualidade com rastreabilidade.",
-    ["Scale-up", "Balanço de massa e energia", "Controle de processo", "Transferência de tecnologia"],
+    [
+      "Scale-up",
+      "Balanço de massa e energia",
+      "Controle de processo",
+      "Transferência de tecnologia",
+    ],
     ["Quais parâmetros críticos e faixas?", "O processo está sob controle estatístico?"],
     ["Qual impacto no atributo de qualidade?", "Qual risco no scale-up?"],
     { farmaceutica: 90, industria: 90, qualidade: 65 },
@@ -451,8 +524,16 @@ const seeds: RoleSeed[] = [
     "PAT Specialist",
     "industria",
     "Medir em linha o que hoje só se mede no fim.",
-    ["Espectroscopia em linha (NIR/Raman)", "Quimiometria", "Modelos de calibração", "Monitoramento contínuo"],
-    ["Qual sinal em linha correlaciona com o atributo?", "Qual conjunto de calibração e validação?"],
+    [
+      "Espectroscopia em linha (NIR/Raman)",
+      "Quimiometria",
+      "Modelos de calibração",
+      "Monitoramento contínuo",
+    ],
+    [
+      "Qual sinal em linha correlaciona com o atributo?",
+      "Qual conjunto de calibração e validação?",
+    ],
     ["O modelo tem transferência entre equipamentos?", "Como detectar deriva do sensor?"],
     { farmaceutica: 94, industria: 85, "dados-ia": 70 },
   ],
@@ -471,7 +552,12 @@ const seeds: RoleSeed[] = [
     "GMP / CSV / CSA Validation Specialist",
     "qualidade",
     "Exigir trilha de auditoria, rastreabilidade e evidência antes de aprovar.",
-    ["GxP e integridade de dados (ALCOA+)", "CSV/CSA por risco", "Qualificação IQ/OQ/PQ", "Gestão de mudança"],
+    [
+      "GxP e integridade de dados (ALCOA+)",
+      "CSV/CSA por risco",
+      "Qualificação IQ/OQ/PQ",
+      "Gestão de mudança",
+    ],
     ["Qual evidência de validação existe?", "A trilha de auditoria é íntegra?"],
     ["Qual classificação de risco do sistema?", "A mudança exige revalidação?"],
     { qualidade: 95, farmaceutica: 85, seguranca: 60 },
@@ -491,7 +577,12 @@ const seeds: RoleSeed[] = [
     "Security Architect",
     "qualidade",
     "Proteger isolamento, segredo e permissão do Owner.",
-    ["Modelagem de ameaça", "Autenticação e autorização", "Gestão de segredo", "Isolamento multi-tenant"],
+    [
+      "Modelagem de ameaça",
+      "Autenticação e autorização",
+      "Gestão de segredo",
+      "Isolamento multi-tenant",
+    ],
     ["Quem pode ler e escrever isso?", "Onde o segredo vive?"],
     ["Qual superfície fica pública?", "Como detectamos abuso?"],
     { seguranca: 96, arquitetura: 70, implementacao: 60 },
@@ -501,7 +592,12 @@ const seeds: RoleSeed[] = [
     "Technology Scout",
     "estrategia",
     "Mapear o que já existe fora antes de inventar dentro.",
-    ["Vigilância tecnológica", "Análise de patente e literatura", "Benchmark de fornecedores", "Maturidade (TRL)"],
+    [
+      "Vigilância tecnológica",
+      "Análise de patente e literatura",
+      "Benchmark de fornecedores",
+      "Maturidade (TRL)",
+    ],
     ["Isso já existe pronto no mercado?", "Qual TRL e quem já publicou?"],
     ["Há patente bloqueando?", "Comprar, integrar ou construir?"],
     { inovacao: 95, arquitetura: 45, financeiro: 50 },
@@ -511,7 +607,12 @@ const seeds: RoleSeed[] = [
     "Innovation Strategist",
     "estrategia",
     "Escolher onde a aposta LAMOU vale o risco.",
-    ["Portfólio de apostas", "Horizontes 1/2/3", "Hipótese de valor", "Gestão de risco de inovação"],
+    [
+      "Portfólio de apostas",
+      "Horizontes 1/2/3",
+      "Hipótese de valor",
+      "Gestão de risco de inovação",
+    ],
     ["Qual hipótese de valor e qual horizonte?", "Qual o menor teste que gera aprendizado?"],
     ["Quanto perdemos se falhar?", "Qual sinal encerra a aposta?"],
     { inovacao: 92, produto: 60, financeiro: 60 },
@@ -521,7 +622,12 @@ const seeds: RoleSeed[] = [
     "Research Scientist / Experimental Design",
     "ciencia",
     "Escrever o protocolo que separa achado de ilusão.",
-    ["Protocolo e hipótese", "Controles e cegamento", "Replicação", "Registro de resultado negativo"],
+    [
+      "Protocolo e hipótese",
+      "Controles e cegamento",
+      "Replicação",
+      "Registro de resultado negativo",
+    ],
     ["Qual hipótese nula?", "Quais controles e replicatas?"],
     ["O resultado negativo será registrado?", "Quem replica de forma independente?"],
     { fisica: 70, biologia: 70, qualidade: 65, "dados-ia": 55, farmaceutica: 60 },
@@ -611,13 +717,37 @@ export interface KnownItem {
 
 /** "O que já sabemos?" — base para não repetir perguntas ao Owner. */
 export const KNOWN_BASE: KnownItem[] = [
-  { label: "Escopo do projeto", value: "CORE PROPRIETÁRIO / OWNER privado, isolado de cliente", truth: "FACT/EVIDENCED" },
-  { label: "Regra de promoção", value: "SALVAR ≠ PROMOVER; FROZEN não editável", truth: "FACT/EVIDENCED" },
+  {
+    label: "Escopo do projeto",
+    value: "CORE PROPRIETÁRIO / OWNER privado, isolado de cliente",
+    truth: "FACT/EVIDENCED",
+  },
+  {
+    label: "Regra de promoção",
+    value: "SALVAR ≠ PROMOVER; FROZEN não editável",
+    truth: "FACT/EVIDENCED",
+  },
   { label: "Idioma da interface", value: "PT-BR, Owner premium, dark", truth: "FACT/EVIDENCED" },
-  { label: "Autenticação", value: "E-mail/senha com sessão persistente (backend Lovable Cloud)", truth: "FACT/EVIDENCED" },
-  { label: "Dados dos módulos legados", value: "Conjunto DEMO marcado, salvo localmente", truth: "SYNTHETIC_DEMO" },
-  { label: "Conceitos do Cubo/Prisma", value: "Isolados como EXPERIMENTAL / NÃO VALIDADO", truth: "HYPOTHESIS" },
-  { label: "Chave de IA", value: "Deve viver server-side; estado exibido em Configurações", truth: "NOT_VERIFIED" },
+  {
+    label: "Autenticação",
+    value: "E-mail/senha com sessão persistente (backend Lovable Cloud)",
+    truth: "FACT/EVIDENCED",
+  },
+  {
+    label: "Dados dos módulos legados",
+    value: "Conjunto DEMO marcado, salvo localmente",
+    truth: "SYNTHETIC_DEMO",
+  },
+  {
+    label: "Conceitos do Cubo/Prisma",
+    value: "Isolados como EXPERIMENTAL / NÃO VALIDADO",
+    truth: "HYPOTHESIS",
+  },
+  {
+    label: "Chave de IA",
+    value: "Deve viver server-side; estado exibido em Configurações",
+    truth: "NOT_VERIFIED",
+  },
 ];
 
 export interface VoiQuestion {
@@ -639,7 +769,8 @@ export const VOI_QUESTIONS: VoiQuestion[] = [
     interestedRoles: ["software-architect", "data-architect", "backend-engineer"],
     state: "respondida",
     decisionInfluenced: "Escopo da migração de persistência",
-    answer: "Conselho, Decisões, Lab e uso de IA vão ao banco; módulos legados seguem locais e marcados.",
+    answer:
+      "Conselho, Decisões, Lab e uso de IA vão ao banco; módulos legados seguem locais e marcados.",
   },
   {
     id: "VOI-002",
@@ -679,13 +810,7 @@ export const VOI_QUESTIONS: VoiQuestion[] = [
   },
 ];
 
-export type DecisionOutcome =
-  | "KEEP"
-  | "IMPROVE"
-  | "RELOCATE"
-  | "MERGE"
-  | "DEPRECATE"
-  | "REMOVE";
+export type DecisionOutcome = "KEEP" | "IMPROVE" | "RELOCATE" | "MERGE" | "DEPRECATE" | "REMOVE";
 
 export const DECISION_OUTCOMES: DecisionOutcome[] = [
   "KEEP",
@@ -718,7 +843,8 @@ export const DECISIONS_SEED: ProvenanceDecision[] = [
   {
     id: "DEC-0001",
     subject: "CORE Cubo / Prisma / Snapshot",
-    whyExists: "Linha experimental de investigação LAMOU sobre estados e ramificação de informação.",
+    whyExists:
+      "Linha experimental de investigação LAMOU sobre estados e ramificação de informação.",
     origin: "Conceito próprio do Owner, registrado antes desta versão do app.",
     requestedBy: "Rafael Lamounier (Owner)",
     dependencies: "Research & Theory Lab, Caleidoscópio, Matriz de Verdade Científica.",
@@ -727,7 +853,8 @@ export const DECISIONS_SEED: ProvenanceDecision[] = [
     history: "Mantido isolado do CORE Padrão desde a definição da governança.",
     removalImpact: "Perda total da linha de pesquisa e do histórico conceitual. Irreversível.",
     outcome: "KEEP",
-    justification: "Preservação obrigatória: conceito é ativo de pesquisa, isolado e sem risco ao CORE Padrão.",
+    justification:
+      "Preservação obrigatória: conceito é ativo de pesquisa, isolado e sem risco ao CORE Padrão.",
     truth: "HYPOTHESIS",
     at: "2026-09-10",
     persisted: false,

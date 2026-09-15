@@ -20,6 +20,4 @@
 - [x] Cliente 360 — ficha com 8 abas + cobranças reais em base real (RLS por proprietário).
 - [ ] Sequência seguinte: reconciliação CORE 9 itens; LABTEST; Instalação Cliente e pós-instalação; varredura final.
 
-
-
 - [ ] Ajuste visual: mais dark/neon executivo, menos branco/azul claro, vermelho só para crítico real.

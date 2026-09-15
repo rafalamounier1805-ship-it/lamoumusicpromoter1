@@ -10,9 +10,17 @@ export const Route = createFileRoute("/core/security")({
   head: () => ({
     meta: [
       { title: "Segurança, RBAC/ABAC & Tenants — LAMOU CORE" },
-      { name: "description", content: "Permissões por superfície, isolamento de tenant, entitlements e política de segredos." },
+      {
+        name: "description",
+        content:
+          "Permissões por superfície, isolamento de tenant, entitlements e política de segredos.",
+      },
       { property: "og:title", content: "Segurança, RBAC/ABAC & Tenants — LAMOU CORE" },
-      { property: "og:description", content: "Permissões por superfície, isolamento de tenant, entitlements e política de segredos." },
+      {
+        property: "og:description",
+        content:
+          "Permissões por superfície, isolamento de tenant, entitlements e política de segredos.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

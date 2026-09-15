@@ -10,9 +10,17 @@ export const Route = createFileRoute("/owner/versions")({
   head: () => ({
     meta: [
       { title: "Versões — LAMOU IA Central" },
-      { name: "description", content: "Histórico, baseline congelada, candidatas, evidências e gate de promoção. Salvar não é promover." },
+      {
+        name: "description",
+        content:
+          "Histórico, baseline congelada, candidatas, evidências e gate de promoção. Salvar não é promover.",
+      },
       { property: "og:title", content: "Versões — LAMOU IA Central" },
-      { property: "og:description", content: "Histórico, baseline congelada, candidatas, evidências e gate de promoção. Salvar não é promover." },
+      {
+        property: "og:description",
+        content:
+          "Histórico, baseline congelada, candidatas, evidências e gate de promoção. Salvar não é promover.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
