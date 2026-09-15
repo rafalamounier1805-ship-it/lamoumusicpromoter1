@@ -10,11 +10,7 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/lamou/app-shell";
-import {
-  CoverageStack,
-  NextActionsPanel,
-  OverallHealth,
-} from "@/components/lamou/health-widgets";
+import { CoverageStack, NextActionsPanel, OverallHealth } from "@/components/lamou/health-widgets";
 import { DemoBadge, PageHeader, Panel, TruthBadge } from "@/components/lamou/shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -87,9 +83,7 @@ function CoreOverview() {
 
   const routedCases = cases.filter((c) => c.destination).length;
   const openPlans = plans.filter((p) => p.status !== "CONCLUÍDO").length;
-  const testsNeedingAttention = tests.filter(
-    (t) => t.result !== "aprovado" || t.retest,
-  ).length;
+  const testsNeedingAttention = tests.filter((t) => t.result !== "aprovado" || t.retest).length;
   const openSecurity = security.filter((s) => s.status === "aberto").length;
   const candidates = versions.filter((v) => v.state === "CANDIDATA").length;
 
@@ -205,9 +199,17 @@ function CoreOverview() {
           <ol className="space-y-2 text-sm">
             {[
               ["1", "Saúde", "mede o que está comprovado e explicita o que não está"],
-              ["2", "Riscos", "mostra bloqueios, falhas e dependências sem transformar ausência de conexão em falso crítico"],
+              [
+                "2",
+                "Riscos",
+                "mostra bloqueios, falhas e dependências sem transformar ausência de conexão em falso crítico",
+              ],
               ["3", "Problemas", "recebe facts do Mapa e conduz investigação técnica"],
-              ["4", "Planos", "registra ação, responsável, evidência esperada e critério de conclusão"],
+              [
+                "4",
+                "Planos",
+                "registra ação, responsável, evidência esperada e critério de conclusão",
+              ],
               ["5", "Testes", "executa e registra evidência antes de qualquer gate"],
               ["6", "Versões", "mantém candidata, rollback e promoção manual governada"],
             ].map(([n, title, text]) => (
