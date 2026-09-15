@@ -26,7 +26,7 @@ Jornada pre-Central:
 10. Testes de prontidao.
 11. Conclusao com resumo, build/hash, evidencia e acesso ao painel.
 
-Visual Lock: `visual-locks/owner-install.jpg`.
+Visual Lock registrado: `ASSET-005` em `ASSET_REGISTRY.json`.
 
 ## 3. Instalacao / Provisionamento do Cliente
 
@@ -44,7 +44,7 @@ Disparada por Central > Clientes; e um wizard pre-acesso, separado do Portal Cli
 
 Cliente nunca acessa CORE Proprietario. Dados/artefatos devem ser isolados por tenant.
 
-Visual Lock: `visual-locks/client-install.jpg`.
+Visual Locks registrados: `ASSET-003` e `ASSET-006` em `ASSET_REGISTRY.json`.
 
 ## 4. LAMOU IA - Proprietario
 
@@ -70,7 +70,7 @@ Mapa Vivo deve representar casos reais e rotas:
 
 Todo nodo abre ficha com status, fonte, app/cliente/CORE, evidencias e acoes autorizadas.
 
-Visual Lock: `visual-locks/mapa-vivo-owner.jpg`.
+Visual Lock registrado: `ASSET-004` em `ASSET_REGISTRY.json`.
 
 ## 5. CORE - Proprietario
 
@@ -122,6 +122,8 @@ CORE tambem possui Mapa Vivo, mas tecnico: `app -> capability -> adapter/provide
 Cadeia integrada:
 
 `Research Scout -> Benchmarker -> Opportunity Intelligence -> Showroom -> Diagnostico -> Digital Improvement -> Teste3 -> Validation Gate -> Lab -> Version/Registry`
+
+Referencias visuais recuperadas: Orbit/LifeOS `ASSET-007`; Showroom `ASSET-002`; biblioteca de icones `ASSET-001`.
 
 ## 8. Design System
 
