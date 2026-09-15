@@ -1,48 +1,36 @@
 # SOURCE AVAILABILITY GATE — LAMOU Owner Console
 
-Data: 2026-09-15
-Status: **BLOCKED_FOR_CODEX_EDIT / HANDOFF_READY**
-Truth-state: **EVIDENCE-BASED**
+Date: 2026-09-15
+Status: **PARTIAL_SOURCE_SYNC / BASELINE_NOT_YET_TESTED**
+Truth state: **EVIDENCE-BASED**
 
-## Origem verificada
+## Verified source
+
 - Lovable project: `bee5a2f8-878d-4954-a168-029ef7399b36`
-- Lovable snapshot/commit interno: `532025926ff73e837c5f38be08fd76665ff457e5`
-- Estado Lovable: `ready`, `agentFinished=true`, `is_published=false`
-- Branch de destino: `candidate/lamou-owner-console-codex-2026-09-15`
-- Repo canônico: `rafalamounier1805-ship-it/lamoumusicpromoter1`
+- Lovable snapshot: `532025926ff73e837c5f38be08fd76665ff457e5`
+- GitHub repository: `rafalamounier1805-ship-it/lamoumusicpromoter1`
+- Candidate branch: `candidate/lamou-owner-console-codex-2026-09-15`
+- Text-source import commit: `9fbb026cab1c8d06921e499d45e8509d4ac851ae`
+- Target: `owner-console/`
 
-## Verificação executada
-1. O snapshot `532025926ff73e837c5f38be08fd76665ff457e5` **não existe** no repositório canônico GitHub como commit.
-2. A branch de handoff contém documentação e instruções, mas o diretório `owner-console/` ainda **não contém o source completo** do snapshot.
-3. O conector Lovable disponível nesta sessão permite listar e ler arquivos individuais, mas não oferece uma ação de export/download em lote do repositório.
-4. `.env` e qualquer segredo devem permanecer fora do GitHub. Somente `.env.example` sem valores pode ser versionado.
+## Verified result
 
-## Inventário esperado no sync
-O source só pode ser declarado AVAILABLE_VERIFIED quando a branch contiver e reconciliar, no mínimo:
-- `package.json`, lockfile e configs de build/lint/typescript;
-- `src/components/lamou/*`;
-- `src/components/ui/*` usados pelo projeto;
-- `src/lib/lamou/*`;
-- `src/routes/*` e `routeTree.gen.ts`;
-- `src/integrations/supabase/*` sem segredos;
-- `drizzle/schema.ts` e migrations;
-- `src/styles.css`;
-- assets/metadata de Visual Lock e biblioteca de ícones;
-- `supabase/config.toml`;
-- `public/*` necessário ao build.
+1. The exact Lovable snapshot contains 180 entries.
+2. 178 non-binary, non-secret files were read from that snapshot without error and committed to `owner-console/`.
+3. Required build/configuration and source folders are present, including `package.json`, `bun.lock`, `drizzle/`, `src/`, and `supabase/config.toml`.
+4. `.env` was excluded by design and must remain outside GitHub. No values were copied.
+5. `public/favicon.ico` remains a binary provenance gap: the available connector only returned lossy decoded text, not transferable bytes.
+6. No deployment, publication, promotion, or change to `main` occurred.
 
-## Regra de segurança
-Não reconstruir silenciosamente arquivos ausentes e não declarar o GitHub como cópia exata enquanto a comparação arquivo-a-arquivo não tiver sido concluída.
+## Gate decision
 
-## Gate para Codex
-**NÃO iniciar refatoração de produto antes de SOURCE_SYNC = PASS.**
-Após o sync:
-1. instalar dependências no diretório `owner-console/`;
-2. rodar typecheck/build/lint;
-3. registrar baseline de falhas antes de editar;
-4. executar o handoff P0;
-5. manter `main` e qualquer baseline FROZEN intocadas;
-6. SALVAR ≠ PROMOVER.
+The source is sufficient to begin a **local baseline install/build/test assessment**, but `SOURCE_SYNC = PASS` is not yet justified because byte-identical binary transfer is incomplete and build evidence does not yet exist.
 
-## Pendência operacional
-A primeira tarefa de Work/Codex é completar a transferência fiel do source do snapshot Lovable para `owner-console/` e produzir um relatório de comparação: `arquivo esperado → arquivo encontrado → hash/estado → divergência`.
+Next steps:
+
+1. Acquire the original binary favicon through an export/download-capable path or record a deliberate replacement decision.
+2. Clone/check out the candidate locally.
+3. Run dependency installation, typecheck, lint and build; register the baseline outcomes.
+4. Only then begin the Codex P0 changes. Preserve `main` and FROZEN baselines.
+
+See `SOURCE_SYNC_REPORT_2026-09-15.md` for the file-level comparison.
