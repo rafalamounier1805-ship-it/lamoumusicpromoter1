@@ -18,7 +18,9 @@ describe("Cognitive severity filters", () => {
   });
 
   test("pendência aberta sozinha não torna módulo crítico", () => {
-    expect(filterCognitiveModules(modules, "critical").some((item) => item.id === "normal-with-pending")).toBe(false);
+    expect(
+      filterCognitiveModules(modules, "critical").some((item) => item.id === "normal-with-pending"),
+    ).toBe(false);
   });
 
   test("probabilidade possui filtro próprio", () => {

@@ -419,7 +419,8 @@ function Cockpit() {
           <div className="space-y-3">
             {listTab(rows)}
             <p className="text-[11px] text-muted-foreground">
-              Sem histórico de promoção comprovado nesta leitura. O destino operacional é a superfície real de Versões.
+              Sem histórico de promoção comprovado nesta leitura. O destino operacional é a
+              superfície real de Versões.
             </p>
             <Button asChild size="sm" variant="outline">
               <Link to="/owner/versions">Abrir Versões</Link>
@@ -846,7 +847,8 @@ function Cockpit() {
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/50 pt-3">
             <p className="text-[11px] text-muted-foreground">
-              Oportunidades permanece na superfície própria como leitura secundária; não compõe o bloco principal do Cognitive.
+              Oportunidades permanece na superfície própria como leitura secundária; não compõe o
+              bloco principal do Cognitive.
             </p>
             <Button asChild size="sm" variant="outline">
               <Link to="/owner/opportunities">Abrir Oportunidades</Link>
@@ -855,9 +857,16 @@ function Cockpit() {
         </Panel>
 
         {modules.length === 0 ? (
-          <Panel title={filterMode === "probability" ? "Nenhuma probabilidade aberta" : "Nenhuma criticidade aberta"}>
+          <Panel
+            title={
+              filterMode === "probability"
+                ? "Nenhuma probabilidade aberta"
+                : "Nenhuma criticidade aberta"
+            }
+          >
             <p className="text-sm text-muted-foreground">
-              O filtro ativo não encontrou módulos neste estado. Desligue o filtro para voltar à visão geral.
+              O filtro ativo não encontrou módulos neste estado. Desligue o filtro para voltar à
+              visão geral.
             </p>
           </Panel>
         ) : (
