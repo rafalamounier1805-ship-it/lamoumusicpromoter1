@@ -116,36 +116,22 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
     key: "install-owner-security",
     label: "Instalação Proprietário",
     personaIds: ["security-architect", "backend-engineer", "qa-test-architect", "product-designer"],
-    plugins: [
-      "data-auth",
-      "validation-gate",
-      "object-storage",
-      "usage-telemetry",
-    ],
-    objective: "Instalar Owner com autenticação, isolamento, recuperação, testes e clareza didática.",
+    plugins: ["data-auth", "validation-gate", "object-storage", "usage-telemetry"],
+    objective:
+      "Instalar Owner com autenticação, isolamento, recuperação, testes e clareza didática.",
   },
   {
     key: "install-client-provisioning",
     label: "Instalação Cliente",
     personaIds: ["backend-engineer", "security-architect", "product-designer", "qa-test-architect"],
-    plugins: [
-      "data-auth",
-      "validation-gate",
-      "billing-contracts",
-      "usage-telemetry",
-    ],
+    plugins: ["data-auth", "validation-gate", "billing-contracts", "usage-telemetry"],
     objective: "Provisionar cliente sem botão fake, com tenant, entitlement, acesso e evidência.",
   },
   {
     key: "labtest-experiment",
     label: "LABTEST",
     personaIds: ["research-scientist", "qa-test-architect", "data-scientist", "software-architect"],
-    plugins: [
-      "validation-gate",
-      "data-router",
-      "version-registry",
-      "usage-telemetry",
-    ],
+    plugins: ["validation-gate", "data-router", "version-registry", "usage-telemetry"],
     objective: "Executar baseline PINNED, uma variável, evidência, comparação e gate.",
   },
   {
@@ -165,9 +151,15 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "ai-council",
     label: "IA, Conselho e Orquestrador",
-    personaIds: ["software-architect", "data-scientist", "security-architect", "research-scientist"],
+    personaIds: [
+      "software-architect",
+      "data-scientist",
+      "security-architect",
+      "research-scientist",
+    ],
     plugins: ["ai-provider", "data-router", "validation-gate", "usage-telemetry"],
-    objective: "Selecionar especialistas e ferramentas sem simular provider ou evidência inexistente.",
+    objective:
+      "Selecionar especialistas e ferramentas sem simular provider ou evidência inexistente.",
   },
   {
     key: "data-cube-research",
@@ -180,7 +172,8 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
       "research-scientist",
     ],
     plugins: ["data-router", "object-storage", "usage-telemetry", "validation-gate"],
-    objective: "Experimentar múltiplas organizações de dados sob um contrato canônico e mensurar ganho real.",
+    objective:
+      "Experimentar múltiplas organizações de dados sob um contrato canônico e mensurar ganho real.",
   },
 ];
 
