@@ -2,10 +2,11 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Moon, Sun } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import { CoreMark } from "@/components/lamou/shell";
+import { OwnerOfficialIcon } from "@/components/lamou/owner-official-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { OWNER_OFFICIAL_ICON_BY_LABEL } from "@/lib/lamou/icon-governance";
 import { NAV_GROUPS, type NavGroup } from "@/lib/lamou/nav";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +44,7 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
               to="/"
               className="flex items-center gap-2 rounded-lg px-2 py-3 hover:bg-surface-2"
             >
-              <CoreMark />
+              <OwnerOfficialIcon code="OWNER-ICO-001" className="h-9 w-9" />
               <span className="leading-tight">
                 <span className="block font-display text-sm font-semibold">LAMOU IA</span>
                 <span className="block text-[11px] text-muted-foreground">
@@ -87,6 +88,7 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
               {active.items.map(({ to, label, icon: Icon }) => {
                 const isRoot = to === "/owner" || to === "/core" || to === "/labtest";
                 const isActive = isRoot ? pathname === to : pathname.startsWith(to);
+                const officialCode = OWNER_OFFICIAL_ICON_BY_LABEL[label];
                 return (
                   <Link
                     key={to}
@@ -100,11 +102,15 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
                         : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
                     )}
                   >
-                    <Icon
-                      className="h-4 w-4 shrink-0"
-                      aria-hidden="true"
-                      data-icon-source="lucide-fallback"
-                    />
+                    {officialCode ? (
+                      <OwnerOfficialIcon code={officialCode} className="h-6 w-6" />
+                    ) : (
+                      <Icon
+                        className="h-4 w-4 shrink-0"
+                        aria-hidden="true"
+                        data-icon-source="lucide-fallback"
+                      />
+                    )}
                     <span className="truncate">{label}</span>
                   </Link>
                 );
