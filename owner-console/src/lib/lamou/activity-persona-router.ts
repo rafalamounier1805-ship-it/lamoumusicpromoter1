@@ -87,14 +87,24 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "core-architecture-data",
     label: "Arquitetura, dados e bindings",
-    personaIds: ["software-architect", "data-architect", "backend-engineer", "security-architect"],
+    personaIds: [
+      "software-architect",
+      "data-architect",
+      "backend-engineer",
+      "security-architect",
+    ],
     plugins: ["data-auth", "data-router", "object-storage", "version-registry"],
     objective: "Preservar contratos, isolamento, linhagem e escolha correta do armazenamento.",
   },
   {
     key: "core-problems-hypotheses",
     label: "Problemas, hipóteses e melhorias",
-    personaIds: ["research-scientist", "data-scientist", "systems-engineer", "product-manager"],
+    personaIds: [
+      "research-scientist",
+      "data-scientist",
+      "systems-engineer",
+      "product-manager",
+    ],
     plugins: ["validation-gate", "usage-telemetry", "document-registry"],
     objective: "Separar fato, hipótese, teste, decisão, ação e eficácia.",
   },
@@ -115,21 +125,36 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "install-owner-security",
     label: "Instalação Proprietário",
-    personaIds: ["security-architect", "backend-engineer", "qa-test-architect", "product-designer"],
+    personaIds: [
+      "security-architect",
+      "backend-engineer",
+      "qa-test-architect",
+      "product-designer",
+    ],
     plugins: ["data-auth", "validation-gate", "object-storage", "usage-telemetry"],
     objective: "Instalar Owner com autenticação, isolamento, recuperação, testes e clareza didática.",
   },
   {
     key: "install-client-provisioning",
     label: "Instalação Cliente",
-    personaIds: ["backend-engineer", "security-architect", "product-designer", "qa-test-architect"],
+    personaIds: [
+      "backend-engineer",
+      "security-architect",
+      "product-designer",
+      "qa-test-architect",
+    ],
     plugins: ["data-auth", "validation-gate", "billing-contracts", "usage-telemetry"],
     objective: "Provisionar cliente sem botão fake, com tenant, entitlement, acesso e evidência.",
   },
   {
     key: "labtest-experiment",
     label: "LABTEST",
-    personaIds: ["research-scientist", "qa-test-architect", "data-scientist", "software-architect"],
+    personaIds: [
+      "research-scientist",
+      "qa-test-architect",
+      "data-scientist",
+      "software-architect",
+    ],
     plugins: ["validation-gate", "data-router", "version-registry", "usage-telemetry"],
     objective: "Executar baseline PINNED, uma variável, evidência, comparação e gate.",
   },
@@ -150,14 +175,25 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "ai-council",
     label: "IA, Conselho e Orquestrador",
-    personaIds: ["software-architect", "data-scientist", "security-architect", "research-scientist"],
+    personaIds: [
+      "software-architect",
+      "data-scientist",
+      "security-architect",
+      "research-scientist",
+    ],
     plugins: ["ai-provider", "data-router", "validation-gate", "usage-telemetry"],
     objective: "Selecionar especialistas e ferramentas sem simular provider ou evidência inexistente.",
   },
   {
     key: "data-cube-research",
     label: "Planilhão, Cubo, Cubo Mágico e Caleidoscópio",
-    personaIds: ["data-architect", "data-engineer", "software-architect", "systems-engineer", "research-scientist"],
+    personaIds: [
+      "data-architect",
+      "data-engineer",
+      "software-architect",
+      "systems-engineer",
+      "research-scientist",
+    ],
     plugins: ["data-router", "object-storage", "usage-telemetry", "validation-gate"],
     objective: "Experimentar múltiplas organizações de dados sob um contrato canônico e mensurar ganho real.",
   },
@@ -170,20 +206,35 @@ export function activityForRoute(route: string): LamouActivityKey {
   const path = route.split("?")[0]?.split("#")[0] ?? route;
   if (path.startsWith("/owner/mapa-vivo")) return "mapa-vivo-detection";
   if (path.startsWith("/owner/clients")) return "client-360";
-  if (path.startsWith("/owner/products") || path.startsWith("/owner/apps")) return "products-apps";
-  if (path.startsWith("/owner/commercial") || path.startsWith("/owner/opportunities")) return "commercial-opportunities";
+  if (path.startsWith("/owner/products") || path.startsWith("/owner/apps")) {
+    return "products-apps";
+  }
+  if (path.startsWith("/owner/commercial") || path.startsWith("/owner/opportunities")) {
+    return "commercial-opportunities";
+  }
   if (path.startsWith("/owner/documents")) return "documents-governance";
   if (path === "/owner" || path.startsWith("/owner/")) return "governance-cockpit";
   if (path.startsWith("/install/owner")) return "install-owner-security";
   if (path.startsWith("/install/client")) return "install-client-provisioning";
   if (path.startsWith("/labtest")) return "labtest-experiment";
   if (path.startsWith("/apps/")) return "app-runtime";
-  if (path.startsWith("/core/health") || path.startsWith("/core/observability")) return "core-health-observability";
+  if (path.startsWith("/core/health") || path.startsWith("/core/observability")) {
+    return "core-health-observability";
+  }
   if (path.startsWith("/core/problems")) return "core-problems-hypotheses";
   if (path.startsWith("/core/tests")) return "core-tests-validation";
   if (path.startsWith("/core/versions")) return "core-versions-release";
   if (path.startsWith("/core/ai")) return "ai-council";
-  if (path.startsWith("/core/architecture") || path.startsWith("/core/data") || path.startsWith("/core/apps") || path.startsWith("/core/security") || path.startsWith("/core/settings") || path.startsWith("/core/calls")) return "core-architecture-data";
+  if (
+    path.startsWith("/core/architecture") ||
+    path.startsWith("/core/data") ||
+    path.startsWith("/core/apps") ||
+    path.startsWith("/core/security") ||
+    path.startsWith("/core/settings") ||
+    path.startsWith("/core/calls")
+  ) {
+    return "core-architecture-data";
+  }
   return "governance-cockpit";
 }
 
