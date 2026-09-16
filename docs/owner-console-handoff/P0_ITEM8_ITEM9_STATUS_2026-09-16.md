@@ -22,7 +22,7 @@ Evidence CI: GitHub Actions run `35044307052`.
 
 ## Item 9 — icons / depth / accessibility
 
-**Status: PARTIAL_IMPLEMENTED_VERIFIED**
+**Status: IMPLEMENTED_VERIFIED / ASSET_COVERAGE_PARTIAL**
 
 Verified implementation:
 
@@ -34,30 +34,41 @@ Verified implementation:
 - global SOL / LUA / DEMO context in header;
 - compact truth-state glyphs with text labels (not color-only);
 - `NOT_CONNECTED` is no longer red; destructive red remains reserved for `BLOCKED`/real blocking semantics;
-- automated item-9 assertions added to `tests/item9-ux-a11y.test.ts`;
-- TypeScript + lint + build/test gate: PASS at run `35044841533`.
+- automated item-9 assertions in `tests/item9-ux-a11y.test.ts`;
+- recovered canonical owner icon inventory is now bound where an inventoried asset actually exists;
+- remaining icon positions use an explicit Lucide fallback rather than fabricated LAMOU art;
+- TypeScript + lint + build/test gate: PASS at run `35045484407`.
 
-### Official icon visual lock
+### Recovered canonical owner icon inventory
 
-The official visual-lock asset is preserved and identified:
+The Library source `INVENTARIO_OWNER_ICONS_V0_1_CR.json` was recovered and reconciled with the candidate. It identifies:
 
-- asset id: `4bb418e9-92d2-41ba-8aa2-2945087ca585`;
-- metadata: `owner-console/src/assets/visual-lock/icon-library.asset.json`;
-- original filename: `icon-library.webp`;
-- governance: `owner-console/src/lib/lamou/icon-governance.ts`.
+- library: `LAMOU-OWNER-ICONS`;
+- version: `V0.1-CR`;
+- state: `CANDIDATE_NOT_PROMOTED`;
+- 10 generated/inventoried individual PNG assets (`OWNER-ICO-001` through `OWNER-ICO-010`);
+- 16 additional owner icons still explicitly planned as `PENDENTE_GERAR`.
 
-However, **per-feature icon binding remains NOT_VERIFIED**. The available source is a visual-lock/contact-sheet asset reference, not a verified mapping of individual icon crops to feature codes. The interface therefore keeps `lucide-react` as an explicit technical fallback (`data-icon-source="lucide-fallback"`) rather than pretending the official icon mapping is complete.
+The 10 generated source assets were recovered from the Library and an optimized web sprite derived from those exact sources was added at:
 
-### Remaining P0 gate
+`owner-console/src/assets/owner-icons/owner-icons-sprite.webp`
 
-Before declaring all P0 closed, produce or recover a canonical mapping:
+Binding/governance lives in:
 
-`feature/module code -> official icon/crop/asset -> light/dark validation -> accessible label/semantics`
+`owner-console/src/lib/lamou/icon-governance.ts`
 
-Do not fabricate mappings from the contact sheet. Once this mapping exists, replace the marked fallbacks, rerun responsive/contrast/accessibility QA, and rerun the full CI gate.
+Current exact bindings include the LAMOU Central mark and inventoried matches such as CORE/Visão Geral, Aplicativos, Configurações and Testes & Evidências. Fallbacks remain marked with `data-icon-source="lucide-fallback"` when there is no generated canonical asset for that feature.
 
-## Promotion rule
+### Declared asset gap — not a hidden code failure
 
-Professional 15/15 review remains queued and **must not be treated as final Promotion Gate while the official per-feature icon mapping is NOT_VERIFIED**.
+The owner icon inventory itself says 16 assets remain to be generated. Therefore full icon coverage cannot truthfully be labeled complete. The code path is complete and verified; **asset coverage is partial by canonical inventory**.
+
+No missing icon is silently invented. This declared gap moves into the professional 15/15 review as a visual-design P1/P0-polish decision, without being misrepresented as a runtime/build failure.
+
+## P0 technical baseline
+
+Items 1–9 have reached their executable technical baseline with CI evidence. Item 9 carries the explicit `ASSET_COVERAGE_PARTIAL` qualifier above.
+
+The next gate is `PRE_PROMOTION_PROFESSIONAL_REVIEW` (15/15 rubric), followed by correction of its findings and a final full regression gate.
 
 SALVAR ≠ PROMOVER. `main` / FROZEN unchanged.
