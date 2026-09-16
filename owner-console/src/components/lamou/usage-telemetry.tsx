@@ -1,6 +1,7 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import { activityContextForRoute } from "@/lib/lamou/activity-persona-router";
 import { classifyLamouRoute, flushLamouUsage, recordLamouUsage } from "@/lib/lamou/usage-telemetry";
 
 function viewportBucket(): string {
@@ -30,9 +31,19 @@ function safeAction(control: HTMLElement): string {
   );
 }
 
+function routingContext(route: string) {
+  const activity = activityContextForRoute(route);
+  return {
+    activity_key: activity.activityKey,
+    personas: activity.personaIds.join(","),
+    plugins: activity.plugins.join(","),
+  };
+}
+
 /**
  * Cross-cutting usage capture for Owner Console.
- * It intentionally records no form values, prompt text, document bodies or button text.
+ * It records the governed activity/persona/plugin routing selected for each surface,
+ * but intentionally records no form values, prompt text, document bodies or button text.
  */
 export function UsageTelemetry() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -46,6 +57,7 @@ export function UsageTelemetry() {
       context: {
         viewport: viewportBucket(),
         online: navigator.onLine,
+        ...routingContext(pathname),
       },
     });
   }, [pathname]);
@@ -58,11 +70,12 @@ export function UsageTelemetry() {
       );
       if (!control) return;
 
-      const surface = classifyLamouRoute(window.location.pathname);
+      const route = window.location.pathname;
+      const surface = classifyLamouRoute(route);
       void recordLamouUsage({
         eventType: "LAMOU_INTERACTION",
         ...surface,
-        route: window.location.pathname,
+        route,
         action: safeAction(control),
         context: {
           control_type: control.tagName.toLowerCase(),
@@ -71,6 +84,7 @@ export function UsageTelemetry() {
             control instanceof HTMLButtonElement || control instanceof HTMLInputElement
               ? control.disabled
               : false,
+          ...routingContext(route),
         },
       });
     };
