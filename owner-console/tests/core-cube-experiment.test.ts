@@ -38,9 +38,9 @@ describe("CORE Cubo full experimental plan", () => {
         "systems-engineer",
         "research-scientist",
       ]);
-      expect(
-        result.specialistReviews.every((review) => review.state === "LOCAL_CHECK_PASS"),
-      ).toBe(true);
+      expect(result.specialistReviews.every((review) => review.state === "LOCAL_CHECK_PASS")).toBe(
+        true,
+      );
     }
   });
 
