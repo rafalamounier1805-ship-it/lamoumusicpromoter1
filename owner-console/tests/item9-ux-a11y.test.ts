@@ -2,7 +2,12 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { FEATURE_ICON_POLICY, ICON_LIBRARY_VISUAL_LOCK } from "../src/lib/lamou/icon-governance";
+import {
+  FEATURE_ICON_POLICY,
+  ICON_LIBRARY_VISUAL_LOCK,
+  OWNER_ICON_INVENTORY,
+  OWNER_OFFICIAL_ICON_BY_LABEL,
+} from "../src/lib/lamou/icon-governance";
 
 const ROOT = resolve(import.meta.dir, "..");
 const shellSource = readFileSync(resolve(ROOT, "src/components/lamou/app-shell.tsx"), "utf8");
@@ -31,10 +36,15 @@ describe("P0 item 9 — visual governance and accessibility", () => {
     expect(truthSource).toContain('BLOCKED: "border-destructive/50 text-destructive"');
   });
 
-  test("icon visual lock is preserved without fabricating per-feature bindings", () => {
+  test("recovered official icon inventory is bound only where an asset exists", () => {
     expect(ICON_LIBRARY_VISUAL_LOCK.assetId).toBe("4bb418e9-92d2-41ba-8aa2-2945087ca585");
-    expect(ICON_LIBRARY_VISUAL_LOCK.perFeatureBinding).toBe("NOT_VERIFIED");
-    expect(FEATURE_ICON_POLICY.currentSource).toBe("lucide-react");
+    expect(ICON_LIBRARY_VISUAL_LOCK.perFeatureBinding).toBe("PARTIAL");
+    expect(OWNER_ICON_INVENTORY.generatedCount).toBe(10);
+    expect(OWNER_ICON_INVENTORY.plannedRemainingCount).toBe(16);
+    expect(OWNER_OFFICIAL_ICON_BY_LABEL["Configurações"]).toBe("OWNER-ICO-007");
+    expect(OWNER_OFFICIAL_ICON_BY_LABEL["Aplicativos"]).toBe("OWNER-ICO-004");
+    expect(FEATURE_ICON_POLICY.fallbackSource).toBe("lucide-react");
+    expect(shellSource).toContain("OWNER_OFFICIAL_ICON_BY_LABEL[label]");
     expect(shellSource).toContain('data-icon-source="lucide-fallback"');
   });
 
