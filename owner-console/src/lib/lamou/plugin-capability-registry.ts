@@ -96,9 +96,9 @@ export const PLUGIN_CAPABILITY_REGISTRY: PluginCapabilityRecord[] = [
   {
     id: "data-router",
     label: "Data Router",
-    state: "DOCUMENTED_ONLY",
+    state: "PARTIAL",
     execution: "local",
-    note: "Roteamento Planilhão/Cubo/Cubo Mágico/Caleidoscópio está em arquitetura experimental e precisa de benchmark real.",
+    note: "Runner experimental local compara Planilhão/Cubo/Cubo Mágico e demais teorias com dataset comum; roteamento de produção continua não promovido.",
   },
 ];
 

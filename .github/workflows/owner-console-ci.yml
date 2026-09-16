@@ -33,6 +33,9 @@ jobs:
       - name: Tests
         run: bun test
 
+      - name: CORE Cubo Benchmark
+        run: bun scripts/run-core-cube-benchmark.ts
+
       - name: Lint
         run: bun run lint
 
