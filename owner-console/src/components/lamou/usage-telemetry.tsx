@@ -26,7 +26,7 @@ function internalPath(control: HTMLElement): string | null {
 
 function safeAction(control: HTMLElement): string {
   return (
-    control.dataset.lamouAction ??
+    control.dataset["lamouAction"] ??
     control.getAttribute("aria-label") ??
     control.getAttribute("title") ??
     control.id ??
