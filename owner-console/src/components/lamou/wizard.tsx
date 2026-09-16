@@ -360,6 +360,7 @@ export function StatusActionLink({
     | "/core"
     | "/core/tests"
     | "/core/observability"
+    | "/core/settings"
     | "/labtest";
   children: ReactNode;
   variant?: "default" | "outline" | "ghost";
