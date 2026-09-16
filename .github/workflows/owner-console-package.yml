@@ -1,0 +1,46 @@
+name: Owner Console Complete Candidate Package
+
+on:
+  push:
+    branches:
+      - candidate/lamou-owner-console-codex-2026-09-15
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Build clean package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA
+          cp -a owner-console _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/
+          mkdir -p _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/docs
+          cp -a docs/owner-console-handoff _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/docs/
+          cp docs/PROMPT_MESTRE_FINALIZACAO_OWNER_2026-09-15.md _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/docs/
+          find _package -type f \( -name '.env' -o -name '.env.*' \) -delete
+          find _package -type d \( -name node_modules -o -name .git \) -prune -exec rm -rf {} + || true
+          printf '%s\n' \
+            'LAMOU Owner Console — Candidate Complete Package' \
+            'Branch: candidate/lamou-owner-console-codex-2026-09-15' \
+            "Commit: ${GITHUB_SHA}" \
+            'State: CANDIDATE_NOT_PROMOTED' \
+            'SALVAR != PROMOVER' \
+            > _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/PACKAGE_STATE.txt
+          cd _package
+          zip -r ../LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16.zip LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA
+
+      - name: Upload candidate package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16
+          path: LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16.zip
+          if-no-files-found: error
+          retention-days: 30
