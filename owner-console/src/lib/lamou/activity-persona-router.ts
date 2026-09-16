@@ -87,24 +87,14 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "core-architecture-data",
     label: "Arquitetura, dados e bindings",
-    personaIds: [
-      "software-architect",
-      "data-architect",
-      "backend-engineer",
-      "security-architect",
-    ],
+    personaIds: ["software-architect", "data-architect", "backend-engineer", "security-architect"],
     plugins: ["data-auth", "data-router", "object-storage", "version-registry"],
     objective: "Preservar contratos, isolamento, linhagem e escolha correta do armazenamento.",
   },
   {
     key: "core-problems-hypotheses",
     label: "Problemas, hipóteses e melhorias",
-    personaIds: [
-      "research-scientist",
-      "data-scientist",
-      "systems-engineer",
-      "product-manager",
-    ],
+    personaIds: ["research-scientist", "data-scientist", "systems-engineer", "product-manager"],
     plugins: ["validation-gate", "usage-telemetry", "document-registry"],
     objective: "Separar fato, hipótese, teste, decisão, ação e eficácia.",
   },
@@ -125,37 +115,37 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "install-owner-security",
     label: "Instalação Proprietário",
-    personaIds: [
-      "security-architect",
-      "backend-engineer",
-      "qa-test-architect",
-      "product-designer",
+    personaIds: ["security-architect", "backend-engineer", "qa-test-architect", "product-designer"],
+    plugins: [
+      "data-auth",
+      "validation-gate",
+      "object-storage",
+      "usage-telemetry",
     ],
-    plugins: ["data-auth", "validation-gate", "object-storage", "usage-telemetry"],
     objective: "Instalar Owner com autenticação, isolamento, recuperação, testes e clareza didática.",
   },
   {
     key: "install-client-provisioning",
     label: "Instalação Cliente",
-    personaIds: [
-      "backend-engineer",
-      "security-architect",
-      "product-designer",
-      "qa-test-architect",
+    personaIds: ["backend-engineer", "security-architect", "product-designer", "qa-test-architect"],
+    plugins: [
+      "data-auth",
+      "validation-gate",
+      "billing-contracts",
+      "usage-telemetry",
     ],
-    plugins: ["data-auth", "validation-gate", "billing-contracts", "usage-telemetry"],
     objective: "Provisionar cliente sem botão fake, com tenant, entitlement, acesso e evidência.",
   },
   {
     key: "labtest-experiment",
     label: "LABTEST",
-    personaIds: [
-      "research-scientist",
-      "qa-test-architect",
-      "data-scientist",
-      "software-architect",
+    personaIds: ["research-scientist", "qa-test-architect", "data-scientist", "software-architect"],
+    plugins: [
+      "validation-gate",
+      "data-router",
+      "version-registry",
+      "usage-telemetry",
     ],
-    plugins: ["validation-gate", "data-router", "version-registry", "usage-telemetry"],
     objective: "Executar baseline PINNED, uma variável, evidência, comparação e gate.",
   },
   {
@@ -175,12 +165,7 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "ai-council",
     label: "IA, Conselho e Orquestrador",
-    personaIds: [
-      "software-architect",
-      "data-scientist",
-      "security-architect",
-      "research-scientist",
-    ],
+    personaIds: ["software-architect", "data-scientist", "security-architect", "research-scientist"],
     plugins: ["ai-provider", "data-router", "validation-gate", "usage-telemetry"],
     objective: "Selecionar especialistas e ferramentas sem simular provider ou evidência inexistente.",
   },
