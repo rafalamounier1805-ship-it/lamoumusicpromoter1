@@ -168,7 +168,11 @@ async function resolveMembership(
 
     const rows = (await response.json()) as MembershipRow[];
     if (!rows.length) return null;
-    return rows.find((row) => row.role === "OWNER") ?? rows.find((row) => row.role === "ADMIN") ?? rows[0]!;
+    return (
+      rows.find((row) => row.role === "OWNER") ??
+      rows.find((row) => row.role === "ADMIN") ??
+      rows[0]!
+    );
   } catch {
     return null;
   }
@@ -311,7 +315,10 @@ export function classifyLamouRoute(route: string): LamouSurfaceDescriptor {
     return { surfaceType: "CORE", surfaceId: path === "/core" ? "core-overview" : path.slice(1) };
   }
   if (path === "/owner" || path.startsWith("/owner/")) {
-    return { surfaceType: "OWNER_MODULE", surfaceId: path === "/owner" ? "cognitive-cockpit" : path.slice(1) };
+    return {
+      surfaceType: "OWNER_MODULE",
+      surfaceId: path === "/owner" ? "cognitive-cockpit" : path.slice(1),
+    };
   }
 
   return { surfaceType: "OTHER", surfaceId: path || "/" };
