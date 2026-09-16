@@ -1,11 +1,7 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import {
-  classifyLamouRoute,
-  flushLamouUsage,
-  recordLamouUsage,
-} from "@/lib/lamou/usage-telemetry";
+import { classifyLamouRoute, flushLamouUsage, recordLamouUsage } from "@/lib/lamou/usage-telemetry";
 
 function viewportBucket(): string {
   if (typeof window === "undefined") return "ssr";
