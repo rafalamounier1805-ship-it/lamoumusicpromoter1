@@ -43,18 +43,38 @@ const TRUTH_TONE: Record<string, string> = {
   SIMULATED: "border-demo/50 text-demo",
   NOT_VERIFIED: "border-muted-foreground/40 text-muted-foreground",
   DOCUMENTED_ONLY: "border-muted-foreground/40 text-muted-foreground",
-  NOT_CONNECTED: "border-destructive/40 text-destructive",
+  NOT_CONNECTED: "border-muted-foreground/40 text-muted-foreground",
   BLOCKED: "border-destructive/50 text-destructive",
   NOT_APPLICABLE: "border-muted-foreground/30 text-muted-foreground",
+};
+
+const TRUTH_GLYPH: Record<string, string> = {
+  "FACT/EVIDENCED": "F",
+  IMPLEMENTED_VERIFIED: "V",
+  EXTERNAL_EVIDENCE: "E",
+  PARTIAL: "P",
+  IMPLEMENTED_NOT_VERIFIED: "?",
+  HYPOTHESIS: "H",
+  SYNTHETIC_DEMO: "D",
+  SIMULATED: "S",
+  NOT_VERIFIED: "?",
+  DOCUMENTED_ONLY: "DOC",
+  NOT_CONNECTED: "NC",
+  BLOCKED: "!",
+  NOT_APPLICABLE: "—",
 };
 
 export function TruthBadge({ truth, hint }: { truth: TruthState | string; hint?: string }) {
   const badge = (
     <Badge
       variant="outline"
-      className={cn("font-mono text-[10px] tracking-wide", TRUTH_TONE[truth] ?? "")}
+      aria-label={`Estado de evidência: ${truth}`}
+      className={cn("gap-1 font-mono text-[10px] tracking-wide", TRUTH_TONE[truth] ?? "")}
     >
-      {truth}
+      <span aria-hidden="true" className="font-semibold">
+        {TRUTH_GLYPH[truth] ?? "·"}
+      </span>
+      <span>{truth}</span>
     </Badge>
   );
   if (!hint) return badge;
@@ -127,7 +147,7 @@ export function Panel({
 
 export function NotConnected({ what, next }: { what: string; next: string }) {
   return (
-    <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm">
+    <div className="rounded-lg border border-warning/30 bg-warning/5 p-3 text-sm">
       <div className="flex items-center gap-2">
         <TruthBadge truth="NOT_CONNECTED" />
         <span className="font-medium">{what}</span>
