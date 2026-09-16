@@ -331,7 +331,9 @@ function ranked(records: CoreCubeRecord[], task: CoreCubeTask): CoreCubeRecord[]
     .filter((record) => record.tenantId === task.tenantId)
     .map((record) => ({ record, score: scoreRecord(record, task) }))
     .filter((item) => item.score > 0)
-    .sort((left, right) => right.score - left.score || left.record.id.localeCompare(right.record.id))
+    .sort(
+      (left, right) => right.score - left.score || left.record.id.localeCompare(right.record.id),
+    )
     .slice(0, 4)
     .map((item) => item.record);
 }
@@ -397,9 +399,7 @@ function prepareArchitecture(
       indexBytes: byteSize([...corridorIndex.entries()]),
       retrieve: (task) =>
         ranked(
-          task.corridor
-            ? corridorIndex.get(`${task.tenantId}:${task.corridor}`) ?? []
-            : records,
+          task.corridor ? (corridorIndex.get(`${task.tenantId}:${task.corridor}`) ?? []) : records,
           task,
         ),
     };
@@ -442,7 +442,9 @@ function prepareArchitecture(
   if (architecture === "snapshot") {
     const snapshot = createCoreCubeSnapshot(records);
     return {
-      indexBytes: byteSize(snapshot.map((record) => [record.id, record.sourceId, record.createdAt])),
+      indexBytes: byteSize(
+        snapshot.map((record) => [record.id, record.sourceId, record.createdAt]),
+      ),
       retrieve: (task) => ranked([...snapshot], task),
     };
   }
@@ -500,10 +502,7 @@ function evaluateSpecialists(metric: Omit<CoreCubeBenchmarkMetric, "specialistRe
       personaId: "data-architect",
       state:
         metric.lineagePreserved && metric.tenantIsolation ? "LOCAL_CHECK_PASS" : "LOCAL_CHECK_FAIL",
-      findings: [
-        `lineage=${metric.lineagePreserved}`,
-        `tenantIsolation=${metric.tenantIsolation}`,
-      ],
+      findings: [`lineage=${metric.lineagePreserved}`, `tenantIsolation=${metric.tenantIsolation}`],
     },
     {
       personaId: "data-engineer",
@@ -523,11 +522,7 @@ function evaluateSpecialists(metric: Omit<CoreCubeBenchmarkMetric, "specialistRe
     {
       personaId: "research-scientist",
       state: metric.promotionAllowed === false ? "LOCAL_CHECK_PASS" : "LOCAL_CHECK_FAIL",
-      findings: [
-        "baseline=grid",
-        "one-change-at-a-time=true",
-        `truthState=${metric.truthState}`,
-      ],
+      findings: ["baseline=grid", "one-change-at-a-time=true", `truthState=${metric.truthState}`],
     },
   ];
   return reviews;
