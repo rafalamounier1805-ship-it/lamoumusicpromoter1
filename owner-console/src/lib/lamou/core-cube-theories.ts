@@ -1,7 +1,5 @@
 export type CoreCubeTheoryState =
-  | "BASELINE_REFERENCE"
-  | "EXPERIMENTAL_NOT_PROMOTED"
-  | "PROPOSED_NOT_VERIFIED";
+  "BASELINE_REFERENCE" | "EXPERIMENTAL_NOT_PROMOTED" | "PROPOSED_NOT_VERIFIED";
 
 export type CoreCubeTheoryKey =
   | "grid"
@@ -77,10 +75,12 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     key: "magic-cube",
     label: "Cubo Mágico",
     state: "EXPERIMENTAL_NOT_PROMOTED",
-    concept: "Os quadrados relevantes se movem para a face frontal e entregam o conjunto necessário ao orquestrador.",
+    concept:
+      "Os quadrados relevantes se movem para a face frontal e entregam o conjunto necessário ao orquestrador.",
     technicalTranslation:
       "Ranking, índice e cache montam um working set temporário; o movimento visual representa recuperação priorizada, não movimentação física do dado.",
-    hypothesis: "Trazer somente as células relevantes pode reduzir leitura desnecessária e tempo de contexto.",
+    hypothesis:
+      "Trazer somente as células relevantes pode reduzir leitura desnecessária e tempo de contexto.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
     evidenceRequired: COMMON_EVIDENCE,
@@ -90,10 +90,12 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     key: "multi-magic-cube",
     label: "Cubo Mágico Múltiplo",
     state: "EXPERIMENTAL_NOT_PROMOTED",
-    concept: "Cada quadrado pode conter outro conjunto organizado por modalidade, como som, bit, imagem, sinal ou documento.",
+    concept:
+      "Cada quadrado pode conter outro conjunto organizado por modalidade, como som, bit, imagem, sinal ou documento.",
     technicalTranslation:
       "Cada célula funciona como manifesto multimodal com metadados, hash, proveniência e ponteiros para objetos pesados; mídia bruta não precisa ser duplicada dentro da célula.",
-    hypothesis: "Manifestos multimodais podem aproximar sinais relacionados sem duplicar o armazenamento pesado.",
+    hypothesis:
+      "Manifestos multimodais podem aproximar sinais relacionados sem duplicar o armazenamento pesado.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
     evidenceRequired: COMMON_EVIDENCE,
@@ -104,8 +106,10 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     label: "Prisma",
     state: "EXPERIMENTAL_NOT_PROMOTED",
     concept: "O mesmo dado pode ser projetado por dimensões diferentes sem alterar sua origem.",
-    technicalTranslation: "Views e projeções derivadas preservam identidade, proveniência e fonte canônica.",
-    hypothesis: "Projeções especializadas podem melhorar leitura por perfil sem criar verdades paralelas.",
+    technicalTranslation:
+      "Views e projeções derivadas preservam identidade, proveniência e fonte canônica.",
+    hypothesis:
+      "Projeções especializadas podem melhorar leitura por perfil sem criar verdades paralelas.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
     evidenceRequired: COMMON_EVIDENCE,
@@ -116,7 +120,8 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     label: "Snapshot",
     state: "EXPERIMENTAL_NOT_PROMOTED",
     concept: "Congela uma visão temporal reproduzível do contexto usado numa decisão ou teste.",
-    technicalTranslation: "Manifesto imutável referencia versões, hashes, timestamp e fontes do working set.",
+    technicalTranslation:
+      "Manifesto imutável referencia versões, hashes, timestamp e fontes do working set.",
     hypothesis: "Snapshots podem melhorar reprodutibilidade, rollback e auditoria de decisões.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
@@ -128,7 +133,8 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     label: "Fantasma",
     state: "EXPERIMENTAL_NOT_PROMOTED",
     concept: "Uma camada efêmera permite explorar combinações sem modificar o dado de origem.",
-    technicalTranslation: "Overlay derivado e descartável mantém rastreabilidade para a fonte e não vira FACT automaticamente.",
+    technicalTranslation:
+      "Overlay derivado e descartável mantém rastreabilidade para a fonte e não vira FACT automaticamente.",
     hypothesis: "Overlays temporários podem acelerar simulações sem contaminar CURRENT ou FROZEN.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
@@ -140,7 +146,8 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     label: "Relação",
     state: "EXPERIMENTAL_NOT_PROMOTED",
     concept: "Prioriza ligações entre objetos, eventos, pessoas, processos, apps e evidências.",
-    technicalTranslation: "Índice de grafo/arestas complementa a origem tabular ou documental sem substituir o source of truth.",
+    technicalTranslation:
+      "Índice de grafo/arestas complementa a origem tabular ou documental sem substituir o source of truth.",
     hypothesis: "Relações explícitas podem reduzir saltos de busca em investigações multientidade.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
@@ -151,8 +158,10 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     key: "kaleidoscope",
     label: "Caleidoscópio",
     state: "EXPERIMENTAL_NOT_PROMOTED",
-    concept: "Recombina perspectivas do mesmo conjunto de dados conforme objetivo, papel e contexto.",
-    technicalTranslation: "Composição de views governadas muda a perspectiva, preservando IDs, proveniência e truth-state.",
+    concept:
+      "Recombina perspectivas do mesmo conjunto de dados conforme objetivo, papel e contexto.",
+    technicalTranslation:
+      "Composição de views governadas muda a perspectiva, preservando IDs, proveniência e truth-state.",
     hypothesis: "Perspectivas adaptativas podem reduzir ruído sem duplicar a verdade original.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
@@ -165,7 +174,8 @@ export const CORE_CUBE_THEORIES: CoreCubeTheory[] = [
     state: "PROPOSED_NOT_VERIFIED",
     concept: "Organização em níveis de síntese e detalhe ainda sem mecanismo validado.",
     technicalTranslation: "Proposta de pesquisa; não possui contrato de execução aprovado.",
-    hypothesis: "Níveis progressivos podem ajudar síntese executiva, mas o ganho ainda não foi demonstrado.",
+    hypothesis:
+      "Níveis progressivos podem ajudar síntese executiva, mas o ganho ainda não foi demonstrado.",
     personas: DATA_PERSONAS,
     capabilities: CORE_CAPABILITIES,
     evidenceRequired: COMMON_EVIDENCE,
