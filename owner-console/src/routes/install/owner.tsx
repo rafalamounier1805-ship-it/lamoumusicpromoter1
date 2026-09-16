@@ -776,7 +776,8 @@ function StepSecurity() {
               label: "Recuperação de acesso por e-mail verificado",
               truth: "IMPLEMENTED_NOT_VERIFIED",
               source: "AUTH-REC-01",
-              definition: "Canal de recuperação implementado no provedor de identidade; exige e-mail validado.",
+              definition:
+                "Canal de recuperação implementado no provedor de identidade; exige e-mail validado.",
               next: "Validar o e-mail e executar o fluxo completo de recuperação.",
               destination: "/owner/security" as const,
             },
@@ -784,7 +785,8 @@ function StepSecurity() {
               label: "Fluxo “esqueci a senha”",
               truth: "IMPLEMENTED_NOT_VERIFIED",
               source: "AUTH-REC-02",
-              definition: "Solicitação de recuperação existe; falta validar a jornada ponta a ponta nesta candidata.",
+              definition:
+                "Solicitação de recuperação existe; falta validar a jornada ponta a ponta nesta candidata.",
               next: "Executar o fluxo real e anexar evidência.",
               destination: "/owner/security" as const,
             },
