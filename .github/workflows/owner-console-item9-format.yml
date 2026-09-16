@@ -1,0 +1,38 @@
+name: Owner Console Item 9 Format
+
+on:
+  push:
+    branches:
+      - candidate/lamou-owner-console-codex-2026-09-15
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        working-directory: owner-console
+        run: bun install --frozen-lockfile
+      - name: Format item 9 files
+        run: bunx prettier --write owner-console/src/components/lamou/app-shell.tsx owner-console/tests/item9-ux-a11y.test.ts
+      - name: Commit formatting
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add owner-console/src/components/lamou/app-shell.tsx owner-console/tests/item9-ux-a11y.test.ts
+          git commit -m "style(owner-console): format item 9 polish and tests"
+          git push
