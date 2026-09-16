@@ -25,7 +25,9 @@ describe("P0 item 9 — visual governance and accessibility", () => {
   });
 
   test("red remains reserved for blocking truth state", () => {
-    expect(truthSource).toContain('NOT_CONNECTED: "border-muted-foreground/40 text-muted-foreground"');
+    expect(truthSource).toContain(
+      'NOT_CONNECTED: "border-muted-foreground/40 text-muted-foreground"',
+    );
     expect(truthSource).toContain('BLOCKED: "border-destructive/50 text-destructive"');
   });
 

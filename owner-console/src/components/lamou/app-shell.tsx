@@ -138,7 +138,10 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
                 <Badge variant="outline" className="border-primary/35 font-mono text-[9px]">
                   SOL · CURRENT
                 </Badge>
-                <Badge variant="outline" className="border-violet/40 font-mono text-[9px] text-violet">
+                <Badge
+                  variant="outline"
+                  className="border-violet/40 font-mono text-[9px] text-violet"
+                >
                   LUA · LAB
                 </Badge>
                 <Badge variant="outline" className="border-demo/40 font-mono text-[9px] text-demo">
