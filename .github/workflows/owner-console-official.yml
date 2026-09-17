@@ -42,8 +42,15 @@ jobs:
       - name: Lint
         run: bun run lint
 
-      - name: Build
+      - name: Build Node Server
+        env:
+          NITRO_PRESET: node-server
         run: bun run build
+
+      - name: Verify Node Server preset
+        run: |
+          grep -q '"preset": "node-server"' .output/nitro.json
+          test -f .output/server/index.mjs
 
       - name: Create official server package
         working-directory: .
@@ -58,6 +65,7 @@ jobs:
           Commit: ${GITHUB_SHA}
           Owner surface: /owner
           Backend: LAMOU-IA-CORE / Supabase
+          Runtime preset: node-server
           Fixtures on official surface: NONE
           Non-operational integrations: shown truthfully as NAO CONECTADO / registered state
           Generated: $(date -u +%FT%TZ)
