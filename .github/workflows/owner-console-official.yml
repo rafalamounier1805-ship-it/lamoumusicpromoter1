@@ -30,6 +30,7 @@ jobs:
       - name: Normalize official source
         run: |
           sed -i 's/(supabase as any)\.from/supabase.from/g' src/routes/owner.index.tsx
+          sed -i 's/(result.data ?? \[\]) as Row\[\]/(result.data ?? []) as unknown as Row[]/g' src/routes/owner.index.tsx
           bunx prettier --write src/routes/owner.index.tsx src/routes/index.tsx
 
       - name: TypeScript
