@@ -1,0 +1,379 @@
+name: LAMOU IA Suite Complete Installer Win64
+
+on:
+  push:
+    branches:
+      - build/lamou-ia-suite-installer-win64-2026-09-17
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-installer:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout frozen-derived installer branch
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node 22 runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Owner Console dependencies
+        working-directory: owner-console
+        shell: pwsh
+        run: bun install --frozen-lockfile
+
+      - name: Validate frozen source and required surfaces
+        working-directory: owner-console
+        shell: pwsh
+        env:
+          NITRO_PRESET: node-server
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $required = @(
+            'src/routes/install/owner.tsx',
+            'src/routes/install/client.tsx',
+            'src/routes/apps.version.tsx',
+            'src/routes/core.index.tsx',
+            'src/routes/core.apps.tsx',
+            'src/routes/core.ai.tsx',
+            'src/routes/core.calls.tsx',
+            'src/routes/core.health.tsx',
+            'src/routes/core.lab.tsx',
+            'src/routes/owner.index.tsx',
+            'src/routes/owner.apps.tsx',
+            'src/routes/owner.clients.tsx',
+            'src/routes/owner.mapa-vivo.tsx',
+            'src/routes/labtest.index.tsx'
+          )
+          foreach ($path in $required) {
+            if (-not (Test-Path $path)) { throw "Required surface missing: $path" }
+          }
+          if (-not (Select-String -Path 'src/routes/apps.version.tsx' -Pattern 'LAMOU Version' -Quiet)) {
+            throw 'LAMOU Version route did not pass identity check'
+          }
+          bun run test
+          bunx tsc --noEmit
+          bun run lint
+          bun run build
+          if (-not (Test-Path '.output/server/index.mjs')) {
+            throw 'Owner Console node-server output missing'
+          }
+
+      - name: Validate static suite JavaScript
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(
+            'suite/app.js',
+            'suite/core-runtime.js',
+            'suite/data.js',
+            'suite/dossier-v2.js',
+            'suite/product-home.js',
+            'suite/release-channels.js',
+            'suite/core-studio/modules.js',
+            'lamou-ranking-ai/app/public/consolidated-app.js',
+            'lamou-ranking-ai/app/public/dsp-engine.js',
+            'lamou-ranking-ai/app/public/market-engine.js'
+          )
+          foreach ($file in $files) {
+            if (Test-Path $file) { node --check $file }
+          }
+
+      - name: Assemble complete LAMOU IA Suite runtime
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $pkg = Join-Path $env:GITHUB_WORKSPACE 'installer-staging/LAMOU_IA_SUITE'
+          $static = Join-Path $pkg 'static'
+          New-Item -ItemType Directory -Force -Path $pkg | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $pkg 'runtime') | Out-Null
+          New-Item -ItemType Directory -Force -Path $static | Out-Null
+
+          Copy-Item -Recurse -Force 'owner-console/.output' (Join-Path $pkg '.output')
+          $nodeExe = (Get-Command node.exe).Source
+          Copy-Item -Force $nodeExe (Join-Path $pkg 'runtime/node.exe')
+
+          # Preserve all runnable static surfaces already present in the frozen repository.
+          Copy-Item -Recurse -Force 'suite' (Join-Path $static 'suite')
+          Copy-Item -Recurse -Force 'core' (Join-Path $static 'core')
+          if (Test-Path 'lamou-ranking-ai/app/public') {
+            Copy-Item -Recurse -Force 'lamou-ranking-ai/app/public' (Join-Path $static 'lamou-ranking-ai')
+          }
+          foreach ($file in @('index.html','img1.webp','img2.webp','img3.jpg','audio.mp3','app-core-manifest.json','plugin-registry.json','LAMOU-IA-BRAND.md')) {
+            if (Test-Path $file) { Copy-Item -Force $file $static }
+          }
+
+          @'
+          import http from 'node:http';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { fileURLToPath } from 'node:url';
+
+          const here = path.dirname(fileURLToPath(import.meta.url));
+          const root = path.resolve(here, 'static');
+          const host = process.env.STATIC_HOST || '127.0.0.1';
+          const port = Number(process.env.STATIC_PORT || '4174');
+          const mime = {
+            '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8',
+            '.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml',
+            '.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif',
+            '.mp3':'audio/mpeg','.webmanifest':'application/manifest+json','.txt':'text/plain; charset=utf-8','.md':'text/markdown; charset=utf-8'
+          };
+          const server = http.createServer((req,res) => {
+            try {
+              const raw = decodeURIComponent((req.url || '/').split('?')[0]);
+              const rel = raw === '/' ? '/suite/index.html' : raw;
+              let target = path.resolve(root, '.' + rel);
+              if (!target.startsWith(root)) { res.writeHead(403); res.end('Forbidden'); return; }
+              if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, 'index.html');
+              if (!fs.existsSync(target) || !fs.statSync(target).isFile()) { res.writeHead(404); res.end('Not found'); return; }
+              res.writeHead(200, {'Content-Type': mime[path.extname(target).toLowerCase()] || 'application/octet-stream','Cache-Control':'no-store'});
+              fs.createReadStream(target).pipe(res);
+            } catch (error) { res.writeHead(500); res.end('Static server error'); }
+          });
+          server.listen(port, host, () => console.log(`LAMOU static suite at http://${host}:${port}`));
+          '@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'static-server.mjs')
+
+          @'
+          LAMOU IA SUITE — EXECUTABLE INVENTORY
+          Frozen source baseline: 154a1fed627b2bf8fde0bae989abe753cca9164d
+          App source baseline: 920a3a372430741010b4f160a1c441d168fb758e
+          State: FROZEN_BASELINE / CANDIDATE_NOT_PROMOTED
+          SALVAR != PROMOVER
+
+          MAIN RUNTIME (Owner Console / TanStack / Node server):
+          - Instalação do Proprietário: /install/owner
+          - Instalação do Cliente: /install/client
+          - LAMOU IA Owner / Central: /owner
+          - Aplicativos: /owner/apps
+          - Clientes: /owner/clients
+          - Mapa Vivo: /owner/mapa-vivo
+          - LAMOU Version: /apps/version
+          - CORE: /core
+          - CORE Apps & Bindings: /core/apps
+          - CORE IA / Conselho: /core/ai
+          - CORE CALL Registry: /core/calls
+          - CORE Health: /core/health
+          - CORE LAB: /core/lab
+          - LABTEST: /labtest
+
+          STATIC/RUNNABLE SURFACES PRESERVED FROM THE SAME FROZEN REPOSITORY:
+          - Suite Hub: /suite/index.html
+          - CORE Studio: /suite/core-studio/index.html
+          - Portal Cliente: /suite/portal-cliente/index.html
+          - Pharmédice OPS 360: /suite/pharmedice-ops360/index.html
+          - Smart Sourcing Ranking: /suite/smart-sourcing-ranking/index.html
+          - LAMOU Ranking AI: /lamou-ranking-ai/index.html
+          - Root legacy experience: /index.html
+
+          Truth-state rule: this installer preserves each module's own state (candidate, test, development, simulation, not-connected, etc.). Packaging does not convert any unverified integration into production readiness.
+          '@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'EXECUTABLE_INVENTORY.txt')
+
+          @'
+          Frozen source baseline: 154a1fed627b2bf8fde0bae989abe753cca9164d
+          App source baseline: 920a3a372430741010b4f160a1c441d168fb758e
+          Build branch: build/lamou-ia-suite-installer-win64-2026-09-17
+          State: FROZEN_BASELINE / CANDIDATE_NOT_PROMOTED
+          SALVAR != PROMOVER
+          main/FROZEN was not modified.
+          '@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'FROZEN_MANIFEST.txt')
+
+          @'
+          using System;
+          using System.Diagnostics;
+          using System.IO;
+          using System.Net.Sockets;
+          using System.Threading;
+
+          public static class LamouSuiteLauncher
+          {
+              static string BaseDir => AppDomain.CurrentDomain.BaseDirectory;
+              static string StateDir => Path.Combine(BaseDir, ".runtime-state");
+
+              static bool PortOpen(int port)
+              {
+                  try { using (var c = new TcpClient()) { var ar = c.BeginConnect("127.0.0.1", port, null, null); return ar.AsyncWaitHandle.WaitOne(350) && c.Connected; } }
+                  catch { return false; }
+              }
+
+              static bool WaitForPort(int port, int milliseconds)
+              {
+                  var until = DateTime.UtcNow.AddMilliseconds(milliseconds);
+                  while (DateTime.UtcNow < until) { if (PortOpen(port)) return true; Thread.Sleep(250); }
+                  return false;
+              }
+
+              static void StartNode(string pidName, string entry, int port, string extraKey, string extraValue)
+              {
+                  if (PortOpen(port)) return;
+                  Directory.CreateDirectory(StateDir);
+                  var psi = new ProcessStartInfo();
+                  psi.FileName = Path.Combine(BaseDir, "runtime", "node.exe");
+                  psi.Arguments = "\"" + Path.Combine(BaseDir, entry) + "\"";
+                  psi.WorkingDirectory = BaseDir;
+                  psi.UseShellExecute = false;
+                  psi.CreateNoWindow = true;
+                  psi.EnvironmentVariables["HOST"] = "127.0.0.1";
+                  psi.EnvironmentVariables["PORT"] = port.ToString();
+                  if (!String.IsNullOrEmpty(extraKey)) psi.EnvironmentVariables[extraKey] = extraValue;
+                  var p = Process.Start(psi);
+                  if (p != null) File.WriteAllText(Path.Combine(StateDir, pidName + ".pid"), p.Id.ToString());
+              }
+
+              static void EnsureServers()
+              {
+                  StartNode("owner", Path.Combine(".output","server","index.mjs"), 4173, "", "");
+                  StartNode("static", "static-server.mjs", 4174, "STATIC_PORT", "4174");
+                  if (!WaitForPort(4173, 15000)) throw new Exception("Owner Console não iniciou na porta 4173.");
+                  if (!WaitForPort(4174, 8000)) throw new Exception("Suite estática não iniciou na porta 4174.");
+              }
+
+              static void Open(string url)
+              {
+                  Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+              }
+
+              static void StopAll()
+              {
+                  if (!Directory.Exists(StateDir)) return;
+                  foreach (var file in Directory.GetFiles(StateDir, "*.pid")) {
+                      try { int pid = Int32.Parse(File.ReadAllText(file).Trim()); var p = Process.GetProcessById(pid); if (!p.HasExited) p.Kill(); } catch { }
+                      try { File.Delete(file); } catch { }
+                  }
+              }
+
+              [STAThread]
+              public static void Main(string[] args)
+              {
+                  try {
+                      string mode = args.Length > 0 ? args[0].ToLowerInvariant() : "/owner";
+                      if (mode == "/stop") { StopAll(); return; }
+                      EnsureServers();
+                      string url;
+                      switch (mode) {
+                          case "/install": url = "http://127.0.0.1:4173/install/owner"; break;
+                          case "/client-install": url = "http://127.0.0.1:4173/install/client"; break;
+                          case "/version": url = "http://127.0.0.1:4173/apps/version"; break;
+                          case "/core": url = "http://127.0.0.1:4173/core"; break;
+                          case "/lab": url = "http://127.0.0.1:4173/labtest"; break;
+                          case "/map": url = "http://127.0.0.1:4173/owner/mapa-vivo"; break;
+                          case "/apps": url = "http://127.0.0.1:4173/owner/apps"; break;
+                          case "/suite": url = "http://127.0.0.1:4174/suite/index.html"; break;
+                          case "/core-studio": url = "http://127.0.0.1:4174/suite/core-studio/index.html"; break;
+                          case "/client-portal": url = "http://127.0.0.1:4174/suite/portal-cliente/index.html"; break;
+                          case "/pharmedice": url = "http://127.0.0.1:4174/suite/pharmedice-ops360/index.html"; break;
+                          case "/sourcing": url = "http://127.0.0.1:4174/suite/smart-sourcing-ranking/index.html"; break;
+                          case "/ranking": url = "http://127.0.0.1:4174/lamou-ranking-ai/index.html"; break;
+                          default: url = "http://127.0.0.1:4173/owner"; break;
+                      }
+                      Open(url);
+                  } catch (Exception ex) {
+                      System.Windows.Forms.MessageBox.Show(ex.Message, "LAMOU IA", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                  }
+              }
+          }
+          '@ | Set-Content -Encoding UTF8 (Join-Path $env:RUNNER_TEMP 'LamouSuiteLauncher.cs')
+
+          $csc = Get-ChildItem "$env:WINDIR\Microsoft.NET\Framework64" -Filter csc.exe -Recurse |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1
+          if (-not $csc) { throw 'csc.exe not found on Windows runner' }
+          & $csc.FullName /nologo /target:winexe /reference:System.Windows.Forms.dll /out:"$(Join-Path $pkg 'LAMOU_IA.exe')" "$(Join-Path $env:RUNNER_TEMP 'LamouSuiteLauncher.cs')"
+          if ($LASTEXITCODE -ne 0) { throw 'LAMOU_IA.exe compilation failed' }
+
+          Get-ChildItem -File -Recurse $pkg |
+            Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { "{0}  {1}" -f $_.Hash, $_.Path.Substring($pkg.Length + 1) } |
+            Set-Content -Encoding ASCII (Join-Path $pkg 'SHA256SUMS.txt')
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup -y --no-progress
+
+      - name: Build single Windows installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $stage = Join-Path $env:GITHUB_WORKSPACE 'installer-staging/LAMOU_IA_SUITE'
+          $out = Join-Path $env:GITHUB_WORKSPACE 'installer-output'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          $iss = Join-Path $env:RUNNER_TEMP 'LAMOU_IA_Suite.iss'
+          @"
+          [Setup]
+          AppId={{8FAF90A6-9185-4F27-91EE-154A1FED2026}
+          AppName=LAMOU IA Suite
+          AppVersion=2026.09.17.154a1fed
+          AppPublisher=LAMOU
+          DefaultDirName={localappdata}\LAMOU IA
+          DefaultGroupName=LAMOU IA
+          DisableProgramGroupPage=yes
+          PrivilegesRequired=lowest
+          OutputDir=$out
+          OutputBaseFilename=LAMOU_IA_Setup_154a1fed
+          Compression=lzma2
+          SolidCompression=yes
+          WizardStyle=modern
+          UninstallDisplayIcon={app}\LAMOU_IA.exe
+          ArchitecturesAllowed=x64compatible
+
+          [Files]
+          Source: "$stage\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+          [Icons]
+          Name: "{group}\LAMOU IA"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/owner"
+          Name: "{group}\Instalação do Proprietário"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/install"
+          Name: "{group}\Instalação do Cliente"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/client-install"
+          Name: "{group}\LAMOU Version"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/version"
+          Name: "{group}\LAMOU CORE"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/core"
+          Name: "{group}\LAMOU LABTEST"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/lab"
+          Name: "{group}\Mapa Vivo"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/map"
+          Name: "{group}\Aplicativos"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/apps"
+          Name: "{group}\Suite Hub"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/suite"
+          Name: "{group}\CORE Studio"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/core-studio"
+          Name: "{group}\Portal Cliente"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/client-portal"
+          Name: "{group}\Pharmédice OPS 360"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/pharmedice"
+          Name: "{group}\Smart Sourcing Ranking"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/sourcing"
+          Name: "{group}\LAMOU Ranking AI"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/ranking"
+          Name: "{group}\Encerrar serviços LAMOU"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/stop"
+          Name: "{userdesktop}\LAMOU IA"; Filename: "{app}\LAMOU_IA.exe"; Parameters: "/owner"; Tasks: desktopicon
+
+          [Tasks]
+          Name: "desktopicon"; Description: "Criar atalho do LAMOU IA na área de trabalho"; GroupDescription: "Atalhos:"
+
+          [Run]
+          Filename: "{app}\LAMOU_IA.exe"; Parameters: "/install"; Description: "Abrir instalação do LAMOU IA"; Flags: nowait postinstall skipifsilent
+          "@ | Set-Content -Encoding UTF8 $iss
+
+          $iscc = @(
+            'C:\Program Files (x86)\Inno Setup 6\ISCC.exe',
+            'C:\Program Files\Inno Setup 6\ISCC.exe'
+          ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $iscc) { $iscc = (Get-Command ISCC.exe -ErrorAction SilentlyContinue).Source }
+          if (-not $iscc) { throw 'ISCC.exe not found after Inno Setup installation' }
+          & $iscc $iss
+          if ($LASTEXITCODE -ne 0) { throw 'Inno Setup build failed' }
+          if (-not (Test-Path (Join-Path $out 'LAMOU_IA_Setup_154a1fed.exe'))) { throw 'Installer EXE missing' }
+
+          Get-FileHash (Join-Path $out 'LAMOU_IA_Setup_154a1fed.exe') -Algorithm SHA256 |
+            ForEach-Object { "SHA256=$($_.Hash)`nFILE=$($_.Path)" } |
+            Set-Content -Encoding ASCII (Join-Path $out 'LAMOU_IA_Setup_154a1fed_SHA256.txt')
+
+      - name: Upload complete installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_IA_COMPLETE_INSTALLER_WIN64_154a1fed
+          path: |
+            installer-output/LAMOU_IA_Setup_154a1fed.exe
+            installer-output/LAMOU_IA_Setup_154a1fed_SHA256.txt
+          if-no-files-found: error
+          retention-days: 30
