@@ -49,11 +49,26 @@ jobs:
           NITRO_PRESET: node-server
         run: bun run build
 
-      - name: Verify Node Server preset
+      - name: Verify official runtime
+        shell: bash
         run: |
+          set -euo pipefail
           grep -q '"preset": "node-server"' .output/nitro.json
           test -f .output/server/index.mjs
-          ! grep -R -q 'candidata não promovida' .output/public .output/server/_ssr/owner.index-*.mjs .output/server/index.mjs
+          HOST=127.0.0.1 PORT=4199 node .output/server/index.mjs > /tmp/lamou-owner.log 2>&1 &
+          PID=$!
+          trap 'kill $PID 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4199/owner -o /tmp/owner.html; then break; fi
+            sleep 1
+          done
+          test -s /tmp/owner.html
+          grep -q 'LAMOU IA — Proprietário Oficial' /tmp/owner.html
+          grep -q 'Autenticação real · LAMOU-IA-CORE' /tmp/owner.html
+          if grep -q 'candidata não promovida' /tmp/owner.html; then
+            echo 'Candidate metadata leaked into official owner surface'
+            exit 1
+          fi
 
       - name: Create official server package
         working-directory: .
