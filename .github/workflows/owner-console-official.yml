@@ -1,0 +1,68 @@
+name: LAMOU Owner Official Real
+
+on:
+  push:
+    branches:
+      - release/lamou-owner-official-real-2026-09-17
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: owner-console
+    steps:
+      - name: Checkout official release
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: TypeScript
+        run: bunx tsc --noEmit
+
+      - name: Tests
+        run: bun test
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Build
+        run: bun run build
+
+      - name: Create official server package
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _official/LAMOU_IA_PROPRIETARIO_OFICIAL
+          cp -a owner-console/.output _official/LAMOU_IA_PROPRIETARIO_OFICIAL/.output
+          cat > _official/LAMOU_IA_PROPRIETARIO_OFICIAL/BUILD_STATE.txt <<EOF
+          LAMOU IA — PROPRIETARIO OFICIAL
+          Branch: release/lamou-owner-official-real-2026-09-17
+          Commit: ${GITHUB_SHA}
+          Owner surface: /owner/official
+          Backend: LAMOU-IA-CORE / Supabase
+          Fixtures on official surface: NONE
+          Non-operational integrations: shown truthfully as NAO CONECTADO / registered state
+          Generated: $(date -u +%FT%TZ)
+          EOF
+          cd _official
+          zip -r ../LAMOU_IA_PROPRIETARIO_OFICIAL_SERVER_BUILD.zip LAMOU_IA_PROPRIETARIO_OFICIAL
+
+      - name: Upload official build
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_IA_PROPRIETARIO_OFICIAL_SERVER_BUILD
+          path: LAMOU_IA_PROPRIETARIO_OFICIAL_SERVER_BUILD.zip
+          if-no-files-found: error
+          retention-days: 30
