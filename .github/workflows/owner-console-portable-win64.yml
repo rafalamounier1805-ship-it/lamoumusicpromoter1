@@ -1,0 +1,252 @@
+name: LAMOU Owner Console Portable Win64
+
+on:
+  push:
+    branches:
+      - build/lamou-owner-console-portable-win64-2026-09-17
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-portable:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout frozen-derived packaging branch
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node 22 runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install locked dependencies
+        working-directory: owner-console
+        shell: pwsh
+        run: bun install --frozen-lockfile
+
+      - name: Validate and build Node server
+        working-directory: owner-console
+        shell: pwsh
+        env:
+          NITRO_PRESET: node-server
+        run: |
+          bun run test
+          bunx tsc --noEmit
+          bun run lint
+          bun run build
+          if (-not (Test-Path '.output/server/index.mjs')) {
+            throw 'Portable build missing .output/server/index.mjs'
+          }
+
+      - name: Assemble portable package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $pkg = Join-Path $env:GITHUB_WORKSPACE 'portable/LAMOU_OWNER_CONSOLE_PORTABLE_WIN64'
+          New-Item -ItemType Directory -Force -Path $pkg | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $pkg 'runtime') | Out-Null
+
+          Copy-Item -Recurse -Force 'owner-console/.output' (Join-Path $pkg '.output')
+          $nodeExe = (Get-Command node.exe).Source
+          Copy-Item -Force $nodeExe (Join-Path $pkg 'runtime/node.exe')
+
+          @'
+          LAMOU Owner Console — Portable Win64
+          Frozen source baseline: 154a1fed627b2bf8fde0bae989abe753cca9164d
+          App source baseline: 920a3a372430741010b4f160a1c441d168fb758e
+          State: FROZEN_BASELINE / CANDIDATE_NOT_PROMOTED
+          SALVAR != PROMOVER
+          main/FROZEN was not modified by this packaging operation.
+
+          Use:
+          1. Extract the ZIP.
+          2. Double-click LAMOU_OWNER_CONSOLE.exe.
+          3. The local app opens at http://127.0.0.1:4173.
+          4. Closing the launcher stops the local server.
+
+          This package includes its own Node.js 22 runtime and does not require Node to be installed globally.
+          Runtime integrations still depend on their configured credentials and network availability; this package does not fabricate external connectivity.
+          '@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'LEIA-ME.txt')
+
+          @'
+          @echo off
+          setlocal
+          cd /d "%~dp0"
+          set HOST=127.0.0.1
+          set PORT=4173
+          start "" "http://127.0.0.1:4173"
+          "%~dp0runtime\node.exe" "%~dp0.output\server\index.mjs"
+          '@ | Set-Content -Encoding ASCII (Join-Path $pkg 'INICIAR_LAMOU_FALLBACK.cmd')
+
+          @'
+          using System;
+          using System.Diagnostics;
+          using System.Drawing;
+          using System.IO;
+          using System.Threading;
+          using System.Windows.Forms;
+
+          public sealed class LamouLauncher : Form
+          {
+              private Process server;
+              private Label status;
+              private Button openButton;
+              private Button stopButton;
+
+              public LamouLauncher()
+              {
+                  Text = "LAMOU Owner Console";
+                  Width = 520;
+                  Height = 230;
+                  StartPosition = FormStartPosition.CenterScreen;
+                  FormBorderStyle = FormBorderStyle.FixedDialog;
+                  MaximizeBox = false;
+
+                  var title = new Label();
+                  title.Text = "LAMOU Owner Console — baseline congelada";
+                  title.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+                  title.AutoSize = true;
+                  title.Left = 24;
+                  title.Top = 24;
+                  Controls.Add(title);
+
+                  status = new Label();
+                  status.Text = "Iniciando servidor local...";
+                  status.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+                  status.AutoSize = true;
+                  status.Left = 24;
+                  status.Top = 66;
+                  Controls.Add(status);
+
+                  openButton = new Button();
+                  openButton.Text = "Abrir no navegador";
+                  openButton.Width = 160;
+                  openButton.Height = 36;
+                  openButton.Left = 24;
+                  openButton.Top = 112;
+                  openButton.Enabled = false;
+                  openButton.Click += delegate { OpenBrowser(); };
+                  Controls.Add(openButton);
+
+                  stopButton = new Button();
+                  stopButton.Text = "Encerrar";
+                  stopButton.Width = 110;
+                  stopButton.Height = 36;
+                  stopButton.Left = 200;
+                  stopButton.Top = 112;
+                  stopButton.Click += delegate { Close(); };
+                  Controls.Add(stopButton);
+
+                  Shown += delegate { StartServer(); };
+                  FormClosing += delegate { StopServer(); };
+              }
+
+              private void StartServer()
+              {
+                  try
+                  {
+                      string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                      string node = Path.Combine(baseDir, "runtime", "node.exe");
+                      string entry = Path.Combine(baseDir, ".output", "server", "index.mjs");
+                      if (!File.Exists(node) || !File.Exists(entry))
+                      {
+                          status.Text = "Pacote incompleto: runtime ou build ausente.";
+                          return;
+                      }
+
+                      var psi = new ProcessStartInfo();
+                      psi.FileName = node;
+                      psi.Arguments = "\"" + entry + "\"";
+                      psi.WorkingDirectory = baseDir;
+                      psi.UseShellExecute = false;
+                      psi.CreateNoWindow = true;
+                      psi.EnvironmentVariables["HOST"] = "127.0.0.1";
+                      psi.EnvironmentVariables["PORT"] = "4173";
+
+                      server = Process.Start(psi);
+                      Thread.Sleep(1800);
+                      if (server == null || server.HasExited)
+                      {
+                          status.Text = "O servidor local não iniciou. Use INICIAR_LAMOU_FALLBACK.cmd para diagnóstico.";
+                          return;
+                      }
+
+                      status.Text = "Executando em http://127.0.0.1:4173";
+                      openButton.Enabled = true;
+                      OpenBrowser();
+                  }
+                  catch (Exception ex)
+                  {
+                      status.Text = "Falha ao iniciar: " + ex.Message;
+                  }
+              }
+
+              private void OpenBrowser()
+              {
+                  try
+                  {
+                      Process.Start(new ProcessStartInfo("http://127.0.0.1:4173") { UseShellExecute = true });
+                  }
+                  catch { }
+              }
+
+              private void StopServer()
+              {
+                  try
+                  {
+                      if (server != null && !server.HasExited)
+                      {
+                          server.Kill();
+                          server.WaitForExit(3000);
+                      }
+                  }
+                  catch { }
+              }
+
+              [STAThread]
+              public static void Main()
+              {
+                  Application.EnableVisualStyles();
+                  Application.SetCompatibleTextRenderingDefault(false);
+                  Application.Run(new LamouLauncher());
+              }
+          }
+          '@ | Set-Content -Encoding UTF8 (Join-Path $env:RUNNER_TEMP 'LamouLauncher.cs')
+
+          $csc = Get-ChildItem "$env:WINDIR\Microsoft.NET\Framework64" -Filter csc.exe -Recurse |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1
+          if (-not $csc) { throw 'csc.exe not found on Windows runner' }
+          & $csc.FullName /nologo /target:winexe /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /out:"$(Join-Path $pkg 'LAMOU_OWNER_CONSOLE.exe')" "$(Join-Path $env:RUNNER_TEMP 'LamouLauncher.cs')"
+          if ($LASTEXITCODE -ne 0) { throw 'Launcher EXE compilation failed' }
+
+          @(
+            'Frozen source baseline: 154a1fed627b2bf8fde0bae989abe753cca9164d',
+            'App source baseline: 920a3a372430741010b4f160a1c441d168fb758e',
+            'Packaging branch: build/lamou-owner-console-portable-win64-2026-09-17',
+            'State: FROZEN_BASELINE / CANDIDATE_NOT_PROMOTED',
+            'SALVAR != PROMOVER'
+          ) | Set-Content -Encoding UTF8 (Join-Path $pkg 'FROZEN_MANIFEST.txt')
+
+          Get-ChildItem -File -Recurse $pkg |
+            Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { "{0}  {1}" -f $_.Hash, $_.Path.Substring($pkg.Length + 1) } |
+            Set-Content -Encoding ASCII (Join-Path $pkg 'SHA256SUMS.txt')
+
+          Compress-Archive -Path "$pkg/*" -DestinationPath 'LAMOU_OWNER_CONSOLE_PORTABLE_WIN64_154a1fed.zip' -CompressionLevel Optimal
+
+      - name: Upload executable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_OWNER_CONSOLE_PORTABLE_WIN64_154a1fed
+          path: LAMOU_OWNER_CONSOLE_PORTABLE_WIN64_154a1fed.zip
+          if-no-files-found: error
+          retention-days: 30
