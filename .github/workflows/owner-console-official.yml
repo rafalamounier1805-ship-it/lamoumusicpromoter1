@@ -27,6 +27,11 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Normalize official source
+        run: |
+          sed -i 's/(supabase as any)\.from/supabase.from/g' src/routes/owner.index.tsx
+          bunx prettier --write src/routes/owner.index.tsx src/routes/index.tsx
+
       - name: TypeScript
         run: bunx tsc --noEmit
 
@@ -50,7 +55,7 @@ jobs:
           LAMOU IA — PROPRIETARIO OFICIAL
           Branch: release/lamou-owner-official-real-2026-09-17
           Commit: ${GITHUB_SHA}
-          Owner surface: /owner/official
+          Owner surface: /owner
           Backend: LAMOU-IA-CORE / Supabase
           Fixtures on official surface: NONE
           Non-operational integrations: shown truthfully as NAO CONECTADO / registered state
