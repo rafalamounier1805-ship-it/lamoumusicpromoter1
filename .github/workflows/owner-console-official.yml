@@ -31,7 +31,9 @@ jobs:
         run: |
           sed -i 's/(supabase as any)\.from/supabase.from/g' src/routes/owner.index.tsx
           sed -i 's/(result.data ?? \[\]) as Row\[\]/(result.data ?? []) as unknown as Row[]/g' src/routes/owner.index.tsx
-          bunx prettier --write src/routes/owner.index.tsx src/routes/index.tsx
+          sed -i 's/LAMOU IA — Owner Console/LAMOU IA — Proprietário Oficial/g' src/routes/__root.tsx
+          sed -i 's/LAMOU IA Central e CORE Proprietário — candidata não promovida\./LAMOU IA — Proprietário Oficial, conectado ao backend LAMOU-IA-CORE./g' src/routes/__root.tsx
+          bunx prettier --write src/routes/owner.index.tsx src/routes/index.tsx src/routes/__root.tsx
 
       - name: TypeScript
         run: bunx tsc --noEmit
@@ -51,6 +53,7 @@ jobs:
         run: |
           grep -q '"preset": "node-server"' .output/nitro.json
           test -f .output/server/index.mjs
+          ! grep -R -q 'candidata não promovida' .output/public .output/server/_ssr/owner.index-*.mjs .output/server/index.mjs
 
       - name: Create official server package
         working-directory: .
