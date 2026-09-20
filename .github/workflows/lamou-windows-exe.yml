@@ -1,4 +1,5 @@
 name: LAMOU IA Windows EXE Candidate
+# Candidate-only Windows packaging. Never promotes production.
 
 on:
   push:
