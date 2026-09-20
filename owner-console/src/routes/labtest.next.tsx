@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { LabTestView } from "@/components/lamou/labtest-view";
+import { LabMasterView } from "@/components/lamou/lab-master-view";
 
 export const Route = createFileRoute("/labtest/next")({
   head: () => ({
     meta: [
-      { title: "Próxima Versão / Fila de Promoção — LABTEST | LAMOU IA" },
+      { title: "Programados / Retestes / Fila — LABTEST | LAMOU IA" },
       {
         name: "description",
         content:
@@ -24,5 +24,5 @@ export const Route = createFileRoute("/labtest/next")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <LabTestView initialTab="next" />,
+  component: () => <LabMasterView initialSection="scheduler" />,
 });
