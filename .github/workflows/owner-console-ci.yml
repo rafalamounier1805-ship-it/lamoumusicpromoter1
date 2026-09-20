@@ -5,6 +5,7 @@ on:
     branches:
       - candidate/lamou-owner-console-codex-2026-09-15
       - candidate/lamou-core-proprietario-architecture-2026-09-20
+      - candidate/lamou-ia-council-reviewed-ux-2026-09-20
   workflow_dispatch:
 
 permissions:
