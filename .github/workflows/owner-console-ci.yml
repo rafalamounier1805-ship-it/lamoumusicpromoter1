@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -29,6 +29,23 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Format LAB V0.9 additions
+        if: github.ref_name == 'candidate/lamou-lab-v0-9-21-screens-evolution-2026-09-20'
+        run: |
+          bunx prettier --write             src/components/lamou/lab-master-view.tsx             src/lib/lamou/lab-master-data.ts             src/routes/labtest.index.tsx             src/routes/labtest.next.tsx             src/lib/lamou/nav.ts             tests/lab-master-v0-9.test.ts
+
+      - name: Persist LAB formatter output
+        if: github.ref_name == 'candidate/lamou-lab-v0-9-21-screens-evolution-2026-09-20'
+        working-directory: .
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add owner-console/src/components/lamou/lab-master-view.tsx                     owner-console/src/lib/lamou/lab-master-data.ts                     owner-console/src/routes/labtest.index.tsx                     owner-console/src/routes/labtest.next.tsx                     owner-console/src/lib/lamou/nav.ts                     owner-console/tests/lab-master-v0-9.test.ts
+            git commit -m "style(lab): format V0.9 candidate"
+            git push origin HEAD:"$GITHUB_REF_NAME"
+          fi
 
       - name: TypeScript
         run: bunx tsc --noEmit
