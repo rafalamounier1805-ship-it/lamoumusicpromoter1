@@ -138,7 +138,12 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
         note: "Dados recuperados do baseline",
         tone: "info",
       },
-      { label: "Produtos", value: "35", note: "Catálogo do CORE oficial; conteúdo preserva truth-state", tone: "info" },
+      {
+        label: "Produtos",
+        value: "35",
+        note: "Catálogo do CORE oficial; conteúdo preserva truth-state",
+        tone: "info",
+      },
       { label: "Bindings ativos", value: "10", note: "Vínculos registrados", tone: "ok" },
       { label: "Candidates", value: "36", note: "Nenhuma promoção automática", tone: "warn" },
     ],
@@ -190,7 +195,12 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     subtitle:
       "Memória técnica rastreável: problema → causa → hipótese → solução → teste → evidência → eficácia.",
     metrics: [
-      { label: "Casos abertos", value: "7", note: "Fixture operacional demonstrativo", tone: "warn" },
+      {
+        label: "Casos abertos",
+        value: "7",
+        note: "Fixture operacional demonstrativo",
+        tone: "warn",
+      },
       { label: "Em investigação", value: "3", note: "Sem causa raiz confirmada", tone: "info" },
       { label: "Em reteste", value: "2", note: "Aguardando eficácia", tone: "warn" },
       {
@@ -701,7 +711,10 @@ function DetailPanel({ row, onClose }: { row: Row | undefined; onClose: () => vo
         {[
           ["Status", row.status],
           ["Contexto", row.meta ?? "Sem metadado adicional"],
-          ["Ambiente", "CORE OFFICIAL/FROZEN · objetos internos preservam CANDIDATE/DEMO quando aplicável"],
+          [
+            "Ambiente",
+            "CORE OFFICIAL/FROZEN · objetos internos preservam CANDIDATE/DEMO quando aplicável",
+          ],
           ["Rastreabilidade", "ID · status · histórico · evidências"],
         ].map(([label, value]) => (
           <div key={label} className="rounded-xl border border-border/50 bg-surface-1/50 p-3">
