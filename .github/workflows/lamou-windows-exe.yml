@@ -1,0 +1,183 @@
+name: LAMOU IA Windows EXE Candidate
+
+on:
+  push:
+    branches:
+      - candidate/lamou-ia-council-reviewed-ux-2026-09-20
+    paths:
+      - ".github/workflows/lamou-windows-exe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-exe:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.16.0"
+
+      - name: Install dependencies
+        working-directory: owner-console
+        run: bun install --frozen-lockfile
+
+      - name: Build portable runtime
+        working-directory: owner-console
+        run: bun scripts/build-portable.mjs
+
+      - name: Install traced runtime dependencies
+        working-directory: owner-console/.output/server
+        run: bun install --production
+
+      - name: Prepare EXE payload
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $root = Join-Path $env:RUNNER_TEMP "lamou-exe"
+          $payload = Join-Path $root "payload"
+          $stage = Join-Path $root "stage"
+          New-Item -ItemType Directory -Force -Path $payload, $stage | Out-Null
+
+          New-Item -ItemType Directory -Force -Path (Join-Path $payload "owner-console") | Out-Null
+          Copy-Item -Recurse -Force "owner-console/.output" (Join-Path $payload "owner-console/.output")
+          New-Item -ItemType Directory -Force -Path (Join-Path $payload "docs") | Out-Null
+          Copy-Item -Force "docs/PROMPT_MESTRE_LAMOU_REVIEWED_V2_2026-09-20.md" (Join-Path $payload "docs/PROMPT_MESTRE_LAMOU_REVIEWED_V2_2026-09-20.md")
+
+          @"
+          LAMOU IA — Council Reviewed Windows Executable
+          Branch: $env:GITHUB_REF_NAME
+          Commit: $env:GITHUB_SHA
+          State: CANDIDATE_NOT_PROMOTED
+          SALVAR != PROMOVER
+          Installation flow unchanged.
+          "@ | Set-Content -Encoding UTF8 (Join-Path $payload "PACKAGE_STATE.txt")
+
+          Compress-Archive -Path (Join-Path $payload "*") -DestinationPath (Join-Path $stage "payload.zip") -CompressionLevel Optimal -Force
+
+          $nodeDir = Split-Path (Get-Command node).Source
+          Copy-Item -Force (Join-Path $nodeDir "node.exe") (Join-Path $stage "node.exe")
+          if (Test-Path (Join-Path $nodeDir "LICENSE")) {
+            Copy-Item -Force (Join-Path $nodeDir "LICENSE") (Join-Path $stage "NODE_LICENSE.txt")
+          } else {
+            "Node.js binary supplied by actions/setup-node. See https://github.com/nodejs/node/blob/main/LICENSE" | Set-Content -Encoding UTF8 (Join-Path $stage "NODE_LICENSE.txt")
+          }
+
+          @'
+          @echo off
+          setlocal EnableExtensions
+          set "APPDIR=%LOCALAPPDATA%\LAMOU_IA\CouncilReviewed_2026-09-20"
+          set "OWNERDIR=%APPDIR%\owner-console"
+          set "URL=http://127.0.0.1:4173/owner/"
+
+          if not exist "%APPDIR%" mkdir "%APPDIR%"
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "Expand-Archive -LiteralPath '%~dp0payload.zip' -DestinationPath '%APPDIR%' -Force"
+          copy /Y "%~dp0node.exe" "%APPDIR%\node.exe" >nul
+          copy /Y "%~dp0NODE_LICENSE.txt" "%APPDIR%\NODE_LICENSE.txt" >nul
+
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -TimeoutSec 2 | Out-Null; exit 0 } catch { exit 1 }"
+          if errorlevel 1 (
+            cd /d "%OWNERDIR%"
+            set HOST=127.0.0.1
+            set PORT=4173
+            start "LAMOU IA Candidate Server" /min "%APPDIR%\node.exe" ".output\server\index.mjs"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "$u='%URL%'; for($i=0;$i -lt 30;$i++){ try { Invoke-WebRequest -UseBasicParsing -Uri $u -TimeoutSec 2 | Out-Null; exit 0 } catch { Start-Sleep -Milliseconds 500 } }; exit 1"
+          )
+
+          start "" "%URL%"
+          exit /b 0
+          '@ | Set-Content -Encoding ASCII (Join-Path $stage "launcher.cmd")
+
+          $target = Join-Path $env:GITHUB_WORKSPACE "LAMOU_IA_COUNCIL_REVIEWED_WINDOWS_X64_2026-09-20.exe"
+          $sed = Join-Path $root "lamou.sed"
+          $source = $stage
+          @"
+          [Version]
+          Class=IEXPRESS
+          SEDVersion=3
+
+          [Options]
+          PackagePurpose=InstallApp
+          ShowInstallProgramWindow=0
+          HideExtractAnimation=1
+          UseLongFileName=1
+          InsideCompressed=0
+          CAB_FixedSize=0
+          CAB_ResvCodeSigning=0
+          RebootMode=N
+          InstallPrompt=
+          DisplayLicense=
+          FinishMessage=
+          TargetName=$target
+          FriendlyName=LAMOU IA Council Reviewed Candidate
+          AppLaunched=cmd.exe /c launcher.cmd
+          PostInstallCmd=<None>
+          AdminQuietInstCmd=
+          UserQuietInstCmd=
+          SourceFiles=SourceFiles
+
+          [SourceFiles]
+          SourceFiles0=$source
+
+          [SourceFiles0]
+          %FILE0%=
+          %FILE1%=
+          %FILE2%=
+          %FILE3%=
+
+          [Strings]
+          FILE0=payload.zip
+          FILE1=node.exe
+          FILE2=NODE_LICENSE.txt
+          FILE3=launcher.cmd
+          "@ | Set-Content -Encoding ASCII $sed
+
+          & "$env:SystemRoot\System32\iexpress.exe" /N /Q $sed
+          if (!(Test-Path $target)) { throw "IExpress did not create the executable." }
+
+      - name: Verify PE executable and smoke test
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $exe = Join-Path $env:GITHUB_WORKSPACE "LAMOU_IA_COUNCIL_REVIEWED_WINDOWS_X64_2026-09-20.exe"
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
+            throw "Output is not a Windows PE executable."
+          }
+
+          $p = Start-Process -FilePath $exe -ArgumentList "/Q" -PassThru
+          $p.WaitForExit(30000) | Out-Null
+
+          $ok = $false
+          for ($i=0; $i -lt 30; $i++) {
+            try {
+              $r = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:4173/owner/" -MaximumRedirection 5 -TimeoutSec 3
+              if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 400) { $ok = $true; break }
+            } catch {}
+            Start-Sleep -Milliseconds 500
+          }
+          if (-not $ok) { throw "Executable launched, but the LAMOU HTTP smoke test did not become ready." }
+
+          Get-CimInstance Win32_Process |
+            Where-Object { $_.Name -eq "node.exe" -and $_.CommandLine -like "*.output\\server\\index.mjs*" } |
+            ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+
+          Get-FileHash $exe -Algorithm SHA256 | Format-List
+
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_IA_COUNCIL_REVIEWED_WINDOWS_X64_2026-09-20
+          path: LAMOU_IA_COUNCIL_REVIEWED_WINDOWS_X64_2026-09-20.exe
+          if-no-files-found: error
+          retention-days: 30
