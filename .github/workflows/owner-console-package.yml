@@ -31,6 +31,28 @@ jobs:
         working-directory: owner-console
         run: bun scripts/build-portable.mjs
 
+      - name: Install traced runtime dependencies
+        working-directory: owner-console/.output/server
+        run: bun install --production
+
+      - name: Runtime smoke test
+        working-directory: owner-console
+        shell: bash
+        run: |
+          set -euo pipefail
+          HOST=127.0.0.1 PORT=4173 node .output/server/index.mjs >/tmp/lamou-runtime.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4173/owner/ >/tmp/lamou-owner.html; then
+              test -s /tmp/lamou-owner.html
+              exit 0
+            fi
+            sleep 0.5
+          done
+          cat /tmp/lamou-runtime.log
+          exit 1
+
       - name: Build clean portable package
         shell: bash
         run: |
@@ -43,7 +65,7 @@ jobs:
           cp docs/PROMPT_MESTRE_FINALIZACAO_OWNER_2026-09-15.md "$ROOT/docs/"
           cp docs/PROMPT_MESTRE_LAMOU_REVIEWED_V2_2026-09-20.md "$ROOT/docs/"
           find "$ROOT" -type f \( -name '.env' -o -name '.env.*' \) -delete
-          find "$ROOT" -type d \( -name node_modules -o -name .git \) -prune -exec rm -rf {} + || true
+          rm -rf "$ROOT/owner-console/node_modules" "$ROOT/owner-console/.git"
           test -f "$ROOT/owner-console/.output/server/index.mjs"
           printf '%s\n' \
             'LAMOU IA — Council Reviewed Executável' \
