@@ -52,14 +52,14 @@ export const LABTEST_MENU: NavItem[] = [
  *  Segurança, Dados & Fontes, CALLs, IA/Prompts, Treinamentos e SOL/LUA NÃO são
  *  itens raiz: vivem dentro de Arquitetura Técnica, Configurações, Bindings e LABTEST. */
 export const CORE_MENU: NavItem[] = [
-  { to: "/core", label: "Visão Geral", icon: Cpu },
-  { to: "/core/health", label: "Indicadores de Saúde", icon: Gauge },
-  { to: "/core/architecture", label: "Arquitetura Técnica", icon: Layers },
-  { to: "/core/apps", label: "Aplicativos, Plugins & Bindings", icon: AppWindow },
-  { to: "/core/problems", label: "Planos de Ação & Melhorias", icon: Activity },
-  { to: "/core/tests", label: "Testes & Qualidade", icon: ClipboardList },
-  { to: "/core/versions", label: "Versões & Atualizações", icon: Boxes },
-  { to: "/core/observability", label: "Observabilidade", icon: Eye },
+  { to: "/core/mapa-vivo", label: "Mapa Vivo", icon: MapIcon },
+  { to: "/core/execution", label: "Execução & Indicadores", icon: Gauge },
+  { to: "/core/products", label: "Produtos & Aplicativos", icon: AppWindow },
+  { to: "/core/cases", label: "Casos & Soluções", icon: Activity },
+  { to: "/core/radar", label: "Radar & Oportunidades", icon: Lightbulb },
+  { to: "/core/documents", label: "Documentos", icon: ClipboardList },
+  { to: "/core/lifecycle", label: "Versões, Distribuição & Recuperação", icon: Boxes },
+  { to: "/core/governance", label: "Governança", icon: ShieldCheck },
   { to: "/core/settings", label: "Configurações", icon: SlidersHorizontal },
 ];
 
