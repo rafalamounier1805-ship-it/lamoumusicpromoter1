@@ -87,8 +87,7 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
     criticality: {
       enabled: true,
       modes: ["Todos os dados", "Somente críticos", "Somente probabilidade"],
-      rule:
-        "Crítico inclui apenas crítico/falha; probabilidade é atenção separada. Vermelho somente para erro, bloqueio, crítico ou falha comprovada.",
+      rule: "Crítico inclui apenas crítico/falha; probabilidade é atenção separada. Vermelho somente para erro, bloqueio, crítico ou falha comprovada.",
     },
     visual: {
       themes: ["Dark Owner", "Light executivo"],
@@ -102,7 +101,12 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
         "Reusar ícones 3D inventariados e Visual Locks existentes; microações podem usar ícones funcionais leves. Não inventar arte oficial.",
     },
     pedagogy: {
-      sequence: ["O que está acontecendo", "Por que importa", "Qual evidência", "O que fazer agora"],
+      sequence: [
+        "O que está acontecendo",
+        "Por que importa",
+        "Qual evidência",
+        "O que fazer agora",
+      ],
       infoRule:
         "Usar ⓘ e microcopy curta em conceitos técnicos; explicar unidade, estado e consequência sem esconder o detalhe.",
       progressiveDisclosure:
@@ -113,8 +117,7 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
     responsive: {
       visualLock: "1672×941 como referência desktop",
       breakpoints: [360, 768, 1440, 1672],
-      rule:
-        "Sem pan/overflow horizontal. Reorganizar blocos por prioridade; não apenas encolher desktop. Scroll vertical natural.",
+      rule: "Sem pan/overflow horizontal. Reorganizar blocos por prioridade; não apenas encolher desktop. Scroll vertical natural.",
     },
     truth: {
       required: true,
@@ -189,14 +192,17 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
       accents: ["cyan", "violet"],
       density: "técnica, rastreável e legível",
       cardRule: "Todo card técnico deve expor estado, origem, dependências, ação e evidência.",
-      graphRule: "Incluir gráficos reais de saúde, performance, falhas, latência, uso e evolução quando houver fonte.",
+      graphRule:
+        "Incluir gráficos reais de saúde, performance, falhas, latência, uso e evolução quando houver fonte.",
       assetRule: "Reusar ícones Owner/CORE aprovados e Visual Locks do CORE.",
     },
     pedagogy: {
       sequence: ["Sinal", "Impacto", "Causa", "Evidência", "Ação", "Validação", "Eficácia"],
-      infoRule: "Termos de engenharia devem ter explicação contextual curta sem retirar nomenclatura técnica.",
+      infoRule:
+        "Termos de engenharia devem ter explicação contextual curta sem retirar nomenclatura técnica.",
       progressiveDisclosure: "Resumo técnico → relação → evidência → histórico.",
-      emptyStateRule: "Mostrar NOT_CONNECTED/NOT_VERIFIED e o próximo passo para conectar ou verificar.",
+      emptyStateRule:
+        "Mostrar NOT_CONNECTED/NOT_VERIFIED e o próximo passo para conectar ou verificar.",
     },
     responsive: {
       visualLock: "1672×941",
@@ -205,7 +211,14 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
     },
     truth: {
       required: true,
-      states: ["IMPLEMENTED_VERIFIED", "PARTIAL", "NOT_VERIFIED", "NOT_CONNECTED", "SYNTHETIC_DEMO", "TEST_ONLY"],
+      states: [
+        "IMPLEMENTED_VERIFIED",
+        "PARTIAL",
+        "NOT_VERIFIED",
+        "NOT_CONNECTED",
+        "SYNTHETIC_DEMO",
+        "TEST_ONLY",
+      ],
       evidenceRule: "Nenhum PASS, CONNECTED ou saúde calculada sem metodologia e evidência.",
     },
   },
@@ -213,9 +226,17 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
     id: "PAGE-LABTEST",
     audience: "labtest",
     title: "LAMOU LABTEST",
-    purpose: "Experimentar uma mudança de cada vez, medir contra baseline, guardar evidência e controlar Validation Gate.",
+    purpose:
+      "Experimentar uma mudança de cada vez, medir contra baseline, guardar evidência e controlar Validation Gate.",
     primaryQuestion: "A mudança funciona melhor, é segura e tem evidência suficiente para avançar?",
-    decisions: ["executar", "comparar", "retestar", "reprovar", "aprovar com ressalva", "liberar candidate"],
+    decisions: [
+      "executar",
+      "comparar",
+      "retestar",
+      "reprovar",
+      "aprovar com ressalva",
+      "liberar candidate",
+    ],
     requiredBlocks: [
       "baseline PINNED/FROZEN",
       "hipótese",
@@ -258,14 +279,24 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
       themes: ["Dark Owner", "Light executivo"],
       accents: ["cyan", "violet"],
       density: "científica e comparativa",
-      cardRule: "Todo experimento deve mostrar hipótese, baseline, mudança, métrica, evidência e conclusão.",
+      cardRule:
+        "Todo experimento deve mostrar hipótese, baseline, mudança, métrica, evidência e conclusão.",
       graphRule: "Comparativos A/B/C, baseline e tendência com unidade e amostra explícitas.",
       assetRule: "Reusar Visual & Media CORE e assets de Testes/Evidências.",
     },
     pedagogy: {
-      sequence: ["Pergunta", "Hipótese", "Como testar", "O que medir", "Resultado", "O que significa", "Próximo passo"],
+      sequence: [
+        "Pergunta",
+        "Hipótese",
+        "Como testar",
+        "O que medir",
+        "Resultado",
+        "O que significa",
+        "Próximo passo",
+      ],
       infoRule: "Explicar diferença entre testado, aprovado, real e demo.",
-      progressiveDisclosure: "Mostrar protocolo antes do resultado para reduzir interpretação enviesada.",
+      progressiveDisclosure:
+        "Mostrar protocolo antes do resultado para reduzir interpretação enviesada.",
       emptyStateRule: "Sem runner/evidência deve aparecer NOT_RUN/NOT_CONNECTED, nunca PASS.",
     },
     responsive: {
@@ -283,7 +314,8 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
     id: "PAGE-CLIENT",
     audience: "client",
     title: "LAMOU IA · Cliente",
-    purpose: "Mostrar serviço contratado, uso, resultados, documentos, suporte e conta sem expor inteligência proprietária.",
+    purpose:
+      "Mostrar serviço contratado, uso, resultados, documentos, suporte e conta sem expor inteligência proprietária.",
     primaryQuestion: "O que tenho, como está, qual resultado recebi e onde consigo ajuda?",
     decisions: ["abrir app", "ver resultado", "baixar documento", "abrir chamado", "gerir acesso"],
     requiredBlocks: ["início", "aplicativos", "resultados", "documentos", "suporte", "minha conta"],
@@ -318,7 +350,8 @@ export const LAMOU_PAGE_EXECUTION_PROFILES: LamouPageExecutionProfile[] = [
       sequence: ["O que você tem", "Como está", "Resultado", "O que pode fazer"],
       infoRule: "Evitar jargão interno; quando necessário, explicar em PT-BR.",
       progressiveDisclosure: "Resultado e ação primeiro; detalhe técnico autorizado depois.",
-      emptyStateRule: "Explicar quando não há resultado porque ainda não existe período/dado suficiente.",
+      emptyStateRule:
+        "Explicar quando não há resultado porque ainda não existe período/dado suficiente.",
     },
     responsive: {
       visualLock: "desktop coerente com LAMOU; mobile é prioridade de consumo",

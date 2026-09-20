@@ -38,7 +38,9 @@ function ReviewPill({ label }: { label: string }) {
 export function CouncilReviewedOverview() {
   const profile = pageExecutionProfile("PAGE-OWNER-COGNITIVE");
   const review = validatedPromptReview();
-  const criticalCases = CASES.filter((item) => item.severity === "critico" || item.severity === "falha");
+  const criticalCases = CASES.filter(
+    (item) => item.severity === "critico" || item.severity === "falha",
+  );
   const candidates = VERSIONS.filter((item) => item.state === "CANDIDATA");
 
   const summary = [
@@ -78,17 +80,22 @@ export function CouncilReviewedOverview() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <Badge className="bg-primary/15 text-primary hover:bg-primary/15">LAMOU IA · Gestão</Badge>
+              <Badge className="bg-primary/15 text-primary hover:bg-primary/15">
+                LAMOU IA · Gestão
+              </Badge>
               <TruthBadge truth={review.valid ? "IMPLEMENTED_VERIFIED" : "PARTIAL"} />
               <DemoBadge label="dados demonstrativos explicitamente marcados" />
             </div>
-            <h2 id="council-reviewed-overview" className="font-display text-xl font-semibold md:text-2xl">
+            <h2
+              id="council-reviewed-overview"
+              className="font-display text-xl font-semibold md:text-2xl"
+            >
               {profile.primaryQuestion}
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
               Perfil da página revisado pelo Conselho: produto, software, tela/UI, pedagogia,
-              responsividade, qualidade e acessibilidade. O objetivo é compreender primeiro,
-              decidir depois e executar somente em destinos governados.
+              responsividade, qualidade e acessibilidade. O objetivo é compreender primeiro, decidir
+              depois e executar somente em destinos governados.
             </p>
           </div>
 
@@ -117,11 +124,16 @@ export function CouncilReviewedOverview() {
 
       <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         {summary.map((item) => (
-          <div key={item.label} className="rounded-2xl border border-border/60 bg-card/70 p-4 backdrop-blur">
+          <div
+            key={item.label}
+            className="rounded-2xl border border-border/60 bg-card/70 p-4 backdrop-blur"
+          >
             <div className="flex items-start gap-3">
               <OwnerOfficialIcon code={item.icon} className="h-10 w-10" decorative={false} />
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{item.label}</p>
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  {item.label}
+                </p>
                 <p className="mt-1 font-display text-2xl font-semibold">{item.value}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{item.note}</p>
               </div>
@@ -140,10 +152,14 @@ export function CouncilReviewedOverview() {
         >
           <p className="mb-3 text-xs text-muted-foreground">
             Demonstração da regra visual do Visual & Media CORE: período, unidade, legenda,
-            baseline/contexto e truth-state ficam junto do gráfico. Estes valores não são
-            telemetria de produção.
+            baseline/contexto e truth-state ficam junto do gráfico. Estes valores não são telemetria
+            de produção.
           </p>
-          <div className="h-64 w-full" role="img" aria-label="Gráfico demonstrativo de saúde e cobertura de evidência do CORE">
+          <div
+            className="h-64 w-full"
+            role="img"
+            aria-label="Gráfico demonstrativo de saúde e cobertura de evidência do CORE"
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={CORE_TREND} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
                 <defs>
@@ -185,8 +201,12 @@ export function CouncilReviewedOverview() {
           </div>
           <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
             <span className="rounded-full border border-border/60 px-2 py-1">Unidade: %</span>
-            <span className="rounded-full border border-border/60 px-2 py-1">Período: 7 pontos demo</span>
-            <span className="rounded-full border border-border/60 px-2 py-1">Fonte: fixture da candidata</span>
+            <span className="rounded-full border border-border/60 px-2 py-1">
+              Período: 7 pontos demo
+            </span>
+            <span className="rounded-full border border-border/60 px-2 py-1">
+              Fonte: fixture da candidata
+            </span>
           </div>
         </Panel>
 

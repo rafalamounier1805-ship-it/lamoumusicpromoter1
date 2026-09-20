@@ -41,12 +41,7 @@ describe("LAMOU prompt reviewed execution contract", () => {
   });
 
   test("instalação não é parte do contrato de páginas revisado", () => {
-    const ids = [
-      "PAGE-OWNER-COGNITIVE",
-      "PAGE-CORE-OWNER",
-      "PAGE-LABTEST",
-      "PAGE-CLIENT",
-    ];
+    const ids = ["PAGE-OWNER-COGNITIVE", "PAGE-CORE-OWNER", "PAGE-LABTEST", "PAGE-CLIENT"];
     for (const id of ids) {
       const profile = pageExecutionProfile(id);
       expect(profile.title.toLowerCase()).not.toContain("instala");
