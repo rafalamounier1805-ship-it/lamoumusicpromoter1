@@ -24,6 +24,14 @@ import { Route as AppsTeste3RouteImport } from './routes/apps.teste3'
 import { Route as AppsValidationGateRouteImport } from './routes/apps.validation-gate'
 import { Route as AppsVersionRouteImport } from './routes/apps.version'
 import { Route as CoreIndexRouteImport } from './routes/core.index'
+import { Route as CoreCasesRouteImport } from './routes/core.cases'
+import { Route as CoreDocumentsRouteImport } from './routes/core.documents'
+import { Route as CoreExecutionRouteImport } from './routes/core.execution'
+import { Route as CoreGovernanceRouteImport } from './routes/core.governance'
+import { Route as CoreLifecycleRouteImport } from './routes/core.lifecycle'
+import { Route as CoreMapaVivoRouteImport } from './routes/core.mapa-vivo'
+import { Route as CoreProductsRouteImport } from './routes/core.products'
+import { Route as CoreRadarRouteImport } from './routes/core.radar'
 import { Route as CoreAiRouteImport } from './routes/core.ai'
 import { Route as CoreAppsRouteImport } from './routes/core.apps'
 import { Route as CoreArchitectureRouteImport } from './routes/core.architecture'
@@ -132,6 +140,46 @@ const AppsVersionRoute = AppsVersionRouteImport.update({
 const CoreIndexRoute = CoreIndexRouteImport.update({
   id: '/core/',
   path: '/core/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreCasesRoute = CoreCasesRouteImport.update({
+  id: '/core/cases',
+  path: '/core/cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreDocumentsRoute = CoreDocumentsRouteImport.update({
+  id: '/core/documents',
+  path: '/core/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreExecutionRoute = CoreExecutionRouteImport.update({
+  id: '/core/execution',
+  path: '/core/execution',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreGovernanceRoute = CoreGovernanceRouteImport.update({
+  id: '/core/governance',
+  path: '/core/governance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreLifecycleRoute = CoreLifecycleRouteImport.update({
+  id: '/core/lifecycle',
+  path: '/core/lifecycle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreMapaVivoRoute = CoreMapaVivoRouteImport.update({
+  id: '/core/mapa-vivo',
+  path: '/core/mapa-vivo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreProductsRoute = CoreProductsRouteImport.update({
+  id: '/core/products',
+  path: '/core/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoreRadarRoute = CoreRadarRouteImport.update({
+  id: '/core/radar',
+  path: '/core/radar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoreAiRoute = CoreAiRouteImport.update({
@@ -346,6 +394,14 @@ export interface FileRoutesByFullPath {
   '/owner/settings': typeof OwnerSettingsRoute
   '/owner/tests': typeof OwnerTestsRoute
   '/owner/versions': typeof OwnerVersionsRoute
+  '/core/cases': typeof CoreCasesRoute
+  '/core/documents': typeof CoreDocumentsRoute
+  '/core/execution': typeof CoreExecutionRoute
+  '/core/governance': typeof CoreGovernanceRoute
+  '/core/lifecycle': typeof CoreLifecycleRoute
+  '/core/mapa-vivo': typeof CoreMapaVivoRoute
+  '/core/products': typeof CoreProductsRoute
+  '/core/radar': typeof CoreRadarRoute
   '/core/': typeof CoreIndexRoute
   '/labtest/': typeof LabtestIndexRoute
   '/owner/': typeof OwnerIndexRoute
@@ -396,6 +452,14 @@ export interface FileRoutesByTo {
   '/owner/settings': typeof OwnerSettingsRoute
   '/owner/tests': typeof OwnerTestsRoute
   '/owner/versions': typeof OwnerVersionsRoute
+  '/core/cases': typeof CoreCasesRoute
+  '/core/documents': typeof CoreDocumentsRoute
+  '/core/execution': typeof CoreExecutionRoute
+  '/core/governance': typeof CoreGovernanceRoute
+  '/core/lifecycle': typeof CoreLifecycleRoute
+  '/core/mapa-vivo': typeof CoreMapaVivoRoute
+  '/core/products': typeof CoreProductsRoute
+  '/core/radar': typeof CoreRadarRoute
   '/core': typeof CoreIndexRoute
   '/labtest': typeof LabtestIndexRoute
   '/owner': typeof OwnerIndexRoute
@@ -447,6 +511,14 @@ export interface FileRoutesById {
   '/owner/settings': typeof OwnerSettingsRoute
   '/owner/tests': typeof OwnerTestsRoute
   '/owner/versions': typeof OwnerVersionsRoute
+  '/core/cases': typeof CoreCasesRoute
+  '/core/documents': typeof CoreDocumentsRoute
+  '/core/execution': typeof CoreExecutionRoute
+  '/core/governance': typeof CoreGovernanceRoute
+  '/core/lifecycle': typeof CoreLifecycleRoute
+  '/core/mapa-vivo': typeof CoreMapaVivoRoute
+  '/core/products': typeof CoreProductsRoute
+  '/core/radar': typeof CoreRadarRoute
   '/core/': typeof CoreIndexRoute
   '/labtest/': typeof LabtestIndexRoute
   '/owner/': typeof OwnerIndexRoute
@@ -499,6 +571,14 @@ export interface FileRouteTypes {
     | '/owner/settings'
     | '/owner/tests'
     | '/owner/versions'
+    | '/core/cases'
+    | '/core/documents'
+    | '/core/execution'
+    | '/core/governance'
+    | '/core/lifecycle'
+    | '/core/mapa-vivo'
+    | '/core/products'
+    | '/core/radar'
     | '/core/'
     | '/labtest/'
     | '/owner/'
@@ -549,6 +629,14 @@ export interface FileRouteTypes {
     | '/owner/settings'
     | '/owner/tests'
     | '/owner/versions'
+    | '/core/cases'
+    | '/core/documents'
+    | '/core/execution'
+    | '/core/governance'
+    | '/core/lifecycle'
+    | '/core/mapa-vivo'
+    | '/core/products'
+    | '/core/radar'
     | '/core'
     | '/labtest'
     | '/owner'
@@ -599,6 +687,14 @@ export interface FileRouteTypes {
     | '/owner/settings'
     | '/owner/tests'
     | '/owner/versions'
+    | '/core/cases'
+    | '/core/documents'
+    | '/core/execution'
+    | '/core/governance'
+    | '/core/lifecycle'
+    | '/core/mapa-vivo'
+    | '/core/products'
+    | '/core/radar'
     | '/core/'
     | '/labtest/'
     | '/owner/'
@@ -620,6 +716,14 @@ export interface RootRouteChildren {
   AppsValidationGateRoute: typeof AppsValidationGateRoute
   AppsVersionRoute: typeof AppsVersionRoute
   CoreAiRoute: typeof CoreAiRoute
+  CoreCasesRoute: typeof CoreCasesRoute
+  CoreDocumentsRoute: typeof CoreDocumentsRoute
+  CoreExecutionRoute: typeof CoreExecutionRoute
+  CoreGovernanceRoute: typeof CoreGovernanceRoute
+  CoreLifecycleRoute: typeof CoreLifecycleRoute
+  CoreMapaVivoRoute: typeof CoreMapaVivoRoute
+  CoreProductsRoute: typeof CoreProductsRoute
+  CoreRadarRoute: typeof CoreRadarRoute
   CoreAppsRoute: typeof CoreAppsRoute
   CoreArchitectureRoute: typeof CoreArchitectureRoute
   CoreCallsRoute: typeof CoreCallsRoute
@@ -760,6 +864,62 @@ declare module '@tanstack/react-router' {
       path: '/core'
       fullPath: '/core/'
       preLoaderRoute: typeof CoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/cases': {
+      id: '/core/cases'
+      path: '/core/cases'
+      fullPath: '/core/cases'
+      preLoaderRoute: typeof CoreCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/documents': {
+      id: '/core/documents'
+      path: '/core/documents'
+      fullPath: '/core/documents'
+      preLoaderRoute: typeof CoreDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/execution': {
+      id: '/core/execution'
+      path: '/core/execution'
+      fullPath: '/core/execution'
+      preLoaderRoute: typeof CoreExecutionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/governance': {
+      id: '/core/governance'
+      path: '/core/governance'
+      fullPath: '/core/governance'
+      preLoaderRoute: typeof CoreGovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/lifecycle': {
+      id: '/core/lifecycle'
+      path: '/core/lifecycle'
+      fullPath: '/core/lifecycle'
+      preLoaderRoute: typeof CoreLifecycleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/mapa-vivo': {
+      id: '/core/mapa-vivo'
+      path: '/core/mapa-vivo'
+      fullPath: '/core/mapa-vivo'
+      preLoaderRoute: typeof CoreMapaVivoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/products': {
+      id: '/core/products'
+      path: '/core/products'
+      fullPath: '/core/products'
+      preLoaderRoute: typeof CoreProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/core/radar': {
+      id: '/core/radar'
+      path: '/core/radar'
+      fullPath: '/core/radar'
+      preLoaderRoute: typeof CoreRadarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/core/ai': {
@@ -1012,6 +1172,14 @@ const rootRouteChildren: RootRouteChildren = {
   AppsValidationGateRoute: AppsValidationGateRoute,
   AppsVersionRoute: AppsVersionRoute,
   CoreAiRoute: CoreAiRoute,
+  CoreCasesRoute: CoreCasesRoute,
+  CoreDocumentsRoute: CoreDocumentsRoute,
+  CoreExecutionRoute: CoreExecutionRoute,
+  CoreGovernanceRoute: CoreGovernanceRoute,
+  CoreLifecycleRoute: CoreLifecycleRoute,
+  CoreMapaVivoRoute: CoreMapaVivoRoute,
+  CoreProductsRoute: CoreProductsRoute,
+  CoreRadarRoute: CoreRadarRoute,
   CoreAppsRoute: CoreAppsRoute,
   CoreArchitectureRoute: CoreArchitectureRoute,
   CoreCallsRoute: CoreCallsRoute,
