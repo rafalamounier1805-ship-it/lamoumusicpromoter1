@@ -309,7 +309,7 @@ const MAP_NODES = [
   { id: "runtime", label: "Ambiente", x: 91, y: 53, status: "warn", icon: Gauge },
 ];
 
-const MAP_CONNECTIONS = [
+const MAP_CONNECTIONS: ReadonlyArray<readonly [string, string]> = [
   ["Cliente", "Produto"],
   ["Produto", "Aplicativo"],
   ["Aplicativo", "CORE"],
