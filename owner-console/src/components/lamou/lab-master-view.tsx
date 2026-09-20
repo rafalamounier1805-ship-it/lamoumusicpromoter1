@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   Area,
   AreaChart,
@@ -821,19 +822,19 @@ function GenericScreen({
               </div>
               <div className="grid gap-2 sm:grid-cols-2">
                 {[
-                  ["C-ID", "identidade canônica da célula"],
-                  ["Linha/coluna", "posição e agrupamento"],
-                  ["Caminho", "rota até o working-set"],
-                  ["Contexto", "sinais e filtros ativos"],
-                  ["Evidence", "proveniência vinculada"],
-                  ["Truth-state", "SYNTHETIC / MEASURED / NOT_VERIFIED"],
-                ].map(([title, text]) => (
+                  { title: "C-ID", text: "identidade canônica da célula" },
+                  { title: "Linha/coluna", text: "posição e agrupamento" },
+                  { title: "Caminho", text: "rota até o working-set" },
+                  { title: "Contexto", text: "sinais e filtros ativos" },
+                  { title: "Evidence", text: "proveniência vinculada" },
+                  { title: "Truth-state", text: "SYNTHETIC / MEASURED / NOT_VERIFIED" },
+                ].map((item) => (
                   <div
-                    key={title}
+                    key={item.title}
                     className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
                   >
-                    <p className="text-xs font-semibold">{title}</p>
-                    <p className="mt-1 text-[11px] text-muted-foreground">{text}</p>
+                    <p className="text-xs font-semibold">{item.title}</p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">{item.text}</p>
                   </div>
                 ))}
               </div>
@@ -1014,15 +1015,15 @@ function GenericScreen({
         <Panel title="Predição & Antecipação">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             {[
-              ["Lead time", "tempo útil antes do evento"],
-              ["False alarm", "alerta sem evento"],
-              ["Miss", "evento não antecipado"],
-              ["Drift", "mudança de distribuição"],
-              ["Calibração", "probabilidade vs frequência real"],
-            ].map(([title, text]) => (
-              <div key={title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
-                <p className="text-xs font-semibold">{title}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground">{text}</p>
+              { title: "Lead time", text: "tempo útil antes do evento" },
+              { title: "False alarm", text: "alerta sem evento" },
+              { title: "Miss", text: "evento não antecipado" },
+              { title: "Drift", text: "mudança de distribuição" },
+              { title: "Calibração", text: "probabilidade vs frequência real" },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                <p className="text-xs font-semibold">{item.title}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">{item.text}</p>
               </div>
             ))}
           </div>
@@ -1033,15 +1034,15 @@ function GenericScreen({
         <Panel title="Campanhas de teste">
           <div className="grid gap-3 md:grid-cols-3">
             {[
-              ["LAB V0.9 / 21 telas", "8 obrigatórios · 3 pendentes", "CANDIDATE"],
-              ["CORE Cubo", "6 comparações · evidence local", "TEST"],
-              ["Meta-Validation", "seeded defects · false PASS/FAIL", "NOT_RUN"],
-            ].map(([title, detail, state]) => (
-              <div key={title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
-                <p className="text-xs font-semibold">{title}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground">{detail}</p>
+              { title: "LAB V0.9 / 21 telas", detail: "8 obrigatórios · 3 pendentes", state: "CANDIDATE" },
+              { title: "CORE Cubo", detail: "6 comparações · evidence local", state: "TEST" },
+              { title: "Meta-Validation", detail: "seeded defects · false PASS/FAIL", state: "NOT_RUN" },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                <p className="text-xs font-semibold">{item.title}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">{item.detail}</p>
                 <Badge variant="outline" className="mt-2 text-[9px]">
-                  {state}
+                  {item.state}
                 </Badge>
               </div>
             ))}
@@ -1265,6 +1266,19 @@ function GenericScreen({
   }
 }
 
+const LAB_HOME_CARDS: {
+  title: string;
+  subtitle: string;
+  icon: LucideIcon;
+  key: LabScreenKey;
+}[] = [
+  { title: "Planilhão", subtitle: "Hoje → 10 → 15", icon: Gauge, key: "metrics" },
+  { title: "Teorias", subtitle: "Ideia → hipótese → evidência", icon: Network, key: "architectures" },
+  { title: "Pesquisas", subtitle: "Descoberta → fit → contradição", icon: Microscope, key: "evidence" },
+  { title: "Radar", subtitle: "Sinal → oportunidade → teste", icon: RadarIcon, key: "evidence" },
+  { title: "Evolução", subtitle: "Baseline → mudança → resultado", icon: Sparkles, key: "compare" },
+];
+
 export function LabMasterView({ initialSection = "lab" }: { initialSection?: LabScreenKey }) {
   const [screenKey, setScreenKey] = useState<LabScreenKey>(initialSection);
   const [reading, setReading] = useState<LabReadingLevel>("essential");
@@ -1438,38 +1452,7 @@ export function LabMasterView({ initialSection = "lab" }: { initialSection?: Lab
               </Panel>
 
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-                {[
-                  {
-                    title: "Planilhão",
-                    subtitle: "Hoje → 10 → 15",
-                    icon: Gauge,
-                    key: "metrics" as LabScreenKey,
-                  },
-                  {
-                    title: "Teorias",
-                    subtitle: "Ideia → hipótese → evidência",
-                    icon: Network,
-                    key: "architectures" as LabScreenKey,
-                  },
-                  {
-                    title: "Pesquisas",
-                    subtitle: "Descoberta → fit → contradição",
-                    icon: Microscope,
-                    key: "evidence" as LabScreenKey,
-                  },
-                  {
-                    title: "Radar",
-                    subtitle: "Sinal → oportunidade → teste",
-                    icon: RadarIcon,
-                    key: "evidence" as LabScreenKey,
-                  },
-                  {
-                    title: "Evolução",
-                    subtitle: "Baseline → mudança → resultado",
-                    icon: Sparkles,
-                    key: "compare" as LabScreenKey,
-                  },
-                ].map((item) => {
+                {LAB_HOME_CARDS.map((item) => {
                   const Icon = item.icon;
                   return (
                     <button
