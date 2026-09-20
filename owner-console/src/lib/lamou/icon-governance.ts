@@ -81,6 +81,14 @@ export const OWNER_OFFICIAL_ICON_BY_LABEL: Readonly<Record<string, OwnerOfficial
   Segurança: "OWNER-ICO-006",
   Configurações: "OWNER-ICO-007",
   "Testes & Evidências": "OWNER-ICO-008",
+  "Mapa Vivo": "OWNER-ICO-002",
+  "Execução & Indicadores": "OWNER-ICO-008",
+  "Produtos & Aplicativos": "OWNER-ICO-004",
+  "Casos & Soluções": "OWNER-ICO-006",
+  "Radar & Oportunidades": "OWNER-ICO-003",
+  Documentos: "OWNER-ICO-005",
+  "Versões, Distribuição & Recuperação": "OWNER-ICO-009",
+  Governança: "OWNER-ICO-006",
 };
 
 export function ownerOfficialIconIndex(code: OwnerOfficialIconCode): number {
