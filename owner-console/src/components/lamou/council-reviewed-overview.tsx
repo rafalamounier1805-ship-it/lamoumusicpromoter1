@@ -25,7 +25,7 @@ const CORE_TREND = [
   { period: "Sex", saude: 86, evidencias: 77 },
   { period: "Sáb", saude: 85, evidencias: 79 },
   { period: "Hoje", saude: 88, evidencias: 82 },
-] as const;
+];
 
 function ReviewPill({ label }: { label: string }) {
   return (
