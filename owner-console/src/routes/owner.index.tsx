@@ -12,6 +12,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
+import { CouncilReviewedOverview } from "@/components/lamou/council-reviewed-overview";
 import {
   ContextColumn,
   ContextLayout,
@@ -767,6 +768,8 @@ function Cockpit() {
           </>
         }
       />
+
+      <CouncilReviewedOverview />
 
       <ContextLayout column={column}>
         <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
