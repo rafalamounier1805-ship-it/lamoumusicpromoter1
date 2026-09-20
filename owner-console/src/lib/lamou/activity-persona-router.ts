@@ -45,7 +45,14 @@ export const ACTIVITY_PERSONA_PROFILES: ActivityPersonaProfile[] = [
   {
     key: "governance-cockpit",
     label: "Cognitive / Cockpit",
-    personaIds: ["product-manager", "data-scientist", "systems-engineer"],
+    personaIds: [
+      "product-manager",
+      "product-designer",
+      "software-architect",
+      "learning-experience-designer",
+      "data-scientist",
+      "systems-engineer",
+    ],
     plugins: ["usage-telemetry", "data-auth", "error-monitoring"],
     objective: "Priorizar sinais reais, impacto e próxima ação sem fabricar probabilidade.",
   },
