@@ -66,10 +66,25 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     subtitle:
       "Saúde, disponibilidade, desempenho, falhas e uso — sempre com origem do dado, baseline e evidência.",
     metrics: [
-      { label: "Saúde observada", value: "PARTIAL", note: "Sem score agregado sem metodologia.", tone: "warn" },
-      { label: "Integrações monitoradas", value: "12", note: "6 verificadas · 6 NOT_VERIFIED", tone: "info" },
+      {
+        label: "Saúde observada",
+        value: "PARTIAL",
+        note: "Sem score agregado sem metodologia.",
+        tone: "warn",
+      },
+      {
+        label: "Integrações monitoradas",
+        value: "12",
+        note: "6 verificadas · 6 NOT_VERIFIED",
+        tone: "info",
+      },
       { label: "Alertas abertos", value: "4", note: "2 críticos · 2 atenção", tone: "bad" },
-      { label: "Evidências recentes", value: "28", note: "Últimas 24 h no fixture candidato", tone: "ok" },
+      {
+        label: "Evidências recentes",
+        value: "28",
+        note: "Últimas 24 h no fixture candidato",
+        tone: "ok",
+      },
     ],
     actions: [
       "Atualizar indicadores",
@@ -81,10 +96,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Exportar relatório",
     ],
     rows: [
-      { id: "EX-01", title: "Supabase / Auth", subtitle: "Sessão e políticas RLS", status: "VERIFIED", meta: "p95 184 ms" },
-      { id: "EX-02", title: "Provider IA primário", subtitle: "Slot de provider sem prova runtime", status: "NOT_VERIFIED", meta: "sem amostra" },
-      { id: "EX-03", title: "Owner Console", subtitle: "Build candidato", status: "CANDIDATE", meta: "920a3a3 baseline" },
-      { id: "EX-04", title: "Distribuição cliente", subtitle: "Fluxo de instalação", status: "ATTENTION", meta: "reteste pendente" },
+      {
+        id: "EX-01",
+        title: "Supabase / Auth",
+        subtitle: "Sessão e políticas RLS",
+        status: "VERIFIED",
+        meta: "p95 184 ms",
+      },
+      {
+        id: "EX-02",
+        title: "Provider IA primário",
+        subtitle: "Slot de provider sem prova runtime",
+        status: "NOT_VERIFIED",
+        meta: "sem amostra",
+      },
+      {
+        id: "EX-03",
+        title: "Owner Console",
+        subtitle: "Build candidato",
+        status: "CANDIDATE",
+        meta: "920a3a3 baseline",
+      },
+      {
+        id: "EX-04",
+        title: "Distribuição cliente",
+        subtitle: "Fluxo de instalação",
+        status: "ATTENTION",
+        meta: "reteste pendente",
+      },
     ],
   },
   products: {
@@ -93,7 +132,12 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     subtitle:
       "Catálogo técnico: composição, COREs, capabilities, providers, dependências, versões, clientes e evidências.",
     metrics: [
-      { label: "Aplicativos catalogados", value: "46", note: "Dados recuperados do baseline", tone: "info" },
+      {
+        label: "Aplicativos catalogados",
+        value: "46",
+        note: "Dados recuperados do baseline",
+        tone: "info",
+      },
       { label: "Produtos", value: "35", note: "Catálogo candidato", tone: "info" },
       { label: "Bindings ativos", value: "10", note: "Vínculos registrados", tone: "ok" },
       { label: "Candidates", value: "36", note: "Nenhuma promoção automática", tone: "warn" },
@@ -110,10 +154,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Documentar",
     ],
     rows: [
-      { id: "APP-001", title: "LAMOU Version", subtitle: "Versionamento, arquivos e builds", status: "CANDIDATE", meta: "CORE + Visual & Media" },
-      { id: "APP-002", title: "Showroom", subtitle: "Diagnóstico, proposta e roadmap", status: "CANDIDATE", meta: "cliente-ready: NOT_VERIFIED" },
-      { id: "APP-003", title: "Opportunity Intelligence", subtitle: "Radar de oportunidades", status: "CANDIDATE", meta: "integrações parciais" },
-      { id: "APP-004", title: "Orbite", subtitle: "Agenda, rotina e reuniões", status: "TEST_ONLY", meta: "LABTEST" },
+      {
+        id: "APP-001",
+        title: "LAMOU Version",
+        subtitle: "Versionamento, arquivos e builds",
+        status: "CANDIDATE",
+        meta: "CORE + Visual & Media",
+      },
+      {
+        id: "APP-002",
+        title: "Showroom",
+        subtitle: "Diagnóstico, proposta e roadmap",
+        status: "CANDIDATE",
+        meta: "cliente-ready: NOT_VERIFIED",
+      },
+      {
+        id: "APP-003",
+        title: "Opportunity Intelligence",
+        subtitle: "Radar de oportunidades",
+        status: "CANDIDATE",
+        meta: "integrações parciais",
+      },
+      {
+        id: "APP-004",
+        title: "Orbite",
+        subtitle: "Agenda, rotina e reuniões",
+        status: "TEST_ONLY",
+        meta: "LABTEST",
+      },
     ],
   },
   cases: {
@@ -125,7 +193,12 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       { label: "Casos abertos", value: "7", note: "Fixture operacional candidato", tone: "warn" },
       { label: "Em investigação", value: "3", note: "Sem causa raiz confirmada", tone: "info" },
       { label: "Em reteste", value: "2", note: "Aguardando eficácia", tone: "warn" },
-      { label: "Conhecimentos publicados", value: "18", note: "Base pesquisável local", tone: "ok" },
+      {
+        label: "Conhecimentos publicados",
+        value: "18",
+        note: "Base pesquisável local",
+        tone: "ok",
+      },
     ],
     actions: [
       "Novo caso",
@@ -139,10 +212,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Transformar em conhecimento",
     ],
     rows: [
-      { id: "CASE-241", title: "Binding sem evidência runtime", subtitle: "Provider marcado sem execução comprovada", status: "INVESTIGANDO", meta: "Impacto: CORE" },
-      { id: "CASE-238", title: "Instalação cliente", subtitle: "Fluxo precisa reteste de ponta a ponta", status: "RETESTE", meta: "Impacto: Cliente" },
-      { id: "CASE-232", title: "Visual regression 1672×941", subtitle: "Ajuste de shell e densidade", status: "EM_SOLUCAO", meta: "Visual Lock" },
-      { id: "CASE-221", title: "RLS tenant", subtitle: "Hardening aplicado", status: "RESOLVIDO", meta: "Evidência registrada" },
+      {
+        id: "CASE-241",
+        title: "Binding sem evidência runtime",
+        subtitle: "Provider marcado sem execução comprovada",
+        status: "INVESTIGANDO",
+        meta: "Impacto: CORE",
+      },
+      {
+        id: "CASE-238",
+        title: "Instalação cliente",
+        subtitle: "Fluxo precisa reteste de ponta a ponta",
+        status: "RETESTE",
+        meta: "Impacto: Cliente",
+      },
+      {
+        id: "CASE-232",
+        title: "Visual regression 1672×941",
+        subtitle: "Ajuste de shell e densidade",
+        status: "EM_SOLUCAO",
+        meta: "Visual Lock",
+      },
+      {
+        id: "CASE-221",
+        title: "RLS tenant",
+        subtitle: "Hardening aplicado",
+        status: "RESOLVIDO",
+        meta: "Evidência registrada",
+      },
     ],
   },
   radar: {
@@ -168,10 +265,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Registrar resultado",
     ],
     rows: [
-      { id: "RAD-031", title: "Provider fallback automático", subtitle: "Reduzir indisponibilidade de IA", status: "VALIDANDO", meta: "benefício esperado: resiliência" },
-      { id: "RAD-028", title: "Visual & Media CORE", subtitle: "Centralizar gráficos, dashboards e exportação", status: "PLANEJADO", meta: "alto reuso" },
-      { id: "RAD-024", title: "Meus Testes", subtitle: "Testes personalizados do Owner", status: "EM_TESTE", meta: "LABTEST" },
-      { id: "RAD-019", title: "Recovery guiado", subtitle: "Restore point + evidência", status: "IMPLEMENTADO", meta: "eficácia em medição" },
+      {
+        id: "RAD-031",
+        title: "Provider fallback automático",
+        subtitle: "Reduzir indisponibilidade de IA",
+        status: "VALIDANDO",
+        meta: "benefício esperado: resiliência",
+      },
+      {
+        id: "RAD-028",
+        title: "Visual & Media CORE",
+        subtitle: "Centralizar gráficos, dashboards e exportação",
+        status: "PLANEJADO",
+        meta: "alto reuso",
+      },
+      {
+        id: "RAD-024",
+        title: "Meus Testes",
+        subtitle: "Testes personalizados do Owner",
+        status: "EM_TESTE",
+        meta: "LABTEST",
+      },
+      {
+        id: "RAD-019",
+        title: "Recovery guiado",
+        subtitle: "Restore point + evidência",
+        status: "IMPLEMENTADO",
+        meta: "eficácia em medição",
+      },
     ],
   },
   documents: {
@@ -198,10 +319,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Arquivar",
     ],
     rows: [
-      { id: "DOC-011", title: "Owner Console — Handoff", subtitle: "Baseline técnico e governança", status: "ATUAL", meta: "16/09/2026" },
-      { id: "DOC-010", title: "Security Hardening", subtitle: "RLS e isolamento", status: "APROVADO", meta: "evidência técnica" },
-      { id: "DOC-009", title: "Prompt Mestre Owner", subtitle: "Finalização controlada", status: "CANDIDATE", meta: "não promovido" },
-      { id: "DOC-008", title: "Visual Lock", subtitle: "Referência 1672×941", status: "REFERENCIA", meta: "desktop" },
+      {
+        id: "DOC-011",
+        title: "Owner Console — Handoff",
+        subtitle: "Baseline técnico e governança",
+        status: "ATUAL",
+        meta: "16/09/2026",
+      },
+      {
+        id: "DOC-010",
+        title: "Security Hardening",
+        subtitle: "RLS e isolamento",
+        status: "APROVADO",
+        meta: "evidência técnica",
+      },
+      {
+        id: "DOC-009",
+        title: "Prompt Mestre Owner",
+        subtitle: "Finalização controlada",
+        status: "CANDIDATE",
+        meta: "não promovido",
+      },
+      {
+        id: "DOC-008",
+        title: "Visual Lock",
+        subtitle: "Referência 1672×941",
+        status: "REFERENCIA",
+        meta: "desktop",
+      },
     ],
   },
   lifecycle: {
@@ -212,7 +357,12 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     metrics: [
       { label: "Baseline atual", value: "920a3a3", note: "Owner Console candidata", tone: "info" },
       { label: "Candidates", value: "36", note: "Promoção bloqueada por padrão", tone: "warn" },
-      { label: "Builds verificáveis", value: "1+", note: "Evidência depende do pipeline", tone: "info" },
+      {
+        label: "Builds verificáveis",
+        value: "1+",
+        note: "Evidência depende do pipeline",
+        tone: "info",
+      },
       { label: "Recovery points", value: "3", note: "Fixture desta superfície", tone: "ok" },
     ],
     actions: [
@@ -231,10 +381,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Ver histórico",
     ],
     rows: [
-      { id: "VER-920a3a3", title: "Owner Console 920a3a3", subtitle: "Pacote Node executável", status: "CANDIDATE", meta: "17/09/2026" },
-      { id: "VER-8f249aa", title: "Candidata completa 8f249aa", subtitle: "Hardening + testes", status: "PRESERVADA", meta: "16/09/2026" },
-      { id: "VER-FROZEN", title: "Baseline FROZEN", subtitle: "Imutável · derivar somente", status: "FROZEN", meta: "não sobrescrever" },
-      { id: "REC-003", title: "Restore point seguro", subtitle: "Snapshot pré-alteração", status: "AVAILABLE", meta: "rollback manual" },
+      {
+        id: "VER-920a3a3",
+        title: "Owner Console 920a3a3",
+        subtitle: "Pacote Node executável",
+        status: "CANDIDATE",
+        meta: "17/09/2026",
+      },
+      {
+        id: "VER-8f249aa",
+        title: "Candidata completa 8f249aa",
+        subtitle: "Hardening + testes",
+        status: "PRESERVADA",
+        meta: "16/09/2026",
+      },
+      {
+        id: "VER-FROZEN",
+        title: "Baseline FROZEN",
+        subtitle: "Imutável · derivar somente",
+        status: "FROZEN",
+        meta: "não sobrescrever",
+      },
+      {
+        id: "REC-003",
+        title: "Restore point seguro",
+        subtitle: "Snapshot pré-alteração",
+        status: "AVAILABLE",
+        meta: "rollback manual",
+      },
     ],
   },
   governance: {
@@ -245,8 +419,18 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     metrics: [
       { label: "Usuários Owner", value: "2", note: "Baseline recuperado", tone: "info" },
       { label: "RLS", value: "50/50", note: "Hardening previamente verificado", tone: "ok" },
-      { label: "MFA Owner", value: "PENDENTE", note: "Gate de produção ainda aberto", tone: "warn" },
-      { label: "Eventos auditáveis", value: "100%", note: "Meta arquitetural desta superfície", tone: "info" },
+      {
+        label: "MFA Owner",
+        value: "PENDENTE",
+        note: "Gate de produção ainda aberto",
+        tone: "warn",
+      },
+      {
+        label: "Eventos auditáveis",
+        value: "100%",
+        note: "Meta arquitetural desta superfície",
+        tone: "info",
+      },
     ],
     actions: [
       "Novo usuário",
@@ -262,10 +446,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Exportar evidências",
     ],
     rows: [
-      { id: "GOV-01", title: "Owner", subtitle: "Administração do CORE Proprietário", status: "OWNER", meta: "escopo global" },
-      { id: "GOV-02", title: "Authorization Gate", subtitle: "Titular do contrato como autoridade primária", status: "ENFORCED_DESIGN", meta: "delegação explícita" },
-      { id: "GOV-03", title: "Tenant isolation", subtitle: "Cliente não acessa Owner", status: "VERIFIED", meta: "hardening Supabase" },
-      { id: "GOV-04", title: "MFA proprietário", subtitle: "Proteção adicional de conta", status: "PENDENTE", meta: "bloqueia promoção" },
+      {
+        id: "GOV-01",
+        title: "Owner",
+        subtitle: "Administração do CORE Proprietário",
+        status: "OWNER",
+        meta: "escopo global",
+      },
+      {
+        id: "GOV-02",
+        title: "Authorization Gate",
+        subtitle: "Titular do contrato como autoridade primária",
+        status: "ENFORCED_DESIGN",
+        meta: "delegação explícita",
+      },
+      {
+        id: "GOV-03",
+        title: "Tenant isolation",
+        subtitle: "Cliente não acessa Owner",
+        status: "VERIFIED",
+        meta: "hardening Supabase",
+      },
+      {
+        id: "GOV-04",
+        title: "MFA proprietário",
+        subtitle: "Proteção adicional de conta",
+        status: "PENDENTE",
+        meta: "bloqueia promoção",
+      },
     ],
   },
   settings: {
@@ -291,10 +499,34 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       "Ver histórico",
     ],
     rows: [
-      { id: "SET-01", title: "Organização", subtitle: "Marca, identidade, domínios e contatos", status: "CONFIGURADO", meta: "Owner" },
-      { id: "SET-02", title: "Providers", subtitle: "Slots, fallback, limites e credenciais", status: "PARTIAL", meta: "runtime variável" },
-      { id: "SET-03", title: "Visual & Media CORE", subtitle: "Gráficos, tabelas, motion e exportação", status: "CANDIDATE", meta: "camada comum" },
-      { id: "SET-04", title: "Acessibilidade", subtitle: "Contraste, fonte, teclado e redução de movimento", status: "IMPLEMENTED", meta: "QA contínuo" },
+      {
+        id: "SET-01",
+        title: "Organização",
+        subtitle: "Marca, identidade, domínios e contatos",
+        status: "CONFIGURADO",
+        meta: "Owner",
+      },
+      {
+        id: "SET-02",
+        title: "Providers",
+        subtitle: "Slots, fallback, limites e credenciais",
+        status: "PARTIAL",
+        meta: "runtime variável",
+      },
+      {
+        id: "SET-03",
+        title: "Visual & Media CORE",
+        subtitle: "Gráficos, tabelas, motion e exportação",
+        status: "CANDIDATE",
+        meta: "camada comum",
+      },
+      {
+        id: "SET-04",
+        title: "Acessibilidade",
+        subtitle: "Contraste, fonte, teclado e redução de movimento",
+        status: "IMPLEMENTED",
+        meta: "QA contínuo",
+      },
     ],
   },
 };
@@ -319,13 +551,21 @@ const MAP_CONNECTIONS: ReadonlyArray<readonly [string, string]> = [
 ];
 
 function statusClass(status: string) {
-  if (/VERIFIED|APROVADO|RESOLVIDO|AVAILABLE|CONFIGURADO|IMPLEMENTED|OWNER|FROZEN|PRESERVADA|REFERENCIA|ATUAL/i.test(status)) {
+  if (
+    /VERIFIED|APROVADO|RESOLVIDO|AVAILABLE|CONFIGURADO|IMPLEMENTED|OWNER|FROZEN|PRESERVADA|REFERENCIA|ATUAL/i.test(
+      status,
+    )
+  ) {
     return "border-success/35 bg-success/10 text-success";
   }
   if (/CRIT|FAIL|BAD|REPROV/i.test(status)) {
     return "border-destructive/35 bg-destructive/10 text-destructive";
   }
-  if (/PEND|ATTENTION|RETESTE|PARTIAL|CANDIDATE|TEST|INVESTIGANDO|VALIDANDO|PLANEJADO|EM_/i.test(status)) {
+  if (
+    /PEND|ATTENTION|RETESTE|PARTIAL|CANDIDATE|TEST|INVESTIGANDO|VALIDANDO|PLANEJADO|EM_/i.test(
+      status,
+    )
+  ) {
     return "border-warning/35 bg-warning/10 text-warning";
   }
   return "border-primary/35 bg-primary/10 text-primary";
@@ -333,7 +573,13 @@ function statusClass(status: string) {
 
 function downloadSnapshot(module: string, rows: Row[]) {
   const blob = new Blob(
-    [JSON.stringify({ module, exportedAt: new Date().toISOString(), truth: "CANDIDATE_NOT_PROMOTED", rows }, null, 2)],
+    [
+      JSON.stringify(
+        { module, exportedAt: new Date().toISOString(), truth: "CANDIDATE_NOT_PROMOTED", rows },
+        null,
+        2,
+      ),
+    ],
     { type: "application/json" },
   );
   const url = URL.createObjectURL(blob);
@@ -348,8 +594,13 @@ function MetricGrid({ metrics }: { metrics: Metric[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {metrics.map((metric) => (
-        <div key={metric.label} className="rounded-2xl border border-border/60 bg-card/70 p-4 backdrop-blur">
-          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{metric.label}</p>
+        <div
+          key={metric.label}
+          className="rounded-2xl border border-border/60 bg-card/70 p-4 backdrop-blur"
+        >
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+            {metric.label}
+          </p>
           <p className="mt-2 font-display text-2xl font-semibold">{metric.value}</p>
           <p className="mt-1 text-xs text-muted-foreground">{metric.note}</p>
         </div>
@@ -394,7 +645,10 @@ function RegistryTable({
   return (
     <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/55">
       <div className="hidden grid-cols-[110px_minmax(0,1.4fr)_minmax(0,1fr)_140px] gap-3 border-b border-border/60 bg-surface-2/60 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground md:grid">
-        <span>ID</span><span>Objeto</span><span>Contexto</span><span>Status</span>
+        <span>ID</span>
+        <span>Objeto</span>
+        <span>Contexto</span>
+        <span>Status</span>
       </div>
       <div className="divide-y divide-border/50">
         {rows.map((row) => (
@@ -412,8 +666,14 @@ function RegistryTable({
               <span className="block text-sm font-medium">{row.title}</span>
               <span className="block text-xs text-muted-foreground md:hidden">{row.subtitle}</span>
             </span>
-            <span className="hidden text-xs text-muted-foreground md:block">{row.subtitle}{row.meta ? ` · ${row.meta}` : ""}</span>
-            <Badge variant="outline" className={cn("w-fit font-mono text-[9px]", statusClass(row.status))}>
+            <span className="hidden text-xs text-muted-foreground md:block">
+              {row.subtitle}
+              {row.meta ? ` · ${row.meta}` : ""}
+            </span>
+            <Badge
+              variant="outline"
+              className={cn("w-fit font-mono text-[9px]", statusClass(row.status))}
+            >
               {row.status}
             </Badge>
           </button>
@@ -433,7 +693,9 @@ function DetailPanel({ row, onClose }: { row: Row | undefined; onClose: () => vo
           <h3 className="mt-1 font-display text-lg font-semibold">{row.title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{row.subtitle}</p>
         </div>
-        <Button type="button" size="sm" variant="ghost" onClick={onClose}>Fechar</Button>
+        <Button type="button" size="sm" variant="ghost" onClick={onClose}>
+          Fechar
+        </Button>
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {[
@@ -473,7 +735,12 @@ function MapaVivoCore() {
       <PageHeader
         title="Mapa Vivo"
         subtitle="Centro visual do CORE Proprietário: Cliente → Produto → Aplicativo → CORE → Capability → Provider → Ambiente. O mapa detecta; os módulos técnicos investigam e resolvem."
-        right={<div className="flex gap-2"><TruthBadge truth="PARTIAL" /><DemoBadge label="candidate · dados de demonstração estruturados" /></div>}
+        right={
+          <div className="flex gap-2">
+            <TruthBadge truth="PARTIAL" />
+            <DemoBadge label="candidate · dados de demonstração estruturados" />
+          </div>
+        }
       />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -486,7 +753,10 @@ function MapaVivoCore() {
           const I = Icon as typeof Users;
           return (
             <div key={String(label)} className="rounded-2xl border border-border/60 bg-card/70 p-4">
-              <div className="flex items-center gap-2 text-muted-foreground"><I className="h-4 w-4" /><span className="text-xs">{String(label)}</span></div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <I className="h-4 w-4" />
+                <span className="text-xs">{String(label)}</span>
+              </div>
               <p className="mt-2 font-display text-3xl font-semibold">{String(value)}</p>
             </div>
           );
@@ -504,34 +774,69 @@ function MapaVivoCore() {
           />
         </div>
         {(["ecossistema", "problemas", "alteracoes"] as const).map((item) => (
-          <Button key={item} size="sm" variant={mode === item ? "default" : "outline"} onClick={() => setMode(item)}>
-            {item === "ecossistema" ? "Ecossistema" : item === "problemas" ? "Somente problemas" : "Alterações"}
+          <Button
+            key={item}
+            size="sm"
+            variant={mode === item ? "default" : "outline"}
+            onClick={() => setMode(item)}
+          >
+            {item === "ecossistema"
+              ? "Ecossistema"
+              : item === "problemas"
+                ? "Somente problemas"
+                : "Alterações"}
           </Button>
         ))}
         <Button size="sm" variant="outline" onClick={() => setUpdatedAt(new Date())}>
           <RefreshCcw className="mr-2 h-3.5 w-3.5" /> Atualizar mapa
         </Button>
-        <Button size="sm" variant="outline" onClick={() => downloadSnapshot("mapa-vivo", MAP_NODES.map((n) => ({id:n.id,title:n.label,subtitle:"Nó do Mapa Vivo",status:n.status})))}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            downloadSnapshot(
+              "mapa-vivo",
+              MAP_NODES.map((n) => ({
+                id: n.id,
+                title: n.label,
+                subtitle: "Nó do Mapa Vivo",
+                status: n.status,
+              })),
+            )
+          }
+        >
           <Download className="mr-2 h-3.5 w-3.5" /> Exportar
         </Button>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="relative min-h-[520px] overflow-hidden rounded-3xl border border-border/60 bg-surface-1/65 p-4">
-          <div className="absolute inset-0 opacity-35" aria-hidden="true" style={{
-            backgroundImage: "linear-gradient(oklch(0.74 0.15 218 / .08) 1px, transparent 1px),linear-gradient(90deg,oklch(0.74 0.15 218 / .08) 1px,transparent 1px)",
-            backgroundSize: "34px 34px",
-          }} />
+          <div
+            className="absolute inset-0 opacity-35"
+            aria-hidden="true"
+            style={{
+              backgroundImage:
+                "linear-gradient(oklch(0.74 0.15 218 / .08) 1px, transparent 1px),linear-gradient(90deg,oklch(0.74 0.15 218 / .08) 1px,transparent 1px)",
+              backgroundSize: "34px 34px",
+            }}
+          />
           <div className="relative mb-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold">Ecossistema técnico</p>
-              <p className="text-[11px] text-muted-foreground">Atualizado {updatedAt.toLocaleTimeString("pt-BR")}</p>
+              <p className="text-[11px] text-muted-foreground">
+                Atualizado {updatedAt.toLocaleTimeString("pt-BR")}
+              </p>
             </div>
-            <Badge variant="outline" className="font-mono text-[9px]">REAL · TESTE · DEMO separados</Badge>
+            <Badge variant="outline" className="font-mono text-[9px]">
+              REAL · TESTE · DEMO separados
+            </Badge>
           </div>
 
           <div className="relative h-[420px]">
-            <div className="absolute left-[8%] right-[6%] top-1/2 h-px bg-gradient-to-r from-primary/20 via-primary/70 to-warning/40" aria-hidden="true" />
+            <div
+              className="absolute left-[8%] right-[6%] top-1/2 h-px bg-gradient-to-r from-primary/20 via-primary/70 to-warning/40"
+              aria-hidden="true"
+            />
             {visibleNodes.map((node) => {
               const Icon = node.icon;
               return (
@@ -541,19 +846,29 @@ function MapaVivoCore() {
                   onClick={() => setSelected(node.id)}
                   className={cn(
                     "absolute -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card/95 p-3 text-left shadow-lg outline-none transition-all hover:-translate-y-[54%] focus-visible:ring-2 focus-visible:ring-ring",
-                    selected === node.id ? "border-primary shadow-[0_0_0_4px_oklch(0.74_0.15_218/.12)]" : "border-border/70",
+                    selected === node.id
+                      ? "border-primary shadow-[0_0_0_4px_oklch(0.74_0.15_218/.12)]"
+                      : "border-border/70",
                   )}
                   style={{ left: `${node.x}%`, top: `${node.y}%` }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className={cn(
-                      "flex h-9 w-9 items-center justify-center rounded-xl",
-                      node.status === "ok" ? "bg-success/12 text-success" : node.status === "bad" ? "bg-destructive/12 text-destructive" : "bg-warning/12 text-warning",
-                    )}>
+                    <span
+                      className={cn(
+                        "flex h-9 w-9 items-center justify-center rounded-xl",
+                        node.status === "ok"
+                          ? "bg-success/12 text-success"
+                          : node.status === "bad"
+                            ? "bg-destructive/12 text-destructive"
+                            : "bg-warning/12 text-warning",
+                      )}
+                    >
                       <Icon className="h-4 w-4" />
                     </span>
                     <span>
-                      <span className="block text-[10px] text-muted-foreground">{node.id.toUpperCase()}</span>
+                      <span className="block text-[10px] text-muted-foreground">
+                        {node.id.toUpperCase()}
+                      </span>
                       <span className="block text-xs font-semibold">{node.label}</span>
                     </span>
                   </div>
@@ -569,26 +884,59 @@ function MapaVivoCore() {
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="font-display text-lg font-semibold">{selectedNode.label}</h3>
-                  <Badge variant="outline" className={cn("font-mono text-[9px]", statusClass(selectedNode.status))}>{selectedNode.status.toUpperCase()}</Badge>
+                  <Badge
+                    variant="outline"
+                    className={cn("font-mono text-[9px]", statusClass(selectedNode.status))}
+                  >
+                    {selectedNode.status.toUpperCase()}
+                  </Badge>
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Página contextual com status, versão, dependências, uso, clientes afetados, métricas, alertas, evidências e histórico.
+                  Página contextual com status, versão, dependências, uso, clientes afetados,
+                  métricas, alertas, evidências e histórico.
                 </p>
                 <div className="mt-4 grid gap-2">
-                  <Button type="button" size="sm" onClick={() => setMode("problemas")}>Ver impacto</Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => downloadSnapshot(selectedNode.id, [{id:selectedNode.id,title:selectedNode.label,subtitle:"Dependências do nó",status:selectedNode.status}])}>Exportar objeto</Button>
-                  <Button asChild size="sm" variant="outline"><Link to="/core/cases">Criar caso / investigar</Link></Button>
+                  <Button type="button" size="sm" onClick={() => setMode("problemas")}>
+                    Ver impacto
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      downloadSnapshot(selectedNode.id, [
+                        {
+                          id: selectedNode.id,
+                          title: selectedNode.label,
+                          subtitle: "Dependências do nó",
+                          status: selectedNode.status,
+                        },
+                      ])
+                    }
+                  >
+                    Exportar objeto
+                  </Button>
+                  <Button asChild size="sm" variant="outline">
+                    <Link to="/core/cases">Criar caso / investigar</Link>
+                  </Button>
                 </div>
               </div>
-            ) : <p className="text-sm text-muted-foreground">Selecione um nó.</p>}
+            ) : (
+              <p className="text-sm text-muted-foreground">Selecione um nó.</p>
+            )}
           </Panel>
 
           <Panel title="Relações">
             <ul className="space-y-2 text-xs">
               {MAP_CONNECTIONS.map(([from, to]) => (
-                <li key={from + to} className="flex items-center gap-2 rounded-lg border border-border/50 bg-surface-1/50 px-3 py-2">
+                <li
+                  key={from + to}
+                  className="flex items-center gap-2 rounded-lg border border-border/50 bg-surface-1/50 px-3 py-2"
+                >
                   <Waypoints className="h-3.5 w-3.5 text-primary" />
-                  <span>{from}</span><span className="text-muted-foreground">→</span><span>{to}</span>
+                  <span>{from}</span>
+                  <span className="text-muted-foreground">→</span>
+                  <span>{to}</span>
                 </li>
               ))}
             </ul>
@@ -609,8 +957,15 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
     return definition.rows.filter((row) => {
-      const matchesSearch = !q || [row.id, row.title, row.subtitle, row.status, row.meta ?? ""].join(" ").toLowerCase().includes(q);
-      const matchesCritical = !criticalOnly || /PEND|ATTENTION|RETESTE|PARTIAL|NOT_VERIFIED|INVESTIGANDO|VALIDANDO/i.test(row.status);
+      const matchesSearch =
+        !q ||
+        [row.id, row.title, row.subtitle, row.status, row.meta ?? ""]
+          .join(" ")
+          .toLowerCase()
+          .includes(q);
+      const matchesCritical =
+        !criticalOnly ||
+        /PEND|ATTENTION|RETESTE|PARTIAL|NOT_VERIFIED|INVESTIGANDO|VALIDANDO/i.test(row.status);
       return matchesSearch && matchesCritical;
     });
   }, [criticalOnly, definition.rows, query]);
@@ -620,14 +975,18 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
   const onAction = (action: string) => {
     if (/exportar|baixar/i.test(action)) {
       downloadSnapshot(module, rows);
-      setLastAction(`${action}: snapshot JSON gerado localmente. Nenhuma promoção/deploy executado.`);
+      setLastAction(
+        `${action}: snapshot JSON gerado localmente. Nenhuma promoção/deploy executado.`,
+      );
       return;
     }
     if (/atualizar/i.test(action)) {
       setLastAction(`${action}: visão recalculada às ${new Date().toLocaleTimeString("pt-BR")}.`);
       return;
     }
-    setLastAction(`${action}: fluxo candidato acionado. Alteração permanece local/DEMO até backend e gate autorizarem persistência real.`);
+    setLastAction(
+      `${action}: fluxo candidato acionado. Alteração permanece local/DEMO até backend e gate autorizarem persistência real.`,
+    );
   };
 
   return (
@@ -635,14 +994,23 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
       <PageHeader
         title={definition.title}
         subtitle={definition.subtitle}
-        right={<div className="flex flex-wrap gap-2"><TruthBadge truth="PARTIAL" /><DemoBadge label="CANDIDATE_NOT_PROMOTED" /></div>}
+        right={
+          <div className="flex flex-wrap gap-2">
+            <TruthBadge truth="PARTIAL" />
+            <DemoBadge label="CANDIDATE_NOT_PROMOTED" />
+          </div>
+        }
       />
 
       <MetricGrid metrics={definition.metrics} />
 
       <Panel title="Ações do módulo">
         <ActionBar actions={definition.actions} onAction={onAction} />
-        <div className="mt-3 flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground" role="status" aria-live="polite">
+        <div
+          className="mt-3 flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
           <Activity className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
           <span>{lastAction}</span>
         </div>
@@ -658,10 +1026,23 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
             className="h-9 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
         </div>
-        <Button type="button" size="sm" variant={criticalOnly ? "default" : "outline"} onClick={() => setCriticalOnly((value) => !value)}>
+        <Button
+          type="button"
+          size="sm"
+          variant={criticalOnly ? "default" : "outline"}
+          onClick={() => setCriticalOnly((value) => !value)}
+        >
           <Filter className="mr-2 h-3.5 w-3.5" /> Dados críticos
         </Button>
-        <Button type="button" size="sm" variant="outline" onClick={() => { setCriticalOnly(false); setQuery(""); }}>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            setCriticalOnly(false);
+            setQuery("");
+          }}
+        >
           Todos os dados
         </Button>
       </div>
@@ -680,7 +1061,10 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
             ].map(([Icon, title, note]) => {
               const I = Icon as typeof History;
               return (
-                <div key={String(title)} className="rounded-xl border border-border/50 bg-surface-1/50 p-3">
+                <div
+                  key={String(title)}
+                  className="rounded-xl border border-border/50 bg-surface-1/50 p-3"
+                >
                   <I className="h-4 w-4 text-primary" />
                   <p className="mt-2 text-xs font-semibold">{String(title)}</p>
                   <p className="mt-1 text-[11px] text-muted-foreground">{String(note)}</p>
@@ -701,7 +1085,10 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
               "LABTEST + Validation Gate validam.",
               "Lifecycle distribui apenas após aprovação.",
             ].map((item, index) => (
-              <li key={item} className="flex gap-2 rounded-lg border border-border/50 bg-surface-1/50 px-3 py-2">
+              <li
+                key={item}
+                className="flex gap-2 rounded-lg border border-border/50 bg-surface-1/50 px-3 py-2"
+              >
                 <span className="font-mono text-primary">{String(index + 1).padStart(2, "0")}</span>
                 <span>{item}</span>
               </li>
@@ -713,11 +1100,21 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
       {module === "governance" ? (
         <Panel title="Superfícies técnicas preservadas">
           <div className="flex flex-wrap gap-2">
-            <Button asChild size="sm" variant="outline"><Link to="/core/architecture">Arquitetura Técnica</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/core/security">Segurança & Tenants</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/core/calls">CALLs & Contratos</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/core/data">Dados & Fontes</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/core/ai">IA, Prompts & Agentes</Link></Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/architecture">Arquitetura Técnica</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/security">Segurança & Tenants</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/calls">CALLs & Contratos</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/data">Dados & Fontes</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/ai">IA, Prompts & Agentes</Link>
+            </Button>
           </div>
         </Panel>
       ) : null}
@@ -725,9 +1122,15 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
       {module === "settings" ? (
         <Panel title="Configurações técnicas relacionadas">
           <div className="flex flex-wrap gap-2">
-            <Button asChild size="sm" variant="outline"><Link to="/core/apps">Bindings existentes</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/core/observability">Observabilidade existente</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/labtest">Abrir LABTEST</Link></Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/apps">Bindings existentes</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/core/observability">Observabilidade existente</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/labtest">Abrir LABTEST</Link>
+            </Button>
           </div>
         </Panel>
       ) : null}
