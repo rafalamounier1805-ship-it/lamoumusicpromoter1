@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - candidate/lamou-owner-console-codex-2026-09-15
+      - candidate/lamou-core-proprietario-architecture-2026-09-20
   workflow_dispatch:
 
 permissions:
@@ -29,18 +30,18 @@ jobs:
           find _package -type d \( -name node_modules -o -name .git \) -prune -exec rm -rf {} + || true
           printf '%s\n' \
             'LAMOU Owner Console — Candidate Complete Package' \
-            'Branch: candidate/lamou-owner-console-codex-2026-09-15' \
+            'Branch: ${GITHUB_REF_NAME}' \
             "Commit: ${GITHUB_SHA}" \
             'State: CANDIDATE_NOT_PROMOTED' \
             'SALVAR != PROMOVER' \
             > _package/LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA/PACKAGE_STATE.txt
           cd _package
-          zip -r ../LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16.zip LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA
+          zip -r ../LAMOU_CORE_PROPRIETARIO_CANDIDATE_2026-09-20.zip LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA
 
       - name: Upload candidate package
         uses: actions/upload-artifact@v4
         with:
-          name: LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16
-          path: LAMOU_OWNER_CONSOLE_CANDIDATE_COMPLETA_2026-09-16.zip
+          name: LAMOU_CORE_PROPRIETARIO_CANDIDATE_2026-09-20
+          path: LAMOU_CORE_PROPRIETARIO_CANDIDATE_2026-09-20.zip
           if-no-files-found: error
           retention-days: 30
