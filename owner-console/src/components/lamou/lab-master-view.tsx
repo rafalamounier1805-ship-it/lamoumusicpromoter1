@@ -179,30 +179,42 @@ function DidacticGuide({
   return (
     <div className="grid gap-2 rounded-2xl border border-primary/20 bg-primary/5 p-3 md:grid-cols-2 xl:grid-cols-4">
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">Em palavras simples</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+          Em palavras simples
+        </p>
         <p className="mt-1 text-xs">{screen.simple}</p>
       </div>
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">Por que importa</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+          Por que importa
+        </p>
         <p className="mt-1 text-xs text-muted-foreground">{screen.why}</p>
       </div>
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">O que já sabemos</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+          O que já sabemos
+        </p>
         <p className="mt-1 text-xs text-muted-foreground">{screen.known}</p>
       </div>
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">O que fazer agora</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+          O que fazer agora
+        </p>
         <p className="mt-1 text-xs text-muted-foreground">{screen.next}</p>
       </div>
       {reading !== "essential" ? (
         <div className="md:col-span-2 xl:col-span-4">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-warning">Ainda falta provar</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-warning">
+            Ainda falta provar
+          </p>
           <p className="mt-1 text-xs text-muted-foreground">{screen.pending}</p>
         </div>
       ) : null}
       {reading === "technical" ? (
         <div className="md:col-span-2 xl:col-span-4 rounded-xl border border-border/50 bg-background/40 p-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-violet">Leitura técnica</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-violet">
+            Leitura técnica
+          </p>
           <p className="mt-1 font-mono text-[11px] text-muted-foreground">{screen.technical}</p>
         </div>
       ) : null}
@@ -264,13 +276,7 @@ function MaturityCard({
   );
 }
 
-function EvolutionTable({
-  search,
-  dataMode,
-}: {
-  search: string;
-  dataMode: DataMode;
-}) {
+function EvolutionTable({ search, dataMode }: { search: string; dataMode: DataMode }) {
   const rows = EVOLUTION_ROWS.filter((row) => {
     const hit = [row.item, row.type, row.situation, row.existing, row.evolution]
       .join(" ")
@@ -337,7 +343,9 @@ function ArchitectureFlow() {
         {ARCHITECTURE_EVOLUTION.map((item, index) => (
           <div key={item} className="flex items-center gap-2">
             <div className="w-40 rounded-xl border border-border/60 bg-card/70 p-3 text-center">
-              <p className="text-[10px] text-muted-foreground">{index === 0 ? "BASELINE" : `ETAPA ${index}`}</p>
+              <p className="text-[10px] text-muted-foreground">
+                {index === 0 ? "BASELINE" : `ETAPA ${index}`}
+              </p>
               <p className="mt-1 text-xs font-semibold">{item}</p>
               <p className="mt-1 text-[9px] text-muted-foreground">
                 {index <= 1 ? "referência" : "LAB / hipótese"}
@@ -350,7 +358,8 @@ function ArchitectureFlow() {
         ))}
       </div>
       <p className="mt-2 text-[10px] text-muted-foreground">
-        Fluxo de investigação, não ranking: cada seta exige hipótese → teste → delta → evidência → trade-off.
+        Fluxo de investigação, não ranking: cada seta exige hipótese → teste → delta → evidência →
+        trade-off.
       </p>
     </div>
   );
@@ -522,9 +531,30 @@ function MetricCharts() {
                   fontSize: 11,
                 }}
               />
-              <Area type="monotone" dataKey="effectiveness" name="Test Effectiveness" stroke="currentColor" fill="currentColor" fillOpacity={0.08} />
-              <Area type="monotone" dataKey="evidence" name="Cobertura de evidência" stroke="currentColor" fillOpacity={0} strokeDasharray="5 4" />
-              <Area type="monotone" dataKey="reality" name="Reality Alignment" stroke="currentColor" fillOpacity={0} strokeDasharray="2 4" />
+              <Area
+                type="monotone"
+                dataKey="effectiveness"
+                name="Test Effectiveness"
+                stroke="currentColor"
+                fill="currentColor"
+                fillOpacity={0.08}
+              />
+              <Area
+                type="monotone"
+                dataKey="evidence"
+                name="Cobertura de evidência"
+                stroke="currentColor"
+                fillOpacity={0}
+                strokeDasharray="5 4"
+              />
+              <Area
+                type="monotone"
+                dataKey="reality"
+                name="Reality Alignment"
+                stroke="currentColor"
+                fillOpacity={0}
+                strokeDasharray="2 4"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -597,7 +627,9 @@ function TestsScreen({
         <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
           {TEST_FAMILIES.map((family, index) => (
             <div key={family} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
-              <p className="font-mono text-[9px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
+              <p className="font-mono text-[9px] text-muted-foreground">
+                {String(index + 1).padStart(2, "0")}
+              </p>
               <p className="mt-1 text-xs font-semibold">{family}</p>
             </div>
           ))}
@@ -606,53 +638,104 @@ function TestsScreen({
       <Panel title="Meus Testes · criar candidato local">
         <div className="grid gap-3 md:grid-cols-2">
           <div>
-            <Label htmlFor="my-test-title" className="text-xs">Nome *</Label>
-            <Input id="my-test-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Snapshot + Delta" className="mt-1" />
+            <Label htmlFor="my-test-title" className="text-xs">
+              Nome *
+            </Label>
+            <Input
+              id="my-test-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ex.: Snapshot + Delta"
+              className="mt-1"
+            />
           </div>
           <div>
-            <Label htmlFor="my-test-object" className="text-xs">Objeto</Label>
-            <Input id="my-test-object" value={object} onChange={(e) => setObject(e.target.value)} placeholder="CORE, app, arquitetura..." className="mt-1" />
+            <Label htmlFor="my-test-object" className="text-xs">
+              Objeto
+            </Label>
+            <Input
+              id="my-test-object"
+              value={object}
+              onChange={(e) => setObject(e.target.value)}
+              placeholder="CORE, app, arquitetura..."
+              className="mt-1"
+            />
           </div>
           <div>
-            <Label htmlFor="my-test-objective" className="text-xs">Objetivo *</Label>
-            <Input id="my-test-objective" value={objective} onChange={(e) => setObjective(e.target.value)} placeholder="O que queremos provar?" className="mt-1" />
+            <Label htmlFor="my-test-objective" className="text-xs">
+              Objetivo *
+            </Label>
+            <Input
+              id="my-test-objective"
+              value={objective}
+              onChange={(e) => setObjective(e.target.value)}
+              placeholder="O que queremos provar?"
+              className="mt-1"
+            />
           </div>
           <div>
-            <Label htmlFor="my-test-baseline" className="text-xs">Baseline</Label>
-            <Input id="my-test-baseline" value={baseline} onChange={(e) => setBaseline(e.target.value)} className="mt-1" />
+            <Label htmlFor="my-test-baseline" className="text-xs">
+              Baseline
+            </Label>
+            <Input
+              id="my-test-baseline"
+              value={baseline}
+              onChange={(e) => setBaseline(e.target.value)}
+              className="mt-1"
+            />
           </div>
           <div className="md:col-span-2">
-            <Label htmlFor="my-test-expected" className="text-xs">Resultado esperado</Label>
-            <Input id="my-test-expected" value={expected} onChange={(e) => setExpected(e.target.value)} placeholder="Critério que será comparado ao resultado real" className="mt-1" />
+            <Label htmlFor="my-test-expected" className="text-xs">
+              Resultado esperado
+            </Label>
+            <Input
+              id="my-test-expected"
+              value={expected}
+              onChange={(e) => setExpected(e.target.value)}
+              placeholder="Critério que será comparado ao resultado real"
+              className="mt-1"
+            />
           </div>
         </div>
         <Button size="sm" className="mt-3" onClick={create}>
           <TestTube2 className="mr-2 h-4 w-4" aria-hidden="true" />
           Criar teste candidato
         </Button>
-        <p className="mt-2 text-[10px] text-muted-foreground">Persistência desta candidata: local da sessão. Runner externo continua NOT_CONNECTED.</p>
+        <p className="mt-2 text-[10px] text-muted-foreground">
+          Persistência desta candidata: local da sessão. Runner externo continua NOT_CONNECTED.
+        </p>
       </Panel>
       <Panel title="Meus Testes · sessão atual">
         <div className="space-y-2">
-          {localTests.length ? localTests.map((test) => (
-            <div key={test.id} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="font-mono text-[9px]">{test.id}</Badge>
-                <span className="min-w-0 flex-1 text-sm font-semibold">{test.title}</span>
-                <TruthPill truth={test.truth} />
+          {localTests.length ? (
+            localTests.map((test) => (
+              <div key={test.id} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className="font-mono text-[9px]">
+                    {test.id}
+                  </Badge>
+                  <span className="min-w-0 flex-1 text-sm font-semibold">{test.title}</span>
+                  <TruthPill truth={test.truth} />
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Objeto: {test.object} · baseline {test.baseline}
+                </p>
+                <p className="mt-1 text-xs">{test.objective}</p>
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">Objeto: {test.object} · baseline {test.baseline}</p>
-              <p className="mt-1 text-xs">{test.objective}</p>
-            </div>
-          )) : (
-            <p className="text-sm text-muted-foreground">Nenhum teste personalizado criado nesta sessão.</p>
+            ))
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Nenhum teste personalizado criado nesta sessão.
+            </p>
           )}
         </div>
       </Panel>
       <Panel title="Schema completo de Meus Testes">
         <div className="flex flex-wrap gap-1">
           {MY_TEST_FIELDS.map((field) => (
-            <Badge key={field} variant="outline" className="font-mono text-[9px]">{field}</Badge>
+            <Badge key={field} variant="outline" className="font-mono text-[9px]">
+              {field}
+            </Badge>
           ))}
         </div>
       </Panel>
@@ -676,7 +759,10 @@ function ValidationScreen() {
       <Panel title="Validation pré-execução">
         <div className="grid gap-2 md:grid-cols-2">
           {checks.map(([label, truth]) => (
-            <div key={label} className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3">
+            <div
+              key={label}
+              className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3"
+            >
               <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
               <span className="min-w-0 flex-1 text-xs">{label}</span>
               <TruthPill truth={truth} />
@@ -693,7 +779,8 @@ function ValidationScreen() {
           ))}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          PASS exige oracle satisfeito + Evidence Pack + versão/hash + integridade. Aprovação do gate não promove automaticamente.
+          PASS exige oracle satisfeito + Evidence Pack + versão/hash + integridade. Aprovação do
+          gate não promove automaticamente.
         </p>
       </Panel>
     </div>
@@ -724,7 +811,11 @@ function GenericScreen({
                   <div className="absolute inset-4 rotate-12 rounded-3xl border border-primary/40 bg-primary/5 shadow-[0_0_60px_oklch(0.7_0.15_220/0.15)]" />
                   <div className="absolute inset-4 -rotate-12 rounded-3xl border border-violet/40 bg-violet/5" />
                   <div className="absolute inset-10 flex items-center justify-center rounded-2xl border border-border/60 bg-card/90">
-                    <OwnerOfficialIcon code="OWNER-ICO-003" className="h-20 w-20" decorative={false} />
+                    <OwnerOfficialIcon
+                      code="OWNER-ICO-003"
+                      className="h-20 w-20"
+                      decorative={false}
+                    />
                   </div>
                 </div>
               </div>
@@ -737,7 +828,10 @@ function GenericScreen({
                   ["Evidence", "proveniência vinculada"],
                   ["Truth-state", "SYNTHETIC / MEASURED / NOT_VERIFIED"],
                 ].map(([title, text]) => (
-                  <div key={title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                  <div
+                    key={title}
+                    className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
+                  >
                     <p className="text-xs font-semibold">{title}</p>
                     <p className="mt-1 text-[11px] text-muted-foreground">{text}</p>
                   </div>
@@ -766,15 +860,44 @@ function GenericScreen({
         <div className="grid gap-4 xl:grid-cols-2">
           <Panel title="Fontes de dados">
             <div className="grid gap-2 sm:grid-cols-2">
-              {["REAL autorizado", "SYNTHETIC", "EXTERNAL", "DERIVED", "NOT_VERIFIED", "Replay histórico"].map((item) => (
-                <div key={item} className="rounded-xl border border-border/50 bg-surface-1/40 p-3 text-xs">{item}</div>
+              {[
+                "REAL autorizado",
+                "SYNTHETIC",
+                "EXTERNAL",
+                "DERIVED",
+                "NOT_VERIFIED",
+                "Replay histórico",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-xl border border-border/50 bg-surface-1/40 p-3 text-xs"
+                >
+                  {item}
+                </div>
               ))}
             </div>
           </Panel>
           <Panel title="Escala & mídia">
             <div className="flex flex-wrap gap-1">
-              {["30", "300", "30.000", "30 milhões", "customizada", "XLSX", "CSV", "JSON", "PDF", "DOCX", "imagem", "áudio", "vídeo", "telemetria"].map((item) => (
-                <Badge key={item} variant="outline" className="text-[10px]">{item}</Badge>
+              {[
+                "30",
+                "300",
+                "30.000",
+                "30 milhões",
+                "customizada",
+                "XLSX",
+                "CSV",
+                "JSON",
+                "PDF",
+                "DOCX",
+                "imagem",
+                "áudio",
+                "vídeo",
+                "telemetria",
+              ].map((item) => (
+                <Badge key={item} variant="outline" className="text-[10px]">
+                  {item}
+                </Badge>
               ))}
             </div>
           </Panel>
@@ -789,19 +912,37 @@ function GenericScreen({
                 <button
                   key={arm}
                   type="button"
-                  onClick={() => onLog(`Braço ${arm} selecionado localmente para configuração. Nenhuma execução foi iniciada.`)}
+                  onClick={() =>
+                    onLog(
+                      `Braço ${arm} selecionado localmente para configuração. Nenhuma execução foi iniciada.`,
+                    )
+                  }
                   className="rounded-xl border border-border/60 bg-card/70 p-4 text-center outline-none hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <p className="font-display text-2xl font-semibold">{arm}</p>
-                  <p className="mt-1 text-[10px] text-muted-foreground">{arm === "SAFE" ? "rota controlada" : "braço experimental"}</p>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {arm === "SAFE" ? "rota controlada" : "braço experimental"}
+                  </p>
                 </button>
               ))}
             </div>
           </Panel>
           <Panel title="Modos de runtime">
             <div className="flex flex-wrap gap-2">
-              {["Runtime A", "Runtime B", "Runtime C", "Shadow", "Dry Run", "Replay", "Sandbox", "Mock", "Canary"].map((item) => (
-                <Badge key={item} variant="outline">{item}</Badge>
+              {[
+                "Runtime A",
+                "Runtime B",
+                "Runtime C",
+                "Shadow",
+                "Dry Run",
+                "Replay",
+                "Sandbox",
+                "Mock",
+                "Canary",
+              ].map((item) => (
+                <Badge key={item} variant="outline">
+                  {item}
+                </Badge>
               ))}
             </div>
           </Panel>
@@ -899,7 +1040,9 @@ function GenericScreen({
               <div key={title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
                 <p className="text-xs font-semibold">{title}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{detail}</p>
-                <Badge variant="outline" className="mt-2 text-[9px]">{state}</Badge>
+                <Badge variant="outline" className="mt-2 text-[9px]">
+                  {state}
+                </Badge>
               </div>
             ))}
           </div>
@@ -925,7 +1068,9 @@ function GenericScreen({
             ].map((lens) => (
               <div key={lens} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
                 <p className="text-xs font-semibold">{lens}</p>
-                <p className="mt-1 text-[10px] text-muted-foreground">Recomenda e desafia; não promove nem sobrescreve evidência.</p>
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  Recomenda e desafia; não promove nem sobrescreve evidência.
+                </p>
               </div>
             ))}
           </div>
@@ -936,7 +1081,11 @@ function GenericScreen({
         <div className="grid gap-4 xl:grid-cols-4">
           {[
             { title: "CURRENT", text: "versão efetiva vigente", truth: "IMPLEMENTED_VERIFIED" },
-            { title: "PINNED", text: "snapshot exato para evidência/replay", truth: "IMPLEMENTED_VERIFIED" },
+            {
+              title: "PINNED",
+              text: "snapshot exato para evidência/replay",
+              truth: "IMPLEMENTED_VERIFIED",
+            },
             { title: "FROZEN", text: "baseline congelada", truth: "IMPLEMENTED_VERIFIED" },
             { title: "CANDIDATE", text: "mudança ainda não promovida", truth: "PARTIAL" },
           ].map((item) => (
@@ -953,15 +1102,28 @@ function GenericScreen({
           <div className="space-y-2">
             {[
               { title: "Reteste LAB V0.9", trigger: "quando build mudar", state: "PLANNED" },
-              { title: "Drift check IA / Gateway", trigger: "após mudança de provider/modelo", state: "PLANNED" },
-              { title: "Revalidação Research Scout", trigger: "quando conectar fonte", state: "WAITING_CONNECTION" },
+              {
+                title: "Drift check IA / Gateway",
+                trigger: "após mudança de provider/modelo",
+                state: "PLANNED",
+              },
+              {
+                title: "Revalidação Research Scout",
+                trigger: "quando conectar fonte",
+                state: "WAITING_CONNECTION",
+              },
               { title: "Evidence expiry", trigger: "por versão/política", state: "PLANNED" },
             ].map((item) => (
-              <div key={item.title} className="flex flex-wrap items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3">
+              <div
+                key={item.title}
+                className="flex flex-wrap items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3"
+              >
                 <History className="h-4 w-4 text-primary" aria-hidden="true" />
                 <span className="min-w-0 flex-1 text-xs font-semibold">{item.title}</span>
                 <span className="text-[10px] text-muted-foreground">{item.trigger}</span>
-                <Badge variant="outline" className="text-[9px]">{item.state}</Badge>
+                <Badge variant="outline" className="text-[9px]">
+                  {item.state}
+                </Badge>
               </div>
             ))}
           </div>
@@ -973,11 +1135,17 @@ function GenericScreen({
           <div className="space-y-2">
             {[
               ["20/09/2026", "LAB V0.9 iniciado a partir do CORE oficial; 21 telas recuperadas."],
-              ["16/09/2026", "V0.8 consolidou fluxo pergunta → teste → arquitetura → objeto → validation."],
+              [
+                "16/09/2026",
+                "V0.8 consolidou fluxo pergunta → teste → arquitetura → objeto → validation.",
+              ],
               ["15/09/2026", "V0.7 adicionou leitura Essencial / Intermediário / Técnico."],
               ["10/09/2026", "LAB consolidou Testes + Validation + Métricas."],
             ].map(([date, text]) => (
-              <div key={date} className="grid gap-1 rounded-xl border border-border/50 bg-surface-1/40 p-3 sm:grid-cols-[120px_1fr]">
+              <div
+                key={date}
+                className="grid gap-1 rounded-xl border border-border/50 bg-surface-1/40 p-3 sm:grid-cols-[120px_1fr]"
+              >
                 <p className="font-mono text-[10px] text-muted-foreground">{date}</p>
                 <p className="text-xs">{text}</p>
               </div>
@@ -990,13 +1158,29 @@ function GenericScreen({
         <div className="grid gap-4 xl:grid-cols-2">
           <Panel title="Controles obrigatórios">
             <div className="flex flex-wrap gap-1">
-              {["RBAC", "Tenant isolation", "Secrets", "Consentimento", "Integridade", "LGPD", "Logs", "Assinatura", "Hash", "Authorization Gate"].map((item) => (
-                <Badge key={item} variant="outline">{item}</Badge>
+              {[
+                "RBAC",
+                "Tenant isolation",
+                "Secrets",
+                "Consentimento",
+                "Integridade",
+                "LGPD",
+                "Logs",
+                "Assinatura",
+                "Hash",
+                "Authorization Gate",
+              ].map((item) => (
+                <Badge key={item} variant="outline">
+                  {item}
+                </Badge>
               ))}
             </div>
           </Panel>
           <Panel title="Regra">
-            <p className="text-sm text-muted-foreground">Declaração em UI não prova enforcement server-side. Resultado técnico exige trilha de identidade, permissão e evidência.</p>
+            <p className="text-sm text-muted-foreground">
+              Declaração em UI não prova enforcement server-side. Resultado técnico exige trilha de
+              identidade, permissão e evidência.
+            </p>
           </Panel>
         </div>
       );
@@ -1008,13 +1192,19 @@ function GenericScreen({
               <TriangleAlert className="h-5 w-5 text-warning" aria-hidden="true" />
               <div>
                 <p className="font-semibold">Pergunta de confiança</p>
-                <p className="mt-1 text-sm text-muted-foreground">O LAB consegue encontrar um erro que sabemos que existe?</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  O LAB consegue encontrar um erro que sabemos que existe?
+                </p>
               </div>
             </div>
             <Button
               size="sm"
               className="mt-4"
-              onClick={() => onLog("Self-test local executado: estrutura validada; seeded defect runtime permanece NOT_CONNECTED.")}
+              onClick={() =>
+                onLog(
+                  "Self-test local executado: estrutura validada; seeded defect runtime permanece NOT_CONNECTED.",
+                )
+              }
             >
               <Play className="mr-2 h-4 w-4" aria-hidden="true" />
               Rodar self-test local
@@ -1028,12 +1218,31 @@ function GenericScreen({
           <Panel title="Resultado Geral · síntese final">
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {[
-                { label: "Telas canônicas", value: String(LAB_FACTS.screenCount), truth: "IMPLEMENTED_VERIFIED" },
-                { label: "Teorias mapeadas", value: String(LAB_FACTS.theoryCount), truth: "PARTIAL" },
-                { label: "Intakes de pesquisa", value: String(LAB_FACTS.researchCount), truth: "NOT_CONNECTED" },
-                { label: "Oportunidades radar", value: String(LAB_FACTS.radarCount), truth: "PARTIAL" },
+                {
+                  label: "Telas canônicas",
+                  value: String(LAB_FACTS.screenCount),
+                  truth: "IMPLEMENTED_VERIFIED",
+                },
+                {
+                  label: "Teorias mapeadas",
+                  value: String(LAB_FACTS.theoryCount),
+                  truth: "PARTIAL",
+                },
+                {
+                  label: "Intakes de pesquisa",
+                  value: String(LAB_FACTS.researchCount),
+                  truth: "NOT_CONNECTED",
+                },
+                {
+                  label: "Oportunidades radar",
+                  value: String(LAB_FACTS.radarCount),
+                  truth: "PARTIAL",
+                },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                <div
+                  key={item.label}
+                  className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
+                >
                   <p className="text-[10px] uppercase text-muted-foreground">{item.label}</p>
                   <p className="mt-1 font-display text-2xl font-semibold">{item.value}</p>
                   <TruthPill truth={item.truth} />
@@ -1044,7 +1253,9 @@ function GenericScreen({
           <MetricCharts />
           <Panel title="Conclusão governada">
             <p className="text-sm text-muted-foreground">
-              Resultado Geral consolida somente fontes exibidas nas telas anteriores. NOT_VERIFIED e NOT_CONNECTED permanecem pendentes; nenhuma oportunidade, teoria ou score promove uma mudança.
+              Resultado Geral consolida somente fontes exibidas nas telas anteriores. NOT_VERIFIED e
+              NOT_CONNECTED permanecem pendentes; nenhuma oportunidade, teoria ou score promove uma
+              mudança.
             </p>
           </Panel>
         </div>
@@ -1054,11 +1265,7 @@ function GenericScreen({
   }
 }
 
-export function LabMasterView({
-  initialSection = "lab",
-}: {
-  initialSection?: LabScreenKey;
-}) {
+export function LabMasterView({ initialSection = "lab" }: { initialSection?: LabScreenKey }) {
   const [screenKey, setScreenKey] = useState<LabScreenKey>(initialSection);
   const [reading, setReading] = useState<LabReadingLevel>("essential");
   const [dataMode, setDataMode] = useState<DataMode>("all");
@@ -1067,7 +1274,8 @@ export function LabMasterView({
   const [sessionLog, setSessionLog] = useState<string[]>([]);
   const [question, setQuestion] = useState("");
 
-  const screen = LAB_CANONICAL_SCREENS.find((item) => item.key === screenKey) ?? LAB_CANONICAL_SCREENS[0]!;
+  const screen =
+    LAB_CANONICAL_SCREENS.find((item) => item.key === screenKey) ?? LAB_CANONICAL_SCREENS[0]!;
 
   const criticalCount = useMemo(
     () => EVOLUTION_ROWS.filter((row) => row.priority === "P0" || row.priority === "P1").length,
@@ -1075,7 +1283,9 @@ export function LabMasterView({
   );
 
   const addLog = (text: string) => {
-    setSessionLog((current) => [`${new Date().toLocaleString("pt-BR")} — ${text}`, ...current].slice(0, 20));
+    setSessionLog((current) =>
+      [`${new Date().toLocaleString("pt-BR")} — ${text}`, ...current].slice(0, 20),
+    );
   };
 
   const sendRadar = (id: string) => {
@@ -1096,7 +1306,10 @@ export function LabMasterView({
         right={
           <>
             <DemoBadge label="V0.9 · 21 TELAS RECUPERADAS" />
-            <TruthBadge truth="NOT_CONNECTED" hint="Runners/fontes externas dependem de conexão real" />
+            <TruthBadge
+              truth="NOT_CONNECTED"
+              hint="Runners/fontes externas dependem de conexão real"
+            />
           </>
         }
       />
@@ -1115,7 +1328,10 @@ export function LabMasterView({
               <p className="text-[10px] text-muted-foreground">V0.7 + V0.8 + evolução</p>
             </div>
           </div>
-          <nav className="max-h-[72vh] space-y-1 overflow-y-auto pr-1" aria-label="Telas do LAMOU LABTEST">
+          <nav
+            className="max-h-[72vh] space-y-1 overflow-y-auto pr-1"
+            aria-label="Telas do LAMOU LABTEST"
+          >
             {LAB_CANONICAL_SCREENS.map((item) => (
               <button
                 key={item.key}
@@ -1142,16 +1358,22 @@ export function LabMasterView({
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-primary/15 text-primary hover:bg-primary/15">{screen.index}</Badge>
+                  <Badge className="bg-primary/15 text-primary hover:bg-primary/15">
+                    {screen.index}
+                  </Badge>
                   <Badge variant="outline">{screen.label}</Badge>
-                  <Badge variant="outline" className="border-warning/40 text-warning">SALVAR ≠ PROMOVER</Badge>
+                  <Badge variant="outline" className="border-warning/40 text-warning">
+                    SALVAR ≠ PROMOVER
+                  </Badge>
                 </div>
                 <h1 className="mt-3 font-display text-2xl font-semibold">{screen.label}</h1>
                 <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{screen.simple}</p>
               </div>
               <div className="flex gap-2">
                 <Badge variant="outline">{reading.toUpperCase()}</Badge>
-                <Badge variant="outline">{dataMode === "all" ? "TODOS" : `CRÍTICOS · ${criticalCount}`}</Badge>
+                <Badge variant="outline">
+                  {dataMode === "all" ? "TODOS" : `CRÍTICOS · ${criticalCount}`}
+                </Badge>
               </div>
             </div>
           </div>
@@ -1163,7 +1385,9 @@ export function LabMasterView({
               <Panel title="LAB FIRST · escolha a pergunta">
                 <div className="grid gap-3 lg:grid-cols-[1fr_auto]">
                   <div>
-                    <Label htmlFor="lab-question" className="text-xs">O que você quer investigar?</Label>
+                    <Label htmlFor="lab-question" className="text-xs">
+                      O que você quer investigar?
+                    </Label>
                     <Input
                       id="lab-question"
                       value={question}
@@ -1190,10 +1414,21 @@ export function LabMasterView({
                 <div className="mt-4 grid gap-2 md:grid-cols-3">
                   {[
                     ["PASSO 1", "Escolha a pergunta", "Problema, hipótese ou comparação."],
-                    ["PASSO 2", "Abra a evidência", "Teste, banco, simulação, estudo ou histórico."],
-                    ["PASSO 3", "Conclua no final", "Validation + Métricas + Comparar + Resultado Geral."],
+                    [
+                      "PASSO 2",
+                      "Abra a evidência",
+                      "Teste, banco, simulação, estudo ou histórico.",
+                    ],
+                    [
+                      "PASSO 3",
+                      "Conclua no final",
+                      "Validation + Métricas + Comparar + Resultado Geral.",
+                    ],
                   ].map(([step, title, text]) => (
-                    <div key={step} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                    <div
+                      key={step}
+                      className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
+                    >
                       <p className="font-mono text-[9px] text-primary">{step}</p>
                       <p className="mt-1 text-xs font-semibold">{title}</p>
                       <p className="mt-1 text-[11px] text-muted-foreground">{text}</p>
@@ -1204,11 +1439,36 @@ export function LabMasterView({
 
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
                 {[
-                  { title: "Planilhão", subtitle: "Hoje → 10 → 15", icon: Gauge, key: "metrics" as LabScreenKey },
-                  { title: "Teorias", subtitle: "Ideia → hipótese → evidência", icon: Network, key: "architectures" as LabScreenKey },
-                  { title: "Pesquisas", subtitle: "Descoberta → fit → contradição", icon: Microscope, key: "evidence" as LabScreenKey },
-                  { title: "Radar", subtitle: "Sinal → oportunidade → teste", icon: RadarIcon, key: "evidence" as LabScreenKey },
-                  { title: "Evolução", subtitle: "Baseline → mudança → resultado", icon: Sparkles, key: "compare" as LabScreenKey },
+                  {
+                    title: "Planilhão",
+                    subtitle: "Hoje → 10 → 15",
+                    icon: Gauge,
+                    key: "metrics" as LabScreenKey,
+                  },
+                  {
+                    title: "Teorias",
+                    subtitle: "Ideia → hipótese → evidência",
+                    icon: Network,
+                    key: "architectures" as LabScreenKey,
+                  },
+                  {
+                    title: "Pesquisas",
+                    subtitle: "Descoberta → fit → contradição",
+                    icon: Microscope,
+                    key: "evidence" as LabScreenKey,
+                  },
+                  {
+                    title: "Radar",
+                    subtitle: "Sinal → oportunidade → teste",
+                    icon: RadarIcon,
+                    key: "evidence" as LabScreenKey,
+                  },
+                  {
+                    title: "Evolução",
+                    subtitle: "Baseline → mudança → resultado",
+                    icon: Sparkles,
+                    key: "compare" as LabScreenKey,
+                  },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
@@ -1245,8 +1505,16 @@ export function LabMasterView({
               <Panel title="Planilhão Mestre · Estado & Evolução">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   <div className="relative min-w-[240px] flex-1">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-                    <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar item, tipo, situação, evolução..." className="pl-9" />
+                    <Search
+                      className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    <Input
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Buscar item, tipo, situação, evolução..."
+                      className="pl-9"
+                    />
                   </div>
                   <Badge variant="outline">fonte: Planilhão + reconciliação LAB</Badge>
                 </div>
@@ -1271,7 +1539,9 @@ export function LabMasterView({
             <Panel title="Registro local desta sessão">
               <div className="space-y-1">
                 {sessionLog.map((entry, index) => (
-                  <p key={index} className="font-mono text-[10px] text-muted-foreground">{entry}</p>
+                  <p key={index} className="font-mono text-[10px] text-muted-foreground">
+                    {entry}
+                  </p>
                 ))}
               </div>
             </Panel>

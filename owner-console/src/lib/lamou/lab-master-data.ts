@@ -45,7 +45,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "SOL permanece referência operacional; LUA concentra experiências e candidates.",
     pending: "Runners externos e conectores de pesquisa permanecem dependentes de binding real.",
     next: "Escolha uma família, um objeto e uma pergunta de teste.",
-    technical: "Orquestra identidade do teste, baseline, target, evidence lineage e handoff ao Validation Gate.",
+    technical:
+      "Orquestra identidade do teste, baseline, target, evidence lineage e handoff ao Validation Gate.",
   },
   {
     key: "testes",
@@ -56,18 +57,21 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Existem suites funcionais, industriais, CORE Cubo, segurança, IA, UAT e regressão.",
     pending: "Nem todos os testes possuem runner real ou evidência de produção.",
     next: "Abra um teste existente ou crie um novo em Meus Testes.",
-    technical: "Test schema inclui target, objective, questions, criteria, baseline, metrics, evidence, version e truth-state.",
+    technical:
+      "Test schema inclui target, objective, questions, criteria, baseline, metrics, evidence, version e truth-state.",
   },
   {
     key: "validation",
     index: "03",
     label: "Validation",
-    simple: "Confere se o teste está pronto antes de rodar e se a evidência sustenta a conclusão depois.",
+    simple:
+      "Confere se o teste está pronto antes de rodar e se a evidência sustenta a conclusão depois.",
     why: "Evita PASS falso, target errado, evidência incompleta ou resultado sem integridade.",
     known: "G0–G11, Evidence Requirements e gates já fazem parte da arquitetura.",
     pending: "Gate executável depende do runner e repositório de evidências conectados.",
     next: "Cheque baseline, oracle, versão, evidência obrigatória e reverse path.",
-    technical: "Pre-run + post-run, target/version/hash binding, rerun independente e Evidence Pack.",
+    technical:
+      "Pre-run + post-run, target/version/hash binding, rerun independente e Evidence Pack.",
   },
   {
     key: "cube",
@@ -75,32 +79,39 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     label: "Cubo Mágico",
     simple: "Visão multidimensional do mesmo conjunto de dados e relações.",
     why: "Permite testar se outra organização melhora recuperação, contexto, rastreabilidade ou decisão.",
-    known: "Existe como arquitetura experimental isolada em LUA e possui benchmark local sintético.",
+    known:
+      "Existe como arquitetura experimental isolada em LUA e possui benchmark local sintético.",
     pending: "Não existe promoção automática nem superioridade universal comprovada.",
     next: "Compare com o baseline usando a mesma entrada, oracle e janela.",
-    technical: "Working-set retrieval, células, caminho, ranking, lineage, tenant isolation e mídia referenciada.",
+    technical:
+      "Working-set retrieval, células, caminho, ranking, lineage, tenant isolation e mídia referenciada.",
   },
   {
     key: "architectures",
     index: "05",
     label: "Arquiteturas LAB",
-    simple: "Compare formas diferentes de organizar e recuperar estado sem contaminar o CORE oficial.",
+    simple:
+      "Compare formas diferentes de organizar e recuperar estado sem contaminar o CORE oficial.",
     why: "Uma arquitetura pode melhorar uma métrica e piorar outra; o LAB precisa mostrar trade-offs.",
-    known: "Planilha/Standard, Cubo, Cubo Mágico, Prisma, Snapshot, Fantasma, Relação, Caleidoscópio e Pirâmide.",
+    known:
+      "Planilha/Standard, Cubo, Cubo Mágico, Prisma, Snapshot, Fantasma, Relação, Caleidoscópio e Pirâmide.",
     pending: "Família integrada só deve ser testada depois de ablações suficientes.",
     next: "Escolha baseline e uma única mudança arquitetural.",
-    technical: "One-change-at-a-time, ablation sequence, same oracle/window/input, delta + evidence.",
+    technical:
+      "One-change-at-a-time, ablation sequence, same oracle/window/input, delta + evidence.",
   },
   {
     key: "database",
     index: "06",
     label: "Banco de Dados",
-    simple: "Escolha quais dados o teste usa e deixe claro se são reais, sintéticos, externos ou derivados.",
+    simple:
+      "Escolha quais dados o teste usa e deixe claro se são reais, sintéticos, externos ou derivados.",
     why: "Resultado só é interpretável quando origem, escala, versão e proveniência do dado são conhecidas.",
     known: "Fixtures sintéticas e datasets locais já existem.",
     pending: "Fontes reais autorizadas variam por ambiente e não podem ser presumidas.",
     next: "Selecione fonte, escala, mídia, seed e versão.",
-    technical: "Dataset ID, hash, provenance, consent, tenant scope, schema/version e replay lineage.",
+    technical:
+      "Dataset ID, hash, provenance, consent, tenant scope, schema/version e replay lineage.",
   },
   {
     key: "simulations",
@@ -111,7 +122,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "A/B/C/D-SAFE, shadow, dry-run, mock e replay fazem parte do modelo.",
     pending: "Fault injection em produção exige autorização explícita e ambiente apropriado.",
     next: "Defina cenário, falha, seed, cleanup e reverse path.",
-    technical: "Sandbox-first, deterministic seeds, fault catalog, SAFE route and reproducible cleanup.",
+    technical:
+      "Sandbox-first, deterministic seeds, fault catalog, SAFE route and reproducible cleanup.",
   },
   {
     key: "personas",
@@ -122,7 +134,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Teste³ IA, Persona Lab e Quest 360 fazem parte do ecossistema.",
     pending: "Persona sintética nunca representa automaticamente uma pessoa real.",
     next: "Selecione papéis, jornada, contexto e tipo de avaliação.",
-    technical: "Persona provenance, synthetic/real separation, tasks, journey, segmentation and UAT evidence.",
+    technical:
+      "Persona provenance, synthetic/real separation, tasks, journey, segmentation and UAT evidence.",
   },
   {
     key: "evidence",
@@ -133,7 +146,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Research Scout possui work order de matching e handoff para o LAB.",
     pending: "Monitoramento externo contínuo depende de fontes conectadas.",
     next: "Adicione conhecimento, classifique a fonte e vincule a uma hipótese/teste.",
-    technical: "Evidence provenance, EXTERNAL vs MEASURED, source quality, DOI/URL, snapshot/hash when permitted.",
+    technical:
+      "Evidence provenance, EXTERNAL vs MEASURED, source quality, DOI/URL, snapshot/hash when permitted.",
   },
   {
     key: "metrics",
@@ -141,10 +155,12 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     label: "Métricas & Analytics",
     simple: "Meça resultado técnico, científico e eficácia do próprio teste.",
     why: "Sem métrica, melhoria vira impressão.",
-    known: "Efetividade, eficiência, eficácia, reality alignment, risco e cobertura de evidência estão definidos.",
+    known:
+      "Efetividade, eficiência, eficácia, reality alignment, risco e cobertura de evidência estão definidos.",
     pending: "Algumas métricas só podem ser calculadas quando houver dados medidos.",
     next: "Escolha métrica primária, secundárias, baseline, unidade e tolerância.",
-    technical: "p50/p95/p99, precision/recall/F1, drift, false PASS/FAIL, throughput, cost and reproducibility.",
+    technical:
+      "p50/p95/p99, precision/recall/F1, drift, false PASS/FAIL, throughput, cost and reproducibility.",
   },
   {
     key: "model",
@@ -155,7 +171,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Baseline simples e uma mudança por vez são as regras preferenciais.",
     pending: "Experimentos multifatoriais precisam justificar desenho e poder estatístico.",
     next: "Defina variável, controle, oracle, amostra, janela e ablação.",
-    technical: "A/B/C/D-SAFE, ablation, replay, paired comparison, DOE quando justificado e falsification criteria.",
+    technical:
+      "A/B/C/D-SAFE, ablation, replay, paired comparison, DOE quando justificado e falsification criteria.",
   },
   {
     key: "compare",
@@ -166,7 +183,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "SOL × LUA e arquiteturas experimentais possuem contrato de comparação.",
     pending: "Comparação real depende de mesmas entradas, versões e métricas.",
     next: "Fixe baseline, selecione braço e escolha métricas.",
-    technical: "Same input/oracle/window, delta, confidence, trade-off matrix and evidence references.",
+    technical:
+      "Same input/oracle/window, delta, confidence, trade-off matrix and evidence references.",
   },
   {
     key: "prediction",
@@ -177,7 +195,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Lead time, misses, false alarms, drift e calibração estão previstos.",
     pending: "Previsão nunca deve aparecer como fato observado.",
     next: "Defina janela, threshold, custo do falso alerta e custo do miss.",
-    technical: "Calibration, precision/recall over time, drift, lead-time distribution and uncertainty.",
+    technical:
+      "Calibration, precision/recall over time, drift, lead-time distribution and uncertainty.",
   },
   {
     key: "campaigns",
@@ -196,10 +215,12 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     label: "Conselho Profissional",
     simple: "Use especialistas diferentes para desafiar método, risco, dado e interpretação.",
     why: "Cada lente encontra um tipo de falha que outra pode não perceber.",
-    known: "Produto, software, UX, dados, QA, segurança, pesquisa e pedagogia já possuem checklists locais.",
+    known:
+      "Produto, software, UX, dados, QA, segurança, pesquisa e pedagogia já possuem checklists locais.",
     pending: "Provider externo do Conselho não deve ser fingido como conectado.",
     next: "Escolha as lentes adequadas ao risco do teste.",
-    technical: "Council recommends; never overwrites oracle, evidence, truth-state or promotion gate.",
+    technical:
+      "Council recommends; never overwrites oracle, evidence, truth-state or promotion gate.",
   },
   {
     key: "registry",
@@ -210,7 +231,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "CURRENT, PINNED, FROZEN e CANDIDATE fazem parte da governança.",
     pending: "Bindings físicos precisam ser comprovados em cada consumidor.",
     next: "Fixe versão, hash e documento usado no teste.",
-    technical: "Canonical ID stable; location/filename mutable; evidence always references pinned versions.",
+    technical:
+      "Canonical ID stable; location/filename mutable; evidence always references pinned versions.",
   },
   {
     key: "scheduler",
@@ -232,7 +254,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Replay e snapshots fazem parte da arquitetura.",
     pending: "Persistência multiusuário precisa de backend auditável.",
     next: "Abra uma execução e reproduza configuração, versão e dataset.",
-    technical: "Append-only history, run identity, evidence lineage, replay contract and immutable snapshots.",
+    technical:
+      "Append-only history, run identity, evidence lineage, replay contract and immutable snapshots.",
   },
   {
     key: "audit",
@@ -243,7 +266,8 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "RBAC, tenant isolation, secrets, LGPD e hashes fazem parte do modelo.",
     pending: "Declaração de UI não substitui enforcement server-side.",
     next: "Cheque acesso, tenant, segredo, consentimento, hash e auditoria.",
-    technical: "Identity, authorization, tenant scope, evidence integrity, immutable logs and policy enforcement.",
+    technical:
+      "Identity, authorization, tenant scope, evidence integrity, immutable logs and policy enforcement.",
   },
   {
     key: "self",
@@ -254,18 +278,21 @@ export const LAB_CANONICAL_SCREENS: LabScreenSpec[] = [
     known: "Seeded defects, false PASS e false FAIL estão definidos.",
     pending: "Meta-validation dinâmica completa depende de runners reais.",
     next: "Plante falha conhecida em sandbox e confira detecção.",
-    technical: "Reliability score is evidence-dependent; seeded defect miss must reduce confidence.",
+    technical:
+      "Reliability score is evidence-dependent; seeded defect miss must reduce confidence.",
   },
   {
     key: "result",
     index: "21",
     label: "Resultado Geral",
-    simple: "Síntese final do que foi provado, falhou, ficou pendente e precisa ser testado depois.",
+    simple:
+      "Síntese final do que foi provado, falhou, ficou pendente e precisa ser testado depois.",
     why: "Conclusão sem trilha de evidência vira opinião.",
     known: "Resultado Geral é view derivada, nunca source-of-truth primário.",
     pending: "NOT_VERIFIED continua pendente mesmo se indicadores positivos existirem.",
     next: "Use somente depois de abrir evidências, métricas, Validation e comparação.",
-    technical: "Aggregates run/evidence/findings/trade-offs/retest/efficacy without mutating source truth.",
+    technical:
+      "Aggregates run/evidence/findings/trade-offs/retest/efficacy without mutating source truth.",
   },
 ];
 
