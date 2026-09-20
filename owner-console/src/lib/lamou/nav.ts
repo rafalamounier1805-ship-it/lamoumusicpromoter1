@@ -44,8 +44,8 @@ export const OWNER_MENU: NavItem[] = [
 /** LABTEST — superfície única de criação, desenvolvimento, teste, homologação
  *  e pré-promoção. Substitui o antigo "LAB". */
 export const LABTEST_MENU: NavItem[] = [
-  { to: "/labtest", label: "Visão Geral & Ambientes de Teste", icon: FlaskConical },
-  { to: "/labtest/next", label: "Próxima Versão / Fila de Promoção", icon: Rocket },
+  { to: "/labtest", label: "LAB · 21 telas canônicas", icon: FlaskConical },
+  { to: "/labtest/next", label: "Programados · Retestes · Fila", icon: Rocket },
 ];
 
 /** CORE — operação técnica corrente. MENU CANÔNICO: exatamente 9 itens.
