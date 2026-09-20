@@ -811,12 +811,12 @@ function GenericScreen({
       return (
         <div className="grid gap-4 xl:grid-cols-3">
           {[
-            ["Teste³ IA", "simulação digital de workers/personas e cenários"],
-            ["Persona Lab", "perfil, contexto, jornada e comportamento sintético"],
-            ["Quest 360 / UAT", "perguntas, pesquisa e validação humana autorizada"],
-          ].map(([title, text]) => (
-            <Panel key={title} title={title}>
-              <p className="text-sm text-muted-foreground">{text}</p>
+            { title: "Teste³ IA", text: "simulação digital de workers/personas e cenários" },
+            { title: "Persona Lab", text: "perfil, contexto, jornada e comportamento sintético" },
+            { title: "Quest 360 / UAT", text: "perguntas, pesquisa e validação humana autorizada" },
+          ].map((item) => (
+            <Panel key={item.title} title={item.title}>
+              <p className="text-sm text-muted-foreground">{item.text}</p>
               <TruthPill truth="PARTIAL" />
             </Panel>
           ))}
@@ -935,14 +935,14 @@ function GenericScreen({
       return (
         <div className="grid gap-4 xl:grid-cols-4">
           {[
-            ["CURRENT", "versão efetiva vigente", "IMPLEMENTED_VERIFIED"],
-            ["PINNED", "snapshot exato para evidência/replay", "IMPLEMENTED_VERIFIED"],
-            ["FROZEN", "baseline congelada", "IMPLEMENTED_VERIFIED"],
-            ["CANDIDATE", "mudança ainda não promovida", "PARTIAL"],
-          ].map(([title, text, truth]) => (
-            <Panel key={title} title={title}>
-              <p className="text-sm text-muted-foreground">{text}</p>
-              <TruthPill truth={truth} />
+            { title: "CURRENT", text: "versão efetiva vigente", truth: "IMPLEMENTED_VERIFIED" },
+            { title: "PINNED", text: "snapshot exato para evidência/replay", truth: "IMPLEMENTED_VERIFIED" },
+            { title: "FROZEN", text: "baseline congelada", truth: "IMPLEMENTED_VERIFIED" },
+            { title: "CANDIDATE", text: "mudança ainda não promovida", truth: "PARTIAL" },
+          ].map((item) => (
+            <Panel key={item.title} title={item.title}>
+              <p className="text-sm text-muted-foreground">{item.text}</p>
+              <TruthPill truth={item.truth} />
             </Panel>
           ))}
         </div>
@@ -952,16 +952,16 @@ function GenericScreen({
         <Panel title="Programados / Scheduler">
           <div className="space-y-2">
             {[
-              ["Reteste LAB V0.9", "quando build mudar", "PLANNED"],
-              ["Drift check IA / Gateway", "após mudança de provider/modelo", "PLANNED"],
-              ["Revalidação Research Scout", "quando conectar fonte", "WAITING_CONNECTION"],
-              ["Evidence expiry", "por versão/política", "PLANNED"],
-            ].map(([title, trigger, state]) => (
-              <div key={title} className="flex flex-wrap items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3">
+              { title: "Reteste LAB V0.9", trigger: "quando build mudar", state: "PLANNED" },
+              { title: "Drift check IA / Gateway", trigger: "após mudança de provider/modelo", state: "PLANNED" },
+              { title: "Revalidação Research Scout", trigger: "quando conectar fonte", state: "WAITING_CONNECTION" },
+              { title: "Evidence expiry", trigger: "por versão/política", state: "PLANNED" },
+            ].map((item) => (
+              <div key={item.title} className="flex flex-wrap items-center gap-2 rounded-xl border border-border/50 bg-surface-1/40 p-3">
                 <History className="h-4 w-4 text-primary" aria-hidden="true" />
-                <span className="min-w-0 flex-1 text-xs font-semibold">{title}</span>
-                <span className="text-[10px] text-muted-foreground">{trigger}</span>
-                <Badge variant="outline" className="text-[9px]">{state}</Badge>
+                <span className="min-w-0 flex-1 text-xs font-semibold">{item.title}</span>
+                <span className="text-[10px] text-muted-foreground">{item.trigger}</span>
+                <Badge variant="outline" className="text-[9px]">{item.state}</Badge>
               </div>
             ))}
           </div>
@@ -1028,15 +1028,15 @@ function GenericScreen({
           <Panel title="Resultado Geral · síntese final">
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {[
-                ["Telas canônicas", String(LAB_FACTS.screenCount), "IMPLEMENTED_VERIFIED"],
-                ["Teorias mapeadas", String(LAB_FACTS.theoryCount), "PARTIAL"],
-                ["Intakes de pesquisa", String(LAB_FACTS.researchCount), "NOT_CONNECTED"],
-                ["Oportunidades radar", String(LAB_FACTS.radarCount), "PARTIAL"],
-              ].map(([label, value, truth]) => (
-                <div key={label} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
-                  <p className="text-[10px] uppercase text-muted-foreground">{label}</p>
-                  <p className="mt-1 font-display text-2xl font-semibold">{value}</p>
-                  <TruthPill truth={truth} />
+                { label: "Telas canônicas", value: String(LAB_FACTS.screenCount), truth: "IMPLEMENTED_VERIFIED" },
+                { label: "Teorias mapeadas", value: String(LAB_FACTS.theoryCount), truth: "PARTIAL" },
+                { label: "Intakes de pesquisa", value: String(LAB_FACTS.researchCount), truth: "NOT_CONNECTED" },
+                { label: "Oportunidades radar", value: String(LAB_FACTS.radarCount), truth: "PARTIAL" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+                  <p className="text-[10px] uppercase text-muted-foreground">{item.label}</p>
+                  <p className="mt-1 font-display text-2xl font-semibold">{item.value}</p>
+                  <TruthPill truth={item.truth} />
                 </div>
               ))}
             </div>
@@ -1204,23 +1204,26 @@ export function LabMasterView({
 
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
                 {[
-                  ["Planilhão", "Hoje → 10 → 15", Gauge, "metrics" as LabScreenKey],
-                  ["Teorias", "Ideia → hipótese → evidência", Network, "architectures" as LabScreenKey],
-                  ["Pesquisas", "Descoberta → fit → contradição", Microscope, "evidence" as LabScreenKey],
-                  ["Radar", "Sinal → oportunidade → teste", RadarIcon, "evidence" as LabScreenKey],
-                  ["Evolução", "Baseline → mudança → resultado", Sparkles, "compare" as LabScreenKey],
-                ].map(([title, subtitle, Icon, key]) => (
-                  <button
-                    key={title as string}
-                    type="button"
-                    onClick={() => jump(key as LabScreenKey)}
-                    className="rounded-2xl border border-border/60 bg-card/70 p-4 text-left outline-none transition hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
-                    <p className="mt-3 text-sm font-semibold">{title as string}</p>
-                    <p className="mt-1 text-[11px] text-muted-foreground">{subtitle as string}</p>
-                  </button>
-                ))}
+                  { title: "Planilhão", subtitle: "Hoje → 10 → 15", icon: Gauge, key: "metrics" as LabScreenKey },
+                  { title: "Teorias", subtitle: "Ideia → hipótese → evidência", icon: Network, key: "architectures" as LabScreenKey },
+                  { title: "Pesquisas", subtitle: "Descoberta → fit → contradição", icon: Microscope, key: "evidence" as LabScreenKey },
+                  { title: "Radar", subtitle: "Sinal → oportunidade → teste", icon: RadarIcon, key: "evidence" as LabScreenKey },
+                  { title: "Evolução", subtitle: "Baseline → mudança → resultado", icon: Sparkles, key: "compare" as LabScreenKey },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.title}
+                      type="button"
+                      onClick={() => jump(item.key)}
+                      className="rounded-2xl border border-border/60 bg-card/70 p-4 text-left outline-none transition hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                      <p className="mt-3 text-sm font-semibold">{item.title}</p>
+                      <p className="mt-1 text-[11px] text-muted-foreground">{item.subtitle}</p>
+                    </button>
+                  );
+                })}
               </div>
 
               <Panel title="Estado & Evolução · 10 → 15">
