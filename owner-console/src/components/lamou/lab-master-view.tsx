@@ -1,8 +1,6 @@
 import {
   Area,
   AreaChart,
-  Bar,
-  BarChart,
   CartesianGrid,
   PolarAngleAxis,
   PolarGrid,
@@ -16,16 +14,9 @@ import {
 import {
   ArrowRight,
   Beaker,
-  BookOpenCheck,
-  CheckCircle2,
   ChevronRight,
-  CircleHelp,
-  FlaskConical,
   Gauge,
-  GitCompareArrows,
   History,
-  Info,
-  Lightbulb,
   Microscope,
   Network,
   Play,
@@ -33,11 +24,10 @@ import {
   Search,
   ShieldCheck,
   Sparkles,
-  Target,
   TestTube2,
   TriangleAlert,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { OwnerOfficialIcon } from "@/components/lamou/owner-official-icon";
@@ -92,7 +82,6 @@ const RADAR_DATA = [
 
 const LAB_FACTS = {
   screenCount: LAB_CANONICAL_SCREENS.length,
-  itemCount: LT_ITEMS.length,
   theoryCount: THEORY_MAP.length,
   researchCount: RESEARCH_MAP.length,
   radarCount: RADAR_OPPORTUNITIES.length,
@@ -568,7 +557,7 @@ function TestsScreen({
   log,
 }: {
   localTests: LocalTest[];
-  setLocalTests: React.Dispatch<React.SetStateAction<LocalTest[]>>;
+  setLocalTests: Dispatch<SetStateAction<LocalTest[]>>;
   log: (text: string) => void;
 }) {
   const [title, setTitle] = useState("");
