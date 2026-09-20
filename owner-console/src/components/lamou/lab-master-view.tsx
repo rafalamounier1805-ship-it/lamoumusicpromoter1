@@ -1021,7 +1021,10 @@ function GenericScreen({
               { title: "Drift", text: "mudança de distribuição" },
               { title: "Calibração", text: "probabilidade vs frequência real" },
             ].map((item) => (
-              <div key={item.title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+              <div
+                key={item.title}
+                className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
+              >
                 <p className="text-xs font-semibold">{item.title}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{item.text}</p>
               </div>
@@ -1034,11 +1037,22 @@ function GenericScreen({
         <Panel title="Campanhas de teste">
           <div className="grid gap-3 md:grid-cols-3">
             {[
-              { title: "LAB V0.9 / 21 telas", detail: "8 obrigatórios · 3 pendentes", state: "CANDIDATE" },
+              {
+                title: "LAB V0.9 / 21 telas",
+                detail: "8 obrigatórios · 3 pendentes",
+                state: "CANDIDATE",
+              },
               { title: "CORE Cubo", detail: "6 comparações · evidence local", state: "TEST" },
-              { title: "Meta-Validation", detail: "seeded defects · false PASS/FAIL", state: "NOT_RUN" },
+              {
+                title: "Meta-Validation",
+                detail: "seeded defects · false PASS/FAIL",
+                state: "NOT_RUN",
+              },
             ].map((item) => (
-              <div key={item.title} className="rounded-xl border border-border/50 bg-surface-1/40 p-3">
+              <div
+                key={item.title}
+                className="rounded-xl border border-border/50 bg-surface-1/40 p-3"
+              >
                 <p className="text-xs font-semibold">{item.title}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{item.detail}</p>
                 <Badge variant="outline" className="mt-2 text-[9px]">
@@ -1273,8 +1287,18 @@ const LAB_HOME_CARDS: {
   key: LabScreenKey;
 }[] = [
   { title: "Planilhão", subtitle: "Hoje → 10 → 15", icon: Gauge, key: "metrics" },
-  { title: "Teorias", subtitle: "Ideia → hipótese → evidência", icon: Network, key: "architectures" },
-  { title: "Pesquisas", subtitle: "Descoberta → fit → contradição", icon: Microscope, key: "evidence" },
+  {
+    title: "Teorias",
+    subtitle: "Ideia → hipótese → evidência",
+    icon: Network,
+    key: "architectures",
+  },
+  {
+    title: "Pesquisas",
+    subtitle: "Descoberta → fit → contradição",
+    icon: Microscope,
+    key: "evidence",
+  },
   { title: "Radar", subtitle: "Sinal → oportunidade → teste", icon: RadarIcon, key: "evidence" },
   { title: "Evolução", subtitle: "Baseline → mudança → resultado", icon: Sparkles, key: "compare" },
 ];
