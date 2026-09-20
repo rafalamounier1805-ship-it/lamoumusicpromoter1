@@ -35,7 +35,7 @@ jobs:
 
       - name: CORE Cubo Benchmark
         working-directory: owner-console
-        run: bun run core:cube:bench
+        run: bun scripts/run-core-cube-benchmark.ts
 
       - name: Lint
         working-directory: owner-console
