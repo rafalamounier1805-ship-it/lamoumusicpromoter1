@@ -257,6 +257,29 @@ const seeds: RoleSeed[] = [
     { ux: 88, implementacao: 50, qualidade: 45 },
   ],
   [
+    "learning-experience-designer",
+    "Learning Experience / Instructional Designer",
+    "produto",
+    "Tornar telas complexas didáticas sem esconder detalhe, evidência ou criticidade.",
+    [
+      "Arquitetura de informação pedagógica",
+      "Divulgação progressiva",
+      "Microcopy e explicação contextual",
+      "Sequência decisão → evidência → ação",
+    ],
+    [
+      "O que o usuário precisa entender antes de agir?",
+      "Qual conceito pode ser interpretado errado nesta tela?",
+      "A próxima ação está clara sem treinamento externo?",
+    ],
+    [
+      "A informação pode aparecer em camadas sem virar drawer que desloca a página?",
+      "Existe exemplo, unidade, fonte ou explicação junto do dado?",
+      "O estado vazio ensina o que fazer em seguida?",
+    ],
+    { ux: 94, produto: 82, qualidade: 55, implementacao: 35 },
+  ],
+  [
     "software-architect",
     "Software Architect",
     "engenharia",
