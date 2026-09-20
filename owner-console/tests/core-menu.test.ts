@@ -3,14 +3,14 @@ import { describe, expect, test } from "bun:test";
 import { CORE_DETAIL_SURFACES, CORE_MENU } from "../src/lib/lamou/nav";
 
 const EXPECTED_ROOTS = [
-  ["/core", "Visão Geral"],
-  ["/core/health", "Indicadores de Saúde"],
-  ["/core/architecture", "Arquitetura Técnica"],
-  ["/core/apps", "Aplicativos, Plugins & Bindings"],
-  ["/core/problems", "Planos de Ação & Melhorias"],
-  ["/core/tests", "Testes & Qualidade"],
-  ["/core/versions", "Versões & Atualizações"],
-  ["/core/observability", "Observabilidade"],
+  ["/core/mapa-vivo", "Mapa Vivo"],
+  ["/core/execution", "Execução & Indicadores"],
+  ["/core/products", "Produtos & Aplicativos"],
+  ["/core/cases", "Casos & Soluções"],
+  ["/core/radar", "Radar & Oportunidades"],
+  ["/core/documents", "Documentos"],
+  ["/core/lifecycle", "Versões, Distribuição & Recuperação"],
+  ["/core/governance", "Governança"],
   ["/core/settings", "Configurações"],
 ] as const;
 
