@@ -82,7 +82,7 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
       {
         label: "Evidências recentes",
         value: "28",
-        note: "Últimas 24 h no fixture candidato",
+        note: "Últimas 24 h no fixture demonstrativo do CORE",
         tone: "ok",
       },
     ],
@@ -138,7 +138,7 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
         note: "Dados recuperados do baseline",
         tone: "info",
       },
-      { label: "Produtos", value: "35", note: "Catálogo candidato", tone: "info" },
+      { label: "Produtos", value: "35", note: "Catálogo do CORE oficial; conteúdo preserva truth-state", tone: "info" },
       { label: "Bindings ativos", value: "10", note: "Vínculos registrados", tone: "ok" },
       { label: "Candidates", value: "36", note: "Nenhuma promoção automática", tone: "warn" },
     ],
@@ -190,7 +190,7 @@ const MODULES: Record<Exclude<CoreOwnerModule, "map">, ModuleDefinition> = {
     subtitle:
       "Memória técnica rastreável: problema → causa → hipótese → solução → teste → evidência → eficácia.",
     metrics: [
-      { label: "Casos abertos", value: "7", note: "Fixture operacional candidato", tone: "warn" },
+      { label: "Casos abertos", value: "7", note: "Fixture operacional demonstrativo", tone: "warn" },
       { label: "Em investigação", value: "3", note: "Sem causa raiz confirmada", tone: "info" },
       { label: "Em reteste", value: "2", note: "Aguardando eficácia", tone: "warn" },
       {
@@ -701,7 +701,7 @@ function DetailPanel({ row, onClose }: { row: Row | undefined; onClose: () => vo
         {[
           ["Status", row.status],
           ["Contexto", row.meta ?? "Sem metadado adicional"],
-          ["Ambiente", "CANDIDATE / DEMO quando marcado"],
+          ["Ambiente", "CORE OFFICIAL/FROZEN · objetos internos preservam CANDIDATE/DEMO quando aplicável"],
           ["Rastreabilidade", "ID · status · histórico · evidências"],
         ].map(([label, value]) => (
           <div key={label} className="rounded-xl border border-border/50 bg-surface-1/50 p-3">
@@ -738,7 +738,7 @@ function MapaVivoCore() {
         right={
           <div className="flex gap-2">
             <TruthBadge truth="PARTIAL" />
-            <DemoBadge label="candidate · dados de demonstração estruturados" />
+            <DemoBadge label="OFFICIAL · FROZEN 20/09/2026 · dados DEMO continuam marcados" />
           </div>
         }
       />
@@ -985,7 +985,7 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
       return;
     }
     setLastAction(
-      `${action}: fluxo candidato acionado. Alteração permanece local/DEMO até backend e gate autorizarem persistência real.`,
+      `${action}: fluxo acionado no CORE oficial. O objeto permanece local/DEMO ou CANDIDATE até backend, evidência e gate autorizarem persistência/promoção própria.`,
     );
   };
 
@@ -997,7 +997,7 @@ function StandardModule({ module }: { module: Exclude<CoreOwnerModule, "map"> })
         right={
           <div className="flex flex-wrap gap-2">
             <TruthBadge truth="PARTIAL" />
-            <DemoBadge label="CANDIDATE_NOT_PROMOTED" />
+            <DemoBadge label="OFFICIAL · FROZEN 20/09/2026" />
           </div>
         }
       />
