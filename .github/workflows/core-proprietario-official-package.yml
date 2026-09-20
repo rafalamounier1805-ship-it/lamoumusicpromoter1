@@ -1,0 +1,99 @@
+name: CORE Proprietário Official Package
+
+on:
+  push:
+    branches:
+      - release/lamou-core-proprietario-official-2026-09-20
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout official CORE
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: owner-console
+        run: bun install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: owner-console
+        run: bunx tsc --noEmit
+
+      - name: Tests
+        working-directory: owner-console
+        run: bun test
+
+      - name: CORE Cubo Benchmark
+        working-directory: owner-console
+        run: bun run core:cube:bench
+
+      - name: Lint
+        working-directory: owner-console
+        run: bun run lint
+
+      - name: Build portable runtime
+        working-directory: owner-console
+        run: bun scripts/build-portable.mjs
+
+      - name: Install traced runtime dependencies
+        working-directory: owner-console/.output/server
+        run: bun install --production
+
+      - name: Runtime smoke test
+        working-directory: owner-console
+        shell: bash
+        run: |
+          set -euo pipefail
+          HOST=127.0.0.1 PORT=4173 node .output/server/index.mjs >/tmp/lamou-core-official.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsSL -L http://127.0.0.1:4173/core/mapa-vivo >/tmp/core-official.html; then
+              if test -s /tmp/core-official.html; then
+                exit 0
+              fi
+            fi
+            sleep 0.5
+          done
+          cat /tmp/lamou-core-official.log
+          exit 1
+
+      - name: Build official package
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="_package/LAMOU_CORE_PROPRIETARIO_OFFICIAL_FROZEN_2026-09-20"
+          mkdir -p "$ROOT"
+          cp -a owner-console "$ROOT/"
+          mkdir -p "$ROOT/docs"
+          cp docs/CORE_PROPRIETARIO_OFFICIAL_2026-09-20.md "$ROOT/docs/"
+          find "$ROOT" -type f \( -name '.env' -o -name '.env.*' \) -delete
+          rm -rf "$ROOT/owner-console/node_modules" "$ROOT/owner-console/.git"
+          printf '%s\n' \
+            'LAMOU CORE PROPRIETÁRIO — OFFICIAL / FROZEN' \
+            "Branch: ${GITHUB_REF_NAME}" \
+            "Commit: ${GITHUB_SHA}" \
+            'State: OFFICIAL_FROZEN' \
+            'SALVAR != PROMOVER remains mandatory for internal objects.' \
+            'Installation/recovery were not changed by this promotion.' \
+            > "$ROOT/PACKAGE_STATE.txt"
+          cd _package
+          zip -r ../LAMOU_CORE_PROPRIETARIO_OFFICIAL_FROZEN_2026-09-20.zip LAMOU_CORE_PROPRIETARIO_OFFICIAL_FROZEN_2026-09-20
+
+      - name: Upload official package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_CORE_PROPRIETARIO_OFFICIAL_FROZEN_2026-09-20
+          path: LAMOU_CORE_PROPRIETARIO_OFFICIAL_FROZEN_2026-09-20.zip
+          if-no-files-found: error
+          retention-days: 90
