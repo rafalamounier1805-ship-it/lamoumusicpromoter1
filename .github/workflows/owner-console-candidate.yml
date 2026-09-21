@@ -1,0 +1,32 @@
+name: Owner Console Candidate Gate
+on:
+  pull_request:
+    paths:
+      - "owner-console/**"
+      - ".github/workflows/owner-console-candidate.yml"
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: owner-console
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+      - run: bun run lint
+      - run: bun run build
+      - name: Package validated candidate
+        run: |
+          mkdir -p ../release
+          tar -czf ../release/LAMOU_OWNER_CONSOLE_CLIENT_RC.tgz .output public README.md INICIAR_WINDOWS.cmd
+          sha256sum ../release/LAMOU_OWNER_CONSOLE_CLIENT_RC.tgz > ../release/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LAMOU_OWNER_CONSOLE_CLIENT_RC
+          path: release/
+          retention-days: 14
