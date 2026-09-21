@@ -23,8 +23,8 @@ export interface MfaFactorState {
 }
 
 /**
- * Auth real do proprietário: cadastro, login, recuperação, MFA (TOTP) e
- * persistência de perfil na tabela profiles (RLS por auth.uid()).
+ * Auth real do proprietário sem senha: acesso por link seguro no e-mail,
+ * MFA (TOTP) e persistência de perfil na tabela profiles (RLS por auth.uid()).
  */
 export function useOwnerAuth() {
   const [session, setSession] = useState<Session | null>(null);
@@ -85,32 +85,19 @@ export function useOwnerAuth() {
     return () => sub.subscription.unsubscribe();
   }, [loadProfile, refreshFactors]);
 
-  const signUp = useCallback(async (email: string, password: string, fullName: string) => {
-    const { data, error } = await supabase.auth.signUp({
+  const sendAccessLink = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
       options: {
         emailRedirectTo: window.location.origin,
-        data: { full_name: fullName },
+        shouldCreateUser: true,
       },
     });
-    return { error, needsConfirmation: !error && !data.session };
-  }, []);
-
-  const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error };
   }, []);
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-  }, []);
-
-  const requestRecovery = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    return { error };
   }, []);
 
   const saveProfile = useCallback(
@@ -169,10 +156,8 @@ export function useOwnerAuth() {
     profile,
     loading,
     factors,
-    signUp,
-    signIn,
+    sendAccessLink,
     signOut,
-    requestRecovery,
     saveProfile,
     enrollMfa,
     verifyMfa,
