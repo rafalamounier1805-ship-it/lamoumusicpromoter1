@@ -10,8 +10,6 @@ import {
   ClipboardCheck,
   Cpu,
   Database,
-  Eye,
-  EyeOff,
   Fingerprint,
   Gauge,
   Globe,
@@ -577,13 +575,6 @@ function StepIdentity() {
 
 /* ------------------------------------------------------------------- 3 segurança */
 
-const PASSWORD_RULES = [
-  { label: "Mínimo de 12 caracteres", test: (v: string) => v.length >= 12 },
-  { label: "Ao menos uma letra maiúscula", test: (v: string) => /[A-Z]/.test(v) },
-  { label: "Ao menos um número", test: (v: string) => /\d/.test(v) },
-  { label: "Ao menos um símbolo", test: (v: string) => /[^A-Za-z0-9]/.test(v) },
-];
-
 const PERMISSIONS = [
   {
     label: "Gestão total do ecossistema",
@@ -606,117 +597,16 @@ const PERMISSIONS = [
 ];
 
 function StepSecurity() {
-  const [pwd, setPwd] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [show, setShow] = useState(false);
   const [mfa, setMfa] = useState<"app" | "sms" | "email" | null>("app");
   const [dual, setDual] = useState(true);
   const [recoveryEmail, setRecoveryEmail] = useState("");
   const [recoveryPhone, setRecoveryPhone] = useState("");
   const [sessionHours, setSessionHours] = useState("8");
-  const match = pwd.length > 0 && pwd === confirm;
-  const strength = PASSWORD_RULES.filter((rule) => rule.test(pwd)).length;
 
   return (
     <div className="space-y-4">
       <OwnerAccountPanel />
       <OwnerMfaPanel />
-      <StepSection
-        icon={KeyRound}
-        title="Critérios de senha"
-        description="Conferência local dos critérios antes de criar a credencial real acima."
-      >
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="space-y-1.5">
-            <Label htmlFor="pwd">Senha</Label>
-            <div className="relative">
-              <Input
-                id="pwd"
-                type={show ? "text" : "password"}
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
-                autoComplete="new-password"
-                className="pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShow((v) => !v)}
-                aria-label={show ? "Ocultar senha" : "Mostrar senha"}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {show ? (
-                  <EyeOff className="h-4 w-4" aria-hidden="true" />
-                ) : (
-                  <Eye className="h-4 w-4" aria-hidden="true" />
-                )}
-              </button>
-            </div>
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="pwd2">Confirmar senha</Label>
-            <Input
-              id="pwd2"
-              type={show ? "text" : "password"}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              autoComplete="new-password"
-            />
-            {confirm.length > 0 ? (
-              <p className={match ? "text-xs text-success" : "text-xs text-destructive"}>
-                {match ? "As senhas conferem." : "As senhas não conferem."}
-              </p>
-            ) : null}
-          </div>
-        </div>
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {PASSWORD_RULES.map((r) => {
-            const ok = r.test(pwd);
-            return (
-              <li
-                key={r.label}
-                className={
-                  ok
-                    ? "flex items-center gap-2 rounded-lg border border-success/40 bg-success/10 p-2 text-xs"
-                    : "flex items-center gap-2 rounded-lg border border-border bg-surface-1 p-2 text-xs text-muted-foreground"
-                }
-              >
-                <ShieldCheck
-                  className={ok ? "h-3.5 w-3.5 shrink-0 text-success" : "h-3.5 w-3.5 shrink-0"}
-                  aria-hidden="true"
-                />
-                {r.label}
-              </li>
-            );
-          })}
-        </ul>
-        <div className="space-y-1.5" aria-live="polite">
-          <div
-            className="grid grid-cols-4 gap-1"
-            aria-label={`Força da senha: ${strength} de 4 regras`}
-          >
-            {PASSWORD_RULES.map((rule, index) => (
-              <span
-                key={rule.label}
-                className={
-                  index < strength
-                    ? "h-1.5 rounded-full bg-primary"
-                    : "h-1.5 rounded-full bg-border"
-                }
-              />
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Força local: {strength < 2 ? "fraca" : strength < 4 ? "média" : "forte"}. A credencial
-            real é criada no bloco &quot;Credencial do proprietário&quot; acima.
-          </p>
-        </div>
-        <Note>
-          Esta conferência é local. A criação da conta, a entrada, a recuperação por e-mail e o
-          segundo fator acontecem na autenticação real do ambiente (IMPLEMENTED_NOT_VERIFIED até
-          você concluir o fluxo).
-        </Note>
-      </StepSection>
-
       <StepSection
         icon={Siren}
         title="MFA e recuperação de acesso"
@@ -782,12 +672,12 @@ function StepSecurity() {
               destination: "/owner/security" as const,
             },
             {
-              label: "Fluxo “esqueci a senha”",
+              label: "Reenvio do link de acesso",
               truth: "IMPLEMENTED_NOT_VERIFIED",
               source: "AUTH-REC-02",
               definition:
-                "Solicitação de recuperação existe; falta validar a jornada ponta a ponta nesta candidata.",
-              next: "Executar o fluxo real e anexar evidência.",
+                "O proprietário recebe um novo link seguro no e-mail quando precisar entrar novamente.",
+              next: "Validar o envio e o retorno pelo link seguro e anexar evidência.",
               destination: "/owner/security" as const,
             },
             {
