@@ -87,10 +87,15 @@ export async function provisionClientStandard(input: {
     return { kind: "no-session", message: "Owner autenticado necessário para provisionar." };
   }
   try {
-    const { data, error } = await supabase.rpc("provision_lamou_customer_standard_v1", {
+    type RpcResponse = { data: unknown; error: unknown };
+    const callRpc = supabase.rpc as unknown as (
+      fn: string,
+      args: Record<string, unknown>,
+    ) => PromiseLike<RpcResponse>;
+    const { data, error } = await callRpc("provision_lamou_customer_standard_v1", {
       p_display_name: input.displayName,
       p_legal_name: input.legalName?.trim() ? input.legalName.trim() : input.displayName,
-    } as never);
+    });
     if (error) return { kind: "error", message: sanitizeError(error) };
     const result = normalizePayload(data);
     if (!result.ok || !result.tenantSlug) {
