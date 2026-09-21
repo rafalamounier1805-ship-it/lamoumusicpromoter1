@@ -49,6 +49,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { TruthState } from "@/lib/lamou/council-data";
+import {
+  type ProvisionResult,
+  getLastProvisioned,
+  provisionClientStandard,
+  setLastProvisioned,
+} from "@/lib/lamou/client-provisioning";
 
 const VERSION = "CORE CLIENTE (sintetizado) · CANDIDATE_NOT_PROMOTED";
 
@@ -114,6 +120,35 @@ function StepPackage() {
 
 function StepTenant() {
   const [f, setF] = useState({ company: "", tenant: "", segment: "", contact: "", env: "TESTE" });
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [provisioned, setProvisioned] = useState<ProvisionResult | null>(getLastProvisioned());
+  const [provisionError, setProvisionError] = useState<string | null>(null);
+
+  const canProvision = f.company.trim().length > 0 && !busy && !provisioned;
+
+  async function handleProvision() {
+    setBusy(true);
+    setProvisionError(null);
+    try {
+      const outcome = await provisionClientStandard({
+        displayName: f.company.trim(),
+        legalName: f.company.trim(),
+      });
+      if (outcome.kind === "success") {
+        setProvisioned(outcome.result);
+        setLastProvisioned(outcome.result);
+        // O tenant canônico passa a vir exclusivamente do backend.
+        if (outcome.result.tenantSlug) setF((s) => ({ ...s, tenant: outcome.result.tenantSlug! }));
+      } else {
+        setProvisionError(outcome.message);
+      }
+    } finally {
+      setBusy(false);
+      setConfirming(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       <StepSection
@@ -141,8 +176,10 @@ function StepTenant() {
               id="cli-tenant"
               value={f.tenant}
               onChange={(e) => setF({ ...f, tenant: e.target.value })}
-              placeholder="ex.: cliente-industrial-01"
+              placeholder="definido pelo backend após provisionar"
               className="font-mono"
+              readOnly={Boolean(provisioned)}
+              aria-describedby="cli-tenant-help"
             />
           </div>
           <div className="space-y-1.5">
@@ -217,6 +254,102 @@ function StepTenant() {
             {f.company || "empresa não informada"}
           </p>
         </div>
+
+        {provisioned ? (
+          <div
+            role="status"
+            className="rounded-lg border border-primary/40 bg-primary/5 p-4 text-sm"
+          >
+            <p className="font-semibold">Fundação do cliente provisionada</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              O backend confirmou cliente, tenant e onboarding inicial. Isso não ativa produção,
+              contrato, licença, apps ou portal automaticamente.
+            </p>
+            <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
+              <div>
+                <dt className="text-muted-foreground">Cliente</dt>
+                <dd className="font-mono">{provisioned.customerCode ?? provisioned.customerId ?? "confirmado"}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Tenant canônico</dt>
+                <dd className="font-mono">{provisioned.tenantSlug ?? "confirmado"}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">CORE</dt>
+                <dd className="font-mono">{provisioned.coreInstanceCode ?? "não retornado"}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Versão-fonte</dt>
+                <dd className="font-mono">{provisioned.sourceVersionCode ?? "não retornada"}</dd>
+              </div>
+            </dl>
+            {provisioned.onboardingCounts.length > 0 ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {provisioned.onboardingCounts.map((item) => (
+                  <Badge key={item.label} variant="outline" className="font-mono text-[10px]">
+                    {item.label}: {item.value}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <div className="rounded-lg border border-border bg-surface-1 p-4">
+            {provisionError ? (
+              <div
+                role="alert"
+                className="mb-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-xs text-destructive"
+              >
+                {provisionError}
+              </div>
+            ) : null}
+
+            {confirming ? (
+              <div className="space-y-3">
+                <div className="text-xs">
+                  <p className="font-semibold">Confirmar provisionamento real</p>
+                  <p className="mt-1 text-muted-foreground">
+                    Será criada/reutilizada a fundação de onboarding para
+                    <strong className="text-foreground"> {f.company.trim()}</strong>. O tenant
+                    canônico será definido pelo backend. Mesmo se a opção visual estiver em OFICIAL,
+                    esta ação não executa go-live.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setConfirming(false)}
+                    disabled={busy}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="button" onClick={handleProvision} disabled={busy}>
+                    {busy ? "Provisionando…" : "Confirmar provisionamento"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-xs text-muted-foreground">
+                  <p className="font-medium text-foreground">Backend P0 disponível</p>
+                  <p>
+                    Cria a fundação real do cliente com sessão Owner; produção continua protegida
+                    pelos gates de homologação.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => setConfirming(true)}
+                  disabled={!canProvision}
+                  className="shrink-0"
+                >
+                  Provisionar cliente real
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
       </StepSection>
     </div>
   );
@@ -858,13 +991,13 @@ export const Route = createFileRoute("/install/client")({
           },
           {
             label: "Estado desta jornada",
-            value: "Interface real, provisionamento ainda não conectado",
+            value: "Provisionamento P0 conectado; produção continua bloqueada por gates",
             truth: "IMPLEMENTED_NOT_VERIFIED",
           },
         ],
         startLabel: "Iniciar provisionamento",
         footNote:
-          "Dados informados aqui ficam apenas neste navegador. Nenhum ambiente, usuário, cobrança ou integração é criado enquanto o backend de provisionamento estiver NOT_CONNECTED.",
+          "O provisionamento P0 pode criar a fundação real do cliente após confirmação do Owner. Contrato, licença, apps, portal e go-live continuam separados e bloqueados pelos respectivos gates.",
       }}
     />
   ),
