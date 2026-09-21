@@ -459,9 +459,7 @@ export function InstallLauncher({
               <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
                 {headline}
               </h1>
-              <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
-                {lead}
-              </p>
+              <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">{lead}</p>
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 {bullets.map((b) => (
@@ -470,10 +468,7 @@ export function InstallLauncher({
                     className="rounded-xl border border-border bg-card/80 p-3 backdrop-blur"
                   >
                     <div className="flex items-center gap-2">
-                      <b.icon
-                        className="h-4 w-4 shrink-0 text-primary"
-                        aria-hidden="true"
-                      />
+                      <b.icon className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                       <p className="text-sm font-medium text-foreground">{b.title}</p>
                     </div>
                     <p className="mt-1 text-xs text-muted-foreground">{b.text}</p>
@@ -498,9 +493,7 @@ export function InstallLauncher({
             </div>
 
             <aside className="rounded-2xl border border-border bg-card/90 p-4 backdrop-blur">
-              <h2 className="font-display text-sm font-semibold text-foreground">
-                {asideTitle}
-              </h2>
+              <h2 className="font-display text-sm font-semibold text-foreground">{asideTitle}</h2>
               <dl className="mt-3 space-y-3">
                 {aside.map((a) => (
                   <div
