@@ -440,15 +440,15 @@ export function InstallLauncher({
             <div className="flex min-w-0 items-center gap-3">
               <CoreMark className="h-9 w-9 shrink-0" />
               <div className="min-w-0">
-                <p className="font-display text-base font-semibold tracking-tight text-[oklch(0.97_0.01_250)]">
+                <p className="font-display text-base font-semibold tracking-tight text-foreground">
                   LAMOU IA
                 </p>
-                <p className="truncate text-xs text-[oklch(0.78_0.03_250)]">{kicker}</p>
+                <p className="truncate text-xs text-muted-foreground">{kicker}</p>
               </div>
             </div>
             <Badge
               variant="outline"
-              className="shrink-0 border-[oklch(0.74_0.15_218/0.5)] font-mono text-[10px] text-[oklch(0.85_0.13_200)]"
+              className="shrink-0 border-primary/30 bg-primary/5 font-mono text-[10px] text-primary"
             >
               {version}
             </Badge>
@@ -456,10 +456,10 @@ export function InstallLauncher({
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
             <div className="min-w-0">
-              <h1 className="font-display text-3xl font-semibold tracking-tight text-[oklch(0.98_0.01_250)] md:text-4xl">
+              <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
                 {headline}
               </h1>
-              <p className="mt-3 max-w-2xl text-sm text-[oklch(0.82_0.02_250)] md:text-base">
+              <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
                 {lead}
               </p>
 
@@ -467,16 +467,16 @@ export function InstallLauncher({
                 {bullets.map((b) => (
                   <div
                     key={b.title}
-                    className="rounded-xl border border-[oklch(0.98_0.01_250/0.14)] bg-[oklch(0.98_0.01_250/0.05)] p-3 backdrop-blur"
+                    className="rounded-xl border border-border bg-card/80 p-3 backdrop-blur"
                   >
                     <div className="flex items-center gap-2">
                       <b.icon
-                        className="h-4 w-4 shrink-0 text-[oklch(0.85_0.13_200)]"
+                        className="h-4 w-4 shrink-0 text-primary"
                         aria-hidden="true"
                       />
-                      <p className="text-sm font-medium text-[oklch(0.97_0.01_250)]">{b.title}</p>
+                      <p className="text-sm font-medium text-foreground">{b.title}</p>
                     </div>
-                    <p className="mt-1 text-xs text-[oklch(0.8_0.02_250)]">{b.text}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{b.text}</p>
                   </div>
                 ))}
               </div>
@@ -489,28 +489,28 @@ export function InstallLauncher({
                   asChild
                   variant="ghost"
                   size="lg"
-                  className="text-[oklch(0.85_0.02_250)] hover:text-[oklch(0.98_0.01_250)]"
+                  className="text-[oklch(0.85_0.02_250)] hover:text-foreground"
                 >
                   <Link to="/">Voltar ao início</Link>
                 </Button>
               </div>
-              <p className="mt-4 max-w-2xl text-xs text-[oklch(0.75_0.02_250)]">{footNote}</p>
+              <p className="mt-4 max-w-2xl text-xs text-muted-foreground">{footNote}</p>
             </div>
 
-            <aside className="rounded-2xl border border-[oklch(0.98_0.01_250/0.16)] bg-[oklch(0.98_0.01_250/0.06)] p-4 backdrop-blur">
-              <h2 className="font-display text-sm font-semibold text-[oklch(0.97_0.01_250)]">
+            <aside className="rounded-2xl border border-border bg-card/90 p-4 backdrop-blur">
+              <h2 className="font-display text-sm font-semibold text-foreground">
                 {asideTitle}
               </h2>
               <dl className="mt-3 space-y-3">
                 {aside.map((a) => (
                   <div
                     key={a.label}
-                    className="border-b border-[oklch(0.98_0.01_250/0.1)] pb-2 last:border-0 last:pb-0"
+                    className="border-b border-border pb-2 last:border-0 last:pb-0"
                   >
-                    <dt className="text-[11px] uppercase tracking-wide text-[oklch(0.72_0.02_250)]">
+                    <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
                       {a.label}
                     </dt>
-                    <dd className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[oklch(0.92_0.01_250)]">
+                    <dd className="mt-1 flex flex-wrap items-center gap-2 text-xs text-foreground">
                       <span className="min-w-0">{a.value}</span>
                       {a.truth ? <TruthBadge truth={a.truth} /> : null}
                     </dd>
