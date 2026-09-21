@@ -99,7 +99,10 @@ export async function provisionClientStandard(input: {
     if (error) return { kind: "error", message: sanitizeError(error) };
     const result = normalizePayload(data);
     if (!result.ok || !result.tenantSlug) {
-      return { kind: "error", message: "O backend não confirmou o provisionamento. Nada foi assumido." };
+      return {
+        kind: "error",
+        message: "O backend não confirmou o provisionamento. Nada foi assumido.",
+      };
     }
     return { kind: "success", result };
   } catch (err) {
