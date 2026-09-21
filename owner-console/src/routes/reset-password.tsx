@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/reset-password")({
 });
 
 function ResetPasswordPage() {
-  const [ready, setReady] = useState(false);
+  const navigate = useNavigate();\n  const [ready, setReady] = useState(false);\n  const [checked, setChecked] = useState(false);\n  const [recovery, setRecovery] = useState(false);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -41,7 +41,7 @@ function ResetPasswordPage() {
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(Boolean(session));
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {\n      active = false;\n      sub.subscription.unsubscribe();\n    };
   }, []);
 
   async function submit() {
@@ -59,7 +59,7 @@ function ResetPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (updateError) setError(updateError.message);
-    else setMessage("Senha atualizada. Você já pode voltar à instalação.");
+    else {\n      setMessage("Senha atualizada. Retornando ao fluxo normal.");\n      setRecovery(false);\n      window.setTimeout(() => void navigate({ to: "/install/owner" }), 500);\n    }
   }
 
   return (
@@ -97,7 +97,7 @@ function ResetPasswordPage() {
       {message ? <p className="text-sm text-success">{message}</p> : null}
 
       <div className="flex flex-wrap gap-2">
-        <Button onClick={submit} disabled={!ready || busy}>
+        <Button onClick={submit} disabled={!ready || !recovery || busy}>
           {busy ? "Salvando…" : "Salvar nova senha"}
         </Button>
         <Button asChild variant="ghost">
