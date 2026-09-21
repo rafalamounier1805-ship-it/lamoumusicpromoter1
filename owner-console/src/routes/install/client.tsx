@@ -268,7 +268,9 @@ function StepTenant() {
             <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
               <div>
                 <dt className="text-muted-foreground">Cliente</dt>
-                <dd className="font-mono">{provisioned.customerCode ?? provisioned.customerId ?? "confirmado"}</dd>
+                <dd className="font-mono">
+                  {provisioned.customerCode ?? provisioned.customerId ?? "confirmado"}
+                </dd>
               </div>
               <div>
                 <dt className="text-muted-foreground">Tenant canônico</dt>
