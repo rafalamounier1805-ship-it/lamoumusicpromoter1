@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { CheckCircle2, KeyRound, ShieldCheck, UserCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -43,52 +42,38 @@ function Shell({
 
 /** Cadastro, login e recuperação reais do proprietário (Auth do backend). */
 export function OwnerAccountPanel() {
-  const { user, session, signUp, signIn, signOut, requestRecovery } = useOwnerAuth();
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  const { user, session, sendAccessLink, signOut } = useOwnerAuth();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function submit() {
+  async function access() {
     setError(null);
     setFeedback(null);
-    setBusy(true);
-    if (mode === "signup") {
-      const res = await signUp(email, password, fullName);
-      if (res.error) setError(res.error.message);
-      else if (res.needsConfirmation)
-        setFeedback("Conta criada. Confirme o e-mail pelo link enviado para concluir o acesso.");
-      else setFeedback("Conta criada e sessão ativa.");
-    } else {
-      const res = await signIn(email, password);
-      if (res.error) setError(res.error.message);
-      else setFeedback("Sessão autenticada.");
-    }
-    setBusy(false);
-  }
 
-  async function recover() {
-    setError(null);
-    setFeedback(null);
-    if (!email.trim()) {
-      setError("Informe o e-mail para receber o link de recuperação.");
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      setError("Informe o e-mail do proprietário para receber o link de acesso.");
       return;
     }
+
     setBusy(true);
-    const res = await requestRecovery(email);
+    const res = await sendAccessLink(normalizedEmail);
     setBusy(false);
+
     if (res.error) setError(res.error.message);
-    else setFeedback("Link de recuperação enviado, se o e-mail estiver cadastrado.");
+    else
+      setFeedback(
+        "Link de acesso enviado. Abra o e-mail do proprietário e toque no link para entrar — sem senha.",
+      );
   }
 
   return (
     <Shell
       icon={KeyRound}
-      title="Credencial do proprietário"
-      description="Cadastro, entrada e recuperação usam a autenticação real do ambiente."
+      title="Acesso do proprietário"
+      description="Entrada sem senha por link seguro enviado ao e-mail do proprietário."
       right={<TruthBadge truth={session ? "IMPLEMENTED_VERIFIED" : "IMPLEMENTED_NOT_VERIFIED"} />}
     >
       {user ? (
@@ -96,16 +81,12 @@ export function OwnerAccountPanel() {
           <div className="flex items-center gap-2 rounded-lg border border-success/40 bg-success/10 p-2 text-xs">
             <CheckCircle2 className="h-4 w-4 shrink-0 text-success" aria-hidden="true" />
             <span>
-              Sessão ativa como <strong>{user.email}</strong>
-              {user.email_confirmed_at ? " (e-mail confirmado)" : " (e-mail ainda não confirmado)"}.
+              Sessão ativa como <strong>{user.email}</strong>.
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="outline" className="h-8" onClick={() => void signOut()}>
               Encerrar sessão
-            </Button>
-            <Button size="sm" variant="ghost" className="h-8" onClick={() => void recover()}>
-              Enviar link de recuperação
             </Button>
           </div>
           {feedback ? <p className="text-xs text-success">{feedback}</p> : null}
@@ -113,68 +94,24 @@ export function OwnerAccountPanel() {
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="flex gap-2">
-            {(["signup", "signin"] as const).map((m) => (
-              <Button
-                key={m}
-                size="sm"
-                variant={mode === m ? "default" : "outline"}
-                className="h-8"
-                onClick={() => setMode(m)}
-              >
-                {m === "signup" ? "Criar conta" : "Entrar"}
-              </Button>
-            ))}
+          <div className="space-y-1.5">
+            <Label htmlFor="auth-email">E-mail do proprietário</Label>
+            <Input
+              id="auth-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="proprietario@empresa.com"
+            />
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {mode === "signup" ? (
-              <div className="space-y-1.5">
-                <Label htmlFor="auth-name">Nome completo</Label>
-                <Input
-                  id="auth-name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  autoComplete="name"
-                />
-              </div>
-            ) : null}
-            <div className="space-y-1.5">
-              <Label htmlFor="auth-email">E-mail</Label>
-              <Input
-                id="auth-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="auth-password">Senha</Label>
-              <Input
-                id="auth-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete={mode === "signup" ? "new-password" : "current-password"}
-              />
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" className="h-8" disabled={busy} onClick={() => void submit()}>
-              {busy ? "Processando…" : mode === "signup" ? "Criar conta" : "Entrar"}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button size="sm" className="h-8" disabled={busy} onClick={() => void access()}>
+              {busy ? "Enviando…" : "Enviar link de acesso"}
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8"
-              disabled={busy}
-              onClick={() => void recover()}
-            >
-              Esqueci a senha
-            </Button>
-            <Button asChild size="sm" variant="ghost" className="h-8">
-              <Link to="/reset-password">Definir nova senha</Link>
-            </Button>
+            <span className="text-xs text-muted-foreground">
+              Nenhuma senha é criada, solicitada ou armazenada por este fluxo.
+            </span>
           </div>
           {feedback ? <p className="text-xs text-success">{feedback}</p> : null}
           {error ? <p className="text-xs text-destructive">{error}</p> : null}
