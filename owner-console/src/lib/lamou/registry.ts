@@ -34,16 +34,17 @@ export interface WaveApp {
   note?: string;
 }
 
-/** Cadeia: Research Scout → Benchmarker → Opportunity Intelligence → Showroom →
- *  Diagnóstico → Digital Improvement → Teste³ → Validation Gate → Lab → Version/Registry */
+/** Catálogo histórico Wave 1. A ordem linear antiga foi substituída por fluxos
+ *  direcionados em app-architecture.ts. chainStep é mantido apenas para compatibilidade
+ *  visual/histórica e NÃO significa que todo caso percorre todos os aplicativos. */
 export const WAVE1_APPS: WaveApp[] = [
   {
     id: "APP-034",
     name: "Research Scout",
     purpose: "Varredura de fontes e sinais externos para alimentar a cadeia.",
     chainStep: 1,
-    route: null,
-    shell: "ficha somente",
+    route: "/apps/research-scout",
+    shell: "rota real",
     capabilities: ["coleta de sinal", "classificação de fonte", "freshness"],
     truth: "NOT_CONNECTED" as TruthState,
     note: "APP-ID candidato. Nenhuma fonte externa conectada neste build.",
@@ -53,8 +54,8 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Benchmarker",
     purpose: "Comparação estruturada entre soluções, versões e alternativas.",
     chainStep: 2,
-    route: null,
-    shell: "ficha somente",
+    route: "/apps/benchmarker",
+    shell: "rota real",
     capabilities: ["comparação multicritério", "delta de desempenho/custo"],
     truth: "NOT_VERIFIED",
     note: "ID canônico não reconciliado — não inventado.",
@@ -64,7 +65,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Opportunity Intelligence",
     purpose: "Transformar sinal comparado em oportunidade com ficha e validação.",
     chainStep: 3,
-    route: "/owner/planos",
+    route: "/apps/opportunity-intelligence",
     shell: "rota real",
     capabilities: ["ficha de oportunidade", "roteamento para projeto/versão/experimento"],
     truth: "PARTIAL" as TruthState,
@@ -75,7 +76,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "LAMOU Showroom",
     purpose: "Apresentação de produtos, canais e provas.",
     chainStep: 4,
-    route: "/owner/aplicativos",
+    route: "/apps/showroom",
     shell: "rota real",
     capabilities: ["catálogo", "canais OFICIAL/DEMO/TESTE"],
     truth: "PARTIAL" as TruthState,
@@ -85,7 +86,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "LAMOU IA — Diagnóstico 360",
     purpose: "Diagnóstico de cliente/produto com evidência e severidade.",
     chainStep: 5,
-    route: "/owner/clientes",
+    route: "/apps/diagnostico-360",
     shell: "rota real",
     capabilities: ["diagnóstico por cliente", "severidade e pendências"],
     truth: "PARTIAL" as TruthState,
@@ -95,7 +96,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "LAMOU Digital Improvement",
     purpose: "Converter diagnóstico em melhoria roteada.",
     chainStep: 6,
-    route: "/owner/planos",
+    route: "/apps/digital-improvement",
     shell: "rota real",
     capabilities: ["plano de ação", "rota de melhoria"],
     truth: "PARTIAL" as TruthState,
@@ -105,8 +106,8 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Diagnostic / Meeting Architect",
     purpose: "Estruturar reuniões e decisões a partir de casos.",
     chainStep: null,
-    route: null,
-    shell: "ficha somente",
+    route: "/apps/meeting-architect",
+    shell: "rota real",
     capabilities: ["pauta orientada a caso", "registro de decisão"],
     truth: "NOT_VERIFIED",
   },
@@ -115,7 +116,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Teste³ IA",
     purpose: "Executor transversal de testes com evidência.",
     chainStep: 7,
-    route: "/owner/testes",
+    route: "/apps/teste3",
     shell: "rota real",
     capabilities: ["execução de teste", "reteste", "eficácia"],
     truth: "PARTIAL" as TruthState,
@@ -125,7 +126,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Validation Gate",
     purpose: "Gate G0–G11: sem evidência não passa.",
     chainStep: 8,
-    route: "/owner/versoes",
+    route: "/apps/validation-gate",
     shell: "rota real",
     capabilities: ["gates", "bloqueio de promoção", "evidência obrigatória"],
     truth: "PARTIAL" as TruthState,
@@ -135,7 +136,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "LAMOU Lab",
     purpose: "Teoria, conceitos LUA e Matriz de Verdade Científica.",
     chainStep: 9,
-    route: "/owner/lab",
+    route: "/apps/lab",
     shell: "rota real",
     capabilities: ["conceitos", "estudos", "matriz de verdade"],
     truth: "PARTIAL" as TruthState,
@@ -145,7 +146,7 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "LAMOU Version",
     purpose: "Builds, baseline, candidata, rollback e linhagem documental.",
     chainStep: 10,
-    route: "/owner/versoes",
+    route: "/apps/version",
     shell: "rota real",
     capabilities: ["versionamento", "gate de promoção", "linhagem"],
     truth: "PARTIAL" as TruthState,
@@ -156,8 +157,8 @@ export const WAVE1_APPS: WaveApp[] = [
     name: "Orbit / Agenda / LifeOS",
     purpose: "Agenda e produtividade do Owner. Não é versionamento nem Intelligence 360.",
     chainStep: null,
-    route: null,
-    shell: "ficha somente",
+    route: "/apps/orbit",
+    shell: "rota real",
     capabilities: ["agenda", "rotina", "foco"],
     truth: "NOT_VERIFIED",
   },
@@ -387,7 +388,17 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
   },
   {
     folder: "20_ARCHITECTURE",
-    files: ["ARCHITECTURE.md", "APP_CORE_BINDINGS.md", "DEPENDENCIES.md", "DATA_FLOW.md"],
+    files: [
+      "ARCHITECTURE.md",
+      "APP_CATALOG.md",
+      "APP_CORE_BINDINGS.md",
+      "DEPENDENCIES.md",
+      "DATA_FLOW.md",
+      "FLOW_HANDOFFS.md",
+      "SOURCE_OF_TRUTH.md",
+      "LINEAGE_ALIASES.md",
+      "DUPLICATION_RECONCILIATION.md",
+    ],
   },
   {
     folder: "30_CONTRACTS",
@@ -400,7 +411,10 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
       "EVENT_CONTRACTS.md",
     ],
   },
-  { folder: "40_DATA", files: ["DATA_CONTRACT.md", "SCHEMAS.md", "RLS.md", "RETENTION.md"] },
+  {
+    folder: "40_DATA",
+    files: ["DATA_CONTRACT.md", "SCHEMAS.md", "RLS.md", "RETENTION.md", "METRICS_REGISTRY.md"],
+  },
   {
     folder: "50_SECURITY",
     files: ["SECURITY_SPEC.md", "RBAC_ABAC.md", "THREAT_MODEL.md", "SECRET_REQUIREMENTS.md"],
@@ -418,7 +432,13 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
   },
   {
     folder: "70_VALIDATION",
-    files: ["VALIDATION_CONTRACT.md", "GATES.md", "EVIDENCE_REQUIREMENTS.md", "TRUTH_STATE.md"],
+    files: [
+      "VALIDATION_CONTRACT.md",
+      "GATES.md",
+      "EVIDENCE_REQUIREMENTS.md",
+      "EFFECTIVENESS_CONTRACT.md",
+      "TRUTH_STATE.md",
+    ],
   },
   {
     folder: "80_AI",
@@ -430,7 +450,14 @@ export const DOC_STRUCTURE: { folder: string; files: string[] }[] = [
   },
   {
     folder: "95_OPERATIONS",
-    files: ["OBSERVABILITY.md", "BACKUP_RESTORE.md", "DEPLOYMENT.md", "RUNBOOK.md"],
+    files: [
+      "OBSERVABILITY.md",
+      "METRICS_REGISTRY.md",
+      "HANDOFF_MONITORING.md",
+      "BACKUP_RESTORE.md",
+      "DEPLOYMENT.md",
+      "RUNBOOK.md",
+    ],
   },
 ];
 
