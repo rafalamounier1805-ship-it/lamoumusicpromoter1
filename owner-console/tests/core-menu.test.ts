@@ -5,17 +5,17 @@ import { CORE_DETAIL_SURFACES, CORE_MENU } from "../src/lib/lamou/nav";
 const EXPECTED_ROOTS = [
   ["/core", "Visão Geral"],
   ["/core/health", "Indicadores de Saúde"],
+  ["/core/observability", "Observabilidade"],
   ["/core/architecture", "Arquitetura Técnica"],
   ["/core/apps", "Aplicativos, Plugins & Bindings"],
-  ["/core/problems", "Planos de Ação & Melhorias"],
-  ["/core/tests", "Testes & Qualidade"],
+  ["/core/problems", "Problemas & Encaminhamentos"],
+  ["/core/tests", "Testes Técnicos do CORE"],
   ["/core/versions", "Versões & Atualizações"],
-  ["/core/observability", "Observabilidade"],
   ["/core/settings", "Configurações"],
 ] as const;
 
 describe("CORE root navigation", () => {
-  test("mantém exatamente as nove raízes canônicas, na ordem aprovada", () => {
+  test("mantém exatamente as nove raízes técnicas, na ordem reconciliada", () => {
     expect(CORE_MENU).toHaveLength(9);
     expect(CORE_MENU.map((item) => [item.to, item.label])).toEqual(EXPECTED_ROOTS);
   });
