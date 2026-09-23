@@ -50,3 +50,22 @@ Key rule: apps remain complete independent products. Central/CORE/LABTEST may or
 Metric definitions can be registered before runtime sources exist, but numeric values must remain `— / NOT_CONNECTED / NOT_VERIFIED` until measured.
 
 **Do not merge/promote this branch without explicit approval.**
+
+
+## MASTER APP LOCK — obrigatório
+
+Antes de alterar, mover, agrupar, renomear ou conectar qualquer aplicativo, leia:
+
+- `ENTITY_CLASSIFICATION_2026-09-23.md`
+- `ARCHITECTURE_RECONCILIATION_2026-09-23.md`
+- `../../owner-console/src/lib/lamou/master-app-lock.ts`
+
+Regra: item confirmado como APP fica inteiro e APP-LOCKED dentro da arquitetura LAMOU. Módulos, bibliotecas, ferramentas e superfícies do sistema não podem ser promovidos a APP por inferência.
+
+Correções explícitas desta candidata:
+- Validation Gate / Validação = APP
+- LAMOU App Processo / Processo = APP
+- APP Observer 360 = APP
+- Certificações = APP
+
+APP LOCK congela classificação/identidade/escopo/origem/linhagem, mas **não promove versão**.
