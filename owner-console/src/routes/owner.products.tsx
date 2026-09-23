@@ -14,7 +14,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { APPS_MENU, appRoute } from "@/lib/lamou/nav";
+import {
+  APP_ARCHITECTURE_NODES,
+  APP_FLOW_EDGES,
+  DUPLICATION_RECONCILIATION,
+  NEW_SINCE_V75,
+  OWNER_MODULE_ORDER,
+} from "@/lib/lamou/app-architecture";
+import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
+import { APPS_MENU, APP_ROUTES, appRoute, type AppSlug } from "@/lib/lamou/nav";
 import { useMemo, useState } from "react";
 
 /** Dependências externas declaradas. Nenhuma medição de custo ou SLA importada. */
@@ -31,7 +39,7 @@ type Stage =
 
 type Product = {
   id: string;
-  slug: string;
+  slug: AppSlug | null;
   name: string;
   family: string;
   classification: "Incubado do Proprietário" | "Produto Comercial";
@@ -39,6 +47,7 @@ type Product = {
   truth: string;
   clients: string;
   version: string;
+  source?: string;
 };
 
 /** Catálogo gerencial SYNTHETIC_DEMO. Nenhuma venda, receita ou adoção medida. */
@@ -164,6 +173,78 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "spec",
   },
+  {
+    id: "PRD-0012",
+    slug: "lab",
+    name: "LAMOU Lab",
+    family: "Qualidade & Validação",
+    classification: "Incubado do Proprietário",
+    stage: "Em Teste",
+    truth: "IMPLEMENTED_NOT_VERIFIED",
+    clients: "—",
+    version: "candidate",
+    source: "Rota já existente no source candidato; reinserida no catálogo/navegação.",
+  },
+  {
+    id: "PRD-0013",
+    slug: null,
+    name: "PROJECT PRIME MASTER V1",
+    family: "Projetos",
+    classification: "Incubado do Proprietário",
+    stage: "Homologação",
+    truth: "APPROVED_REFERENCE",
+    clients: "—",
+    version: "V1",
+    source: "Aplicativo aprovado externo; não embutido nesta Owner Console.",
+  },
+  {
+    id: "PRD-0014",
+    slug: null,
+    name: "LAMU IA — Meu Desenvolvimento v1 COMPLETO",
+    family: "Pessoas & Desenvolvimento",
+    classification: "Incubado do Proprietário",
+    stage: "Homologação",
+    truth: "APPROVED_REFERENCE",
+    clients: "—",
+    version: "v1 COMPLETO",
+    source: "Aplicativo aprovado externo; preserva escopo próprio.",
+  },
+  {
+    id: "PRD-0015",
+    slug: null,
+    name: "VECTRA Intelligence 360 V4 — Mapa Vivo",
+    family: "Operação & Observabilidade",
+    classification: "Produto Comercial",
+    stage: "Produto Comercial",
+    truth: "OFFICIAL_APPROVED",
+    clients: "—",
+    version: "V4",
+    source: "Manifest oficial externo; linhagem BELGO/VECTRA em reconciliação.",
+  },
+  {
+    id: "PRD-0016",
+    slug: null,
+    name: "LAMOU App Processo",
+    family: "Processos & Operação",
+    classification: "Incubado do Proprietário",
+    stage: "Em Teste",
+    truth: "CANDIDATE_NOT_PROMOTED",
+    clients: "—",
+    version: "V0.3",
+    source: "Candidata externa; engenharia de processos completa permanece no próprio app.",
+  },
+  {
+    id: "PRD-0017",
+    slug: null,
+    name: "Plano de Ação",
+    family: "Execução & Eficácia",
+    classification: "Incubado do Proprietário",
+    stage: "Ideia",
+    truth: "DOCUMENTED_ONLY",
+    clients: "—",
+    version: "documented",
+    source: "Contrato funcional documentado; source standalone não materializado neste repo.",
+  },
 ];
 
 function Kpi({
@@ -219,7 +300,11 @@ function ProductsPage() {
         <ContextColumn empty="Selecione um aplicativo do portfólio: a leitura executiva abre aqui, sem sair da tela." />
       );
     }
-    const executavel = APPS_MENU.some((a) => a.to === appRoute(current.slug));
+    const route =
+      current.slug && Object.prototype.hasOwnProperty.call(APP_ROUTES, current.slug)
+        ? appRoute(current.slug)
+        : null;
+    const executavel = Boolean(route && APPS_MENU.some((a) => a.to === route));
     const tabs: ColumnTab[] = [
       {
         id: "resumo",
@@ -236,8 +321,8 @@ function ProductsPage() {
               label="Execução"
               value={
                 executavel
-                  ? "Aplicativo existe como ficha/spec — execução ainda não implementada."
-                  : "Rota de aplicativo não reconciliada."
+                  ? "Rota do aplicativo está materializada nesta candidata. Isso não prova integração externa nem promoção."
+                  : "Aplicativo/referência externo ao bundle atual; fonte e estado são preservados sem falsa incorporação."
               }
             />
           </>
@@ -284,7 +369,11 @@ function ProductsPage() {
               value="Catálogo gerencial de portfólio (fixtures do proprietário)."
             />
             <Field label="Responsável" value="responsável: proprietário" />
-            <Field label="Última verificação" value="sem verificação registrada" />
+            <Field label="Última verificação" value="sem verificação de runtime registrada" />
+            <Field
+              label="Fonte / reconciliação"
+              value={current.source ?? "Catálogo da candidata; ver arquitetura e lineage registry."}
+            />
           </>
         ),
       },
@@ -326,9 +415,15 @@ function ProductsPage() {
         onClose={() => setOpenId(null)}
         footer={
           <>
-            <Button asChild size="sm" variant="outline">
-              <Link to={appRoute(current.slug)}>Abrir aplicativo</Link>
-            </Button>
+            {route ? (
+              <Button asChild size="sm" variant="outline">
+                <Link to={route}>Abrir aplicativo</Link>
+              </Button>
+            ) : (
+              <Button size="sm" variant="outline" disabled>
+                Fonte externa / sem rota embutida
+              </Button>
+            )}
             <Button asChild size="sm" variant="outline">
               <Link to="/core/apps">Binding técnico no CORE</Link>
             </Button>
@@ -368,6 +463,51 @@ function ProductsPage() {
             icon={Boxes}
           />
         </div>
+
+        <Panel title="Revisão de arquitetura da próxima candidata">
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <p className="text-xs text-muted-foreground">Apps/referências reconciliados</p>
+              <p className="mt-1 font-display text-xl font-semibold">{APP_ARCHITECTURE_NODES.length}</p>
+            </div>
+            <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <p className="text-xs text-muted-foreground">Novos desde V7.5</p>
+              <p className="mt-1 font-display text-xl font-semibold">{NEW_SINCE_V75.length}</p>
+            </div>
+            <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <p className="text-xs text-muted-foreground">Handoffs contratados</p>
+              <p className="mt-1 font-display text-xl font-semibold">{APP_FLOW_EDGES.length}</p>
+            </div>
+            <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <p className="text-xs text-muted-foreground">Métricas cadastradas</p>
+              <p className="mt-1 font-display text-xl font-semibold">{METRICS_REGISTRY.length}</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">definições; valores exigem fonte medida</p>
+            </div>
+          </div>
+
+          <div className="mt-3 grid gap-3 xl:grid-cols-2">
+            <div className="rounded-lg border border-border/50 bg-background/40 p-3">
+              <p className="text-xs font-medium">Ordem gerencial</p>
+              <ol className="mt-2 space-y-1 text-xs text-muted-foreground">
+                {OWNER_MODULE_ORDER.map((item, index) => (
+                  <li key={item}>{index + 1}. {item}</li>
+                ))}
+              </ol>
+            </div>
+            <div className="rounded-lg border border-border/50 bg-background/40 p-3">
+              <p className="text-xs font-medium">Duplicidades / linhagens revisadas</p>
+              <div className="mt-2 space-y-2 text-xs text-muted-foreground">
+                {DUPLICATION_RECONCILIATION.map((d) => (
+                  <div key={d.id}>
+                    <span className="font-mono text-[10px]">{d.id}</span> · {d.items.join(" ↔ ")}
+                    <br />
+                    <span>{d.decision}: {d.rule}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Panel>
 
         <Panel title="Distribuição por estágio">
           <div className="flex flex-wrap gap-2">
