@@ -51,6 +51,8 @@ export const OWNER_MENU: NavItem[] = [
  *  e pré-promoção. Substitui o antigo "LAB". */
 export const LABTEST_MENU: NavItem[] = [
   { to: "/labtest", label: "Visão Geral & Ambientes de Teste", icon: FlaskConical },
+  { to: "/apps/lab", label: "LAMOU Lab", icon: FlaskConical },
+  { to: "/apps/validation-gate", label: "Validation Gate", icon: ShieldCheck },
   { to: "/labtest/next", label: "Próxima Versão / Fila de Promoção", icon: Rocket },
 ];
 
@@ -105,8 +107,6 @@ export const APPS_MENU: NavItem[] = [
   { to: "/apps/digital-improvement", label: "Digital Improvement", icon: Activity },
   { to: "/apps/meeting-architect", label: "Meeting Architect", icon: ClipboardList },
   { to: "/apps/teste3", label: "Teste³ IA", icon: ClipboardList },
-  { to: "/apps/validation-gate", label: "Validation Gate", icon: ShieldCheck },
-  { to: "/apps/lab", label: "LAMOU Lab", icon: FlaskConical },
   { to: "/apps/orbit", label: "Orbit / Agenda / LifeOS", icon: Compass },
   { to: "/apps/version", label: "LAMOU Version", icon: Boxes },
 ];
@@ -154,8 +154,6 @@ export const APP_ROUTES = {
   "digital-improvement": "/apps/digital-improvement",
   "meeting-architect": "/apps/meeting-architect",
   teste3: "/apps/teste3",
-  "validation-gate": "/apps/validation-gate",
-  lab: "/apps/lab",
   orbit: "/apps/orbit",
   version: "/apps/version",
 } as const;
@@ -174,3 +172,10 @@ export function appRoute(slug: string): AppRoute {
   }
   return route;
 }
+
+
+/** Rotas físicas preservadas por compatibilidade, sem classificá-las como aplicativos. */
+export const SYSTEM_SURFACE_ROUTES = {
+  lab: "/apps/lab",
+  "validation-gate": "/apps/validation-gate",
+} as const;
