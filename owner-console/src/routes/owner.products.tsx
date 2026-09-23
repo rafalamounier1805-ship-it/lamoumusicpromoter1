@@ -229,6 +229,18 @@ const PRODUCTS: Product[] = [
     version: "V0.3",
     source: "Candidata externa; engenharia de processos completa permanece no próprio app.",
   },
+  {
+    id: "PRD-0018",
+    slug: null,
+    name: "APP Observer 360 V2",
+    family: "Observabilidade & Diagnóstico Técnico",
+    classification: "Incubado do Proprietário",
+    stage: "Em Teste",
+    truth: "CANDIDATE_NOT_PROMOTED",
+    clients: "—",
+    version: "V2",
+    source: "Aplicativo independente; executável/candidata externa de 2026-09-23. APP LOCK não equivale a promoção.",
+  },
 ];
 
 function Kpi({
