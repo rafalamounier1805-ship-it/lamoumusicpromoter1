@@ -78,6 +78,31 @@ jobs:
           echo "ROUTES=$pass/7"
           test "$pass" -eq 7
 
+      - name: Security guard smoke
+        run: |
+          set -euo pipefail
+
+          curl -fsS http://127.0.0.1:4173/install/owner > /tmp/public-owner.html
+          grep -Fq "Seu pacote está pronto para instalar." /tmp/public-owner.html
+          echo "PUBLIC /install/owner: PASS"
+
+          curl -fsS http://127.0.0.1:4173/reset-password > /tmp/public-reset.html
+          grep -Fq "Definir nova senha" /tmp/public-reset.html
+          echo "PUBLIC /reset-password: PASS"
+
+          for route in /owner /core /apps/orbit /install/client; do
+            out="/tmp/protected-${route//\//_}.html"
+            curl -fsS "http://127.0.0.1:4173$route" > "$out"
+            grep -Fq "Verificando autorização" "$out"
+            echo "GUARD $route: PASS"
+          done
+
+          ! grep -Fq "CORE PROPRIETÁRIO / OWNER" /tmp/protected-_owner.html
+          ! grep -Fq "CORE PROPRIETÁRIO / OWNER" /tmp/protected-_core.html
+          ! grep -Fq "CORE PROPRIETÁRIO / OWNER" /tmp/protected-_apps_orbit.html
+          ! grep -Fq "Vamos preparar o ambiente deste cliente." /tmp/protected-_install_client.html
+          echo "ADMIN CONTENT BEFORE AUTH: BLOCKED"
+
       - name: Preview log
         if: always()
         run: |
