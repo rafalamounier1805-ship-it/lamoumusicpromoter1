@@ -5,7 +5,8 @@
  * It reconciles V7.5, source-binding evidence and explicit later decisions.
  */
 
-export type MasterAppClass = "LOCKED_APP" | "SAME_APP_LINEAGE_ALIAS" | "HOLD_CLASSIFICATION" | "NOT_APP";
+export type MasterAppClass =
+  "LOCKED_APP" | "SAME_APP_LINEAGE_ALIAS" | "HOLD_CLASSIFICATION" | "NOT_APP";
 
 export type LamouArea =
   | "personal-productivity"
