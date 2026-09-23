@@ -30,14 +30,17 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Start preview
+      - name: Start Cloudflare preview
         run: |
           set -euo pipefail
-          nohup bunx vite preview --host 127.0.0.1 --port 4173 > /tmp/lamou-preview.log 2>&1 &
+          echo "=== NITRO WRANGLER CONFIG ==="
+          cat .output/server/wrangler.json
+          nohup bunx wrangler dev --config .output/server/wrangler.json --ip 127.0.0.1 --port 4173 > /tmp/lamou-preview.log 2>&1 &
           echo $! > /tmp/lamou-preview.pid
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
-              echo "PREVIEW_READY"
+          for i in $(seq 1 45); do
+            status=$(curl -sS -o /tmp/root-body.txt -w "%{http_code}" http://127.0.0.1:4173/ || true)
+            if [ "$status" != "000" ]; then
+              echo "PREVIEW_READY HTTP=$status"
               exit 0
             fi
             sleep 1
