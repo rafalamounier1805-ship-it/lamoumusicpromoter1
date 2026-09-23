@@ -18,8 +18,16 @@ export type ArchitectureState =
 
 export type Availability = "BUNDLED_ROUTE" | "EXTERNAL_SOURCE_REFERENCE" | "CATALOG_ONLY";
 
+export type ArchitectureEntityKind =
+  | "app"
+  | "module"
+  | "system-surface"
+  | "tool"
+  | "external-app-reference";
+
 export interface AppArchitectureNode {
   key: string;
+  kind: ArchitectureEntityKind;
   canonicalId: string | null;
   name: string;
   aliases: string[];
@@ -47,6 +55,7 @@ export interface AppArchitectureNode {
 export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   {
     key: "research-scout",
+    kind: "app",
     canonicalId: "APP-034",
     name: "LAMOU Research Scout",
     aliases: ["Research Scout"],
@@ -61,6 +70,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "benchmarker",
+    kind: "app",
     canonicalId: null,
     name: "Benchmarker",
     aliases: [],
@@ -75,6 +85,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "opportunity-intelligence",
+    kind: "app",
     canonicalId: null,
     name: "Opportunity Intelligence",
     aliases: ["Radar de Oportunidades"],
@@ -89,6 +100,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "diagnostico-360",
+    kind: "app",
     canonicalId: "APP-011",
     name: "LAMOU IA — Diagnóstico 360",
     aliases: ["Diagnóstico 360"],
@@ -103,6 +115,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "showroom",
+    kind: "app",
     canonicalId: "APP-029",
     name: "LAMOU Showroom",
     aliases: ["Showroom"],
@@ -117,6 +130,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "digital-improvement",
+    kind: "app",
     canonicalId: "APP-012",
     name: "LAMOU Digital Improvement",
     aliases: [],
@@ -131,6 +145,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "meeting-architect",
+    kind: "app",
     canonicalId: "APP-030",
     name: "LAMOU Diagnostic / Meeting Architect",
     aliases: ["Meeting Architect"],
@@ -145,6 +160,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "orbit",
+    kind: "app",
     canonicalId: "APP-007",
     name: "Orbit / Agenda / LifeOS",
     aliases: ["Orbite", "LAMOU Agenda", "LAMOU LifeOS"],
@@ -159,11 +175,12 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "plano-acao",
+    kind: "module",
     canonicalId: null,
     name: "Plano de Ação",
     aliases: ["Plano de Ação & Melhorias"],
     domain: "operations",
-    role: "Receber decisão aprovada, executar ação, anexar evidência, medir resultado, eficácia e recorrência.",
+    role: "Módulo de ação/eficácia. Não contar como aplicativo independente sem decisão explícita.",
     state: "DOCUMENTED_ONLY",
     availability: "CATALOG_ONLY",
     route: null,
@@ -173,6 +190,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "project-prime",
+    kind: "external-app-reference",
     canonicalId: null,
     name: "PROJECT PRIME MASTER V1",
     aliases: ["PROJECT", "Project Prime"],
@@ -187,6 +205,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "processo",
+    kind: "external-app-reference",
     canonicalId: null,
     name: "LAMOU App Processo",
     aliases: ["Processo"],
@@ -201,6 +220,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "meu-desenvolvimento",
+    kind: "external-app-reference",
     canonicalId: null,
     name: "LAMU IA — Meu Desenvolvimento v1 COMPLETO",
     aliases: ["Meu Desenvolvimento"],
@@ -215,11 +235,12 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "app-observer-360",
+    kind: "tool",
     canonicalId: null,
     name: "APP Observer 360 V2",
     aliases: ["Observer 360", "Aplicativo de Observação"],
     domain: "observability",
-    role: "Observar aplicativos ponta a ponta: estrutura, uso, erros/crashes, disponibilidade, rede/APIs, segurança, tracing, versão, backup e atualização.",
+    role: "Ferramenta técnica candidata de observação de aplicativos; NÃO contar no catálogo de aplicativos até classificação explícita do proprietário.",
     state: "CANDIDATE_NOT_PROMOTED",
     availability: "EXTERNAL_SOURCE_REFERENCE",
     route: null,
@@ -229,6 +250,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "teste3",
+    kind: "app",
     canonicalId: "APP-010",
     name: "Teste³ IA",
     aliases: [],
@@ -243,6 +265,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "lab",
+    kind: "system-surface",
     canonicalId: null,
     name: "LAMOU Lab",
     aliases: ["LABTEST"],
@@ -257,6 +280,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "validation-gate",
+    kind: "system-surface",
     canonicalId: null,
     name: "Validation Gate",
     aliases: [],
@@ -271,6 +295,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "version",
+    kind: "app",
     canonicalId: "APP-LAMOU-VERSION",
     name: "LAMOU Version",
     aliases: ["Version"],
@@ -285,6 +310,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "vectra-v4",
+    kind: "external-app-reference",
     canonicalId: null,
     name: "VECTRA Intelligence 360 V4 — Mapa Vivo",
     aliases: ["VECTRA V4", "BELGO/VECTRA lineage"],
@@ -670,3 +696,13 @@ export const DUPLICATION_RECONCILIATION: DuplicationDecision[] = [
 ];
 
 export const NEW_SINCE_V75 = APP_ARCHITECTURE_NODES.filter((app) => app.newSinceV75);
+
+
+/** Somente entidades explicitamente classificadas como aplicativo entram no catálogo de Apps. */
+export const CONFIRMED_APP_ENTITIES = APP_ARCHITECTURE_NODES.filter(
+  (item) => item.kind === "app" || item.kind === "external-app-reference",
+);
+
+export const NON_APP_ARCHITECTURE_ENTITIES = APP_ARCHITECTURE_NODES.filter(
+  (item) => item.kind !== "app" && item.kind !== "external-app-reference",
+);
