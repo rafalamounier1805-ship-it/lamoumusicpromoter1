@@ -334,7 +334,8 @@ export function PlansView({
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                Nenhum projeto criado nesta visão de compatibilidade. Quando a complexidade exigir projeto, o handoff deve apontar para PROJECT sem recriar o PROJECT aqui.
+                Nenhum projeto criado nesta visão de compatibilidade. Quando a complexidade exigir
+                projeto, o handoff deve apontar para PROJECT sem recriar o PROJECT aqui.
               </p>
             )}
           </Panel>
@@ -421,14 +422,26 @@ export function PlansView({
       <Panel title="Onde cada atividade acontece">
         <ul className="space-y-1 text-sm text-muted-foreground">
           <li>Mapa Vivo: detectar, contextualizar fatos e encaminhar.</li>
-          <li>CORE: investigar tecnicamente, observar e encaminhar sem absorver o aplicativo responsável pela execução.</li>
-          <li>Plano de Ação: governar ação, responsável, prazo, aprovação, evidência, resultado e eficácia.</li>
-          <li>PROJECT: assumir iniciativas complexas com múltiplas frentes, dependências e marcos.</li>
+          <li>
+            CORE: investigar tecnicamente, observar e encaminhar sem absorver o aplicativo
+            responsável pela execução.
+          </li>
+          <li>
+            Plano de Ação: governar ação, responsável, prazo, aprovação, evidência, resultado e
+            eficácia.
+          </li>
+          <li>
+            PROJECT: assumir iniciativas complexas com múltiplas frentes, dependências e marcos.
+          </li>
           <li>
             Teste do que já está em operação: CORE &gt; Testes & Qualidade. Candidata/experimento:
             LABTEST.
           </li>
-          <li>Persistência local DEMO nesta visão de compatibilidade; Plano de Ação e PROJECT permanecem aplicativos independentes e seus runtimes/bancos não são declarados conectados.</li>
+          <li>
+            Persistência local DEMO nesta visão de compatibilidade; Plano de Ação e PROJECT
+            permanecem aplicativos independentes e seus runtimes/bancos não são declarados
+            conectados.
+          </li>
           <li>Nenhuma versão foi promovida: SALVAR ≠ PROMOVER.</li>
         </ul>
       </Panel>
