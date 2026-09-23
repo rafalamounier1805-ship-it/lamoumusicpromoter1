@@ -5,11 +5,7 @@
  * It reconciles V7.5, source-binding evidence and explicit later decisions.
  */
 
-export type MasterAppClass =
-  | "LOCKED_APP"
-  | "SAME_APP_LINEAGE_ALIAS"
-  | "HOLD_CLASSIFICATION"
-  | "NOT_APP";
+export type MasterAppClass = "LOCKED_APP" | "SAME_APP_LINEAGE_ALIAS" | "HOLD_CLASSIFICATION" | "NOT_APP";
 
 export type LamouArea =
   | "personal-productivity"
@@ -59,7 +55,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     classification: "LOCKED_APP",
     lamouArea: "people-learning",
     sourceState: "SOURCE_REPO_VERIFICADO",
-    versionTruth: "produção declarada no catálogo; build produtivo não reverificado nesta candidata",
+    versionTruth:
+      "produção declarada no catálogo; build produtivo não reverificado nesta candidata",
     bindingTruth: "NOT_VERIFIED",
     scopeLock: "LOCKED",
     reason: "Aplicativo do catálogo anterior com fonte de produto verificada.",
@@ -114,7 +111,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     classification: "LOCKED_APP",
     lamouArea: "personal-productivity",
     sourceState: "LINEAGE_RECONCILIATION",
-    versionTruth: "app confirmado; identidade canônica desta candidata para a linhagem Agenda/Orbit",
+    versionTruth:
+      "app confirmado; identidade canônica desta candidata para a linhagem Agenda/Orbit",
     bindingTruth: "NOT_VERIFIED",
     scopeLock: "LOCKED",
     reason: "Agenda, diário, rotina e follow-up permanecem dentro do aplicativo.",
@@ -238,7 +236,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     versionTruth: "identidade de app preservada; source a reconciliar",
     bindingTruth: "NOT_VERIFIED",
     scopeLock: "LOCKED",
-    reason: "Catálogo já o identifica como aplicativo; ausência de source bloqueia binding/promoção, não apaga a identidade.",
+    reason:
+      "Catálogo já o identifica como aplicativo; ausência de source bloqueia binding/promoção, não apaga a identidade.",
   },
   {
     id: "APP-019",
@@ -426,7 +425,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     versionTruth: "biblioteca reutilizável",
     bindingTruth: "NOT_VERIFIED",
     scopeLock: "NOT_APPLICABLE",
-    reason: "Biblioteca/design system reutilizável; executável de catálogo não a transforma em app.",
+    reason:
+      "Biblioteca/design system reutilizável; executável de catálogo não a transforma em app.",
   },
   {
     id: "APP-034-CANDIDATE",
@@ -516,7 +516,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     versionTruth: "CANDIDATE_NOT_PROMOTED",
     bindingTruth: "NOT_CONNECTED",
     scopeLock: "LOCKED",
-    reason: "Foi definido e tratado como APP de observação; não confundir com CORE Observabilidade.",
+    reason:
+      "Foi definido e tratado como APP de observação; não confundir com CORE Observabilidade.",
   },
   {
     id: "APP-CERTIFICACOES",
@@ -527,7 +528,8 @@ export const MASTER_APP_LOCK_CATALOG: MasterAppLockItem[] = [
     versionTruth: "identity/scope locked; source/version to reconcile",
     bindingTruth: "NOT_VERIFIED",
     scopeLock: "LOCKED",
-    reason: "Aplicativo citado explicitamente como ciclo completo de certificações; não fragmentar.",
+    reason:
+      "Aplicativo citado explicitamente como ciclo completo de certificações; não fragmentar.",
   },
 
   // Non-app entities explicitly kept outside Apps
