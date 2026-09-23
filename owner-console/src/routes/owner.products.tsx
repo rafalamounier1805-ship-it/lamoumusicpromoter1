@@ -17,8 +17,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   APP_ARCHITECTURE_NODES,
   APP_FLOW_EDGES,
+  CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
   NEW_SINCE_V75,
+  NON_APP_ARCHITECTURE_ENTITIES,
   OWNER_MODULE_ORDER,
 } from "@/lib/lamou/app-architecture";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
@@ -140,17 +142,7 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "spec",
   },
-  {
-    id: "PRD-0009",
-    slug: "validation-gate",
-    name: "Validation Gate",
-    family: "Qualidade & Validação",
-    classification: "Incubado do Proprietário",
-    stage: "Homologação",
-    truth: "NOT_VERIFIED",
-    clients: "—",
-    version: "spec",
-  },
+
   {
     id: "PRD-0010",
     slug: "orbit",
@@ -173,18 +165,7 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "spec",
   },
-  {
-    id: "PRD-0012",
-    slug: "lab",
-    name: "LAMOU Lab",
-    family: "Qualidade & Validação",
-    classification: "Incubado do Proprietário",
-    stage: "Em Teste",
-    truth: "IMPLEMENTED_NOT_VERIFIED",
-    clients: "—",
-    version: "V0.9 external candidate / bundled route version to reconcile",
-    source: "Rota já existe no Owner source; candidata externa mais nova LAMOU LAB V0.9 precisa de reconciliação de source/version antes de substituir a rota.",
-  },
+
   {
     id: "PRD-0013",
     slug: null,
@@ -233,30 +214,8 @@ const PRODUCTS: Product[] = [
     version: "V0.3",
     source: "Candidata externa; engenharia de processos completa permanece no próprio app.",
   },
-  {
-    id: "PRD-0017",
-    slug: null,
-    name: "Plano de Ação",
-    family: "Execução & Eficácia",
-    classification: "Incubado do Proprietário",
-    stage: "Ideia",
-    truth: "DOCUMENTED_ONLY",
-    clients: "—",
-    version: "documented",
-    source: "Contrato funcional documentado; source standalone não materializado neste repo.",
-  },
-  {
-    id: "PRD-0018",
-    slug: null,
-    name: "APP Observer 360 V2",
-    family: "Observabilidade & Diagnóstico Técnico",
-    classification: "Incubado do Proprietário",
-    stage: "Em Teste",
-    truth: "CANDIDATE_NOT_PROMOTED",
-    clients: "—",
-    version: "V2",
-    source: "Executável/candidata externa criada em 2026-09-23; integrações reais ainda exigem fontes autorizadas.",
-  },
+
+
 ];
 
 function Kpi({
@@ -476,15 +435,18 @@ function ProductsPage() {
           />
         </div>
 
-        <Panel title="Revisão de arquitetura da próxima candidata">
+        <Panel title="Revisão de arquitetura e classificação da próxima candidata">
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Apps/referências reconciliados</p>
-              <p className="mt-1 font-display text-xl font-semibold">{APP_ARCHITECTURE_NODES.length}</p>
+              <p className="text-xs text-muted-foreground">Aplicativos confirmados</p>
+              <p className="mt-1 font-display text-xl font-semibold">{CONFIRMED_APP_ENTITIES.length}</p>
             </div>
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Novos desde V7.5</p>
+              <p className="text-xs text-muted-foreground">Entidades novas/reconciliadas</p>
               <p className="mt-1 font-display text-xl font-semibold">{NEW_SINCE_V75.length}</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                {NON_APP_ARCHITECTURE_ENTITIES.length} não são Apps
+              </p>
             </div>
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
               <p className="text-xs text-muted-foreground">Handoffs contratados</p>
