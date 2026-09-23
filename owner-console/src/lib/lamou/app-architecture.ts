@@ -844,6 +844,5 @@ export const APP_LOCK_REGISTRY: AppLockRecord[] = CONFIRMED_APP_ENTITIES.map((ap
     "source_of_truth",
     "lineage_aliases",
   ] as const,
-  rule:
-    "Aplicativo permanece inteiro dentro do LAMOU; não fragmentar, absorver, recriar como módulo ou fundir por similaridade. Mudança de classificação/identidade exige decisão explícita. SALVAR ≠ PROMOVER.",
+  rule: "Aplicativo permanece inteiro dentro do LAMOU; não fragmentar, absorver, recriar como módulo ou fundir por similaridade. Mudança de classificação/identidade exige decisão explícita. SALVAR ≠ PROMOVER.",
 }));
