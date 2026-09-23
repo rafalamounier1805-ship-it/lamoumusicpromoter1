@@ -239,7 +239,8 @@ const PRODUCTS: Product[] = [
     truth: "CANDIDATE_NOT_PROMOTED",
     clients: "—",
     version: "V2",
-    source: "Aplicativo independente; executável/candidata externa de 2026-09-23. APP LOCK não equivale a promoção.",
+    source:
+      "Aplicativo independente; executável/candidata externa de 2026-09-23. APP LOCK não equivale a promoção.",
   },
 ];
 
