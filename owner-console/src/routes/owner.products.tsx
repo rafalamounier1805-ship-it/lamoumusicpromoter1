@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   APP_FLOW_EDGES,
+  APP_LOCK_REGISTRY,
   CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
   NEW_SINCE_V75,
@@ -140,6 +141,18 @@ const PRODUCTS: Product[] = [
     truth: "NOT_VERIFIED",
     clients: "—",
     version: "spec",
+  },
+  {
+    id: "PRD-0009",
+    slug: "validation-gate",
+    name: "Validation Gate",
+    family: "Qualidade & Validação",
+    classification: "Incubado do Proprietário",
+    stage: "Homologação",
+    truth: "NOT_VERIFIED",
+    clients: "—",
+    version: "candidate",
+    source: "Aplicativo confirmado e APP-LOCKED; valida evidence packs e gates sem promover automaticamente.",
   },
 
   {
@@ -437,8 +450,11 @@ function ProductsPage() {
         <Panel title="Revisão de arquitetura e classificação da próxima candidata">
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Aplicativos confirmados</p>
-              <p className="mt-1 font-display text-xl font-semibold">{CONFIRMED_APP_ENTITIES.length}</p>
+              <p className="text-xs text-muted-foreground">Aplicativos confirmados / travados</p>
+              <p className="mt-1 font-display text-xl font-semibold">
+                {CONFIRMED_APP_ENTITIES.length} / {APP_LOCK_REGISTRY.length}
+              </p>
+              <p className="mt-1 text-[10px] text-muted-foreground">APP LOCK: identidade + escopo + origem + linhagem</p>
             </div>
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
               <p className="text-xs text-muted-foreground">Entidades novas/reconciliadas</p>
