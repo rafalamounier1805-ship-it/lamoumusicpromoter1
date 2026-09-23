@@ -73,7 +73,8 @@ export const METRICS_REGISTRY: MetricDefinition[] = [
     source: "error capture / exception telemetry",
     cadence: "event",
     formula: "count(unhandled_exception + handled_error_severity>=error)",
-    truthRule: "Erro precisa de timestamp, version_id, route/action e stack/fingerprint quando permitido.",
+    truthRule:
+      "Erro precisa de timestamp, version_id, route/action e stack/fingerprint quando permitido.",
     appliesTo: ["all-apps"],
   },
   {
@@ -183,7 +184,8 @@ export const METRICS_REGISTRY: MetricDefinition[] = [
     source: "security/audit telemetry",
     cadence: "event",
     formula: "count(security_event)",
-    truthRule: "Classificar severidade, regra acionada, tenant e evidência; sem inferir comprometimento.",
+    truthRule:
+      "Classificar severidade, regra acionada, tenant e evidência; sem inferir comprometimento.",
     appliesTo: ["all-apps"],
   },
   {
