@@ -3,6 +3,7 @@ import { Menu, Moon, Sun } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { OwnerOfficialIcon } from "@/components/lamou/owner-official-icon";
+import { OwnerGuard } from "@/components/lamou/owner-guard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,14 @@ import { NAV_GROUPS, type NavGroup } from "@/lib/lamou/nav";
 import { cn } from "@/lib/utils";
 
 export function AppShell({ group, children }: { group: NavGroup; children: ReactNode }) {
+  return (
+    <OwnerGuard>
+      <AppShellChrome group={group}>{children}</AppShellChrome>
+    </OwnerGuard>
+  );
+}
+
+function AppShellChrome({ group, children }: { group: NavGroup; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [light, setLight] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
