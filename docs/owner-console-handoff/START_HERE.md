@@ -27,3 +27,26 @@ The Work/source-sync prerequisite is complete enough for code execution and no l
 `AUDITORIA_FECHAMENTO_LAMOU_OWNER_2026-09-15.md` remains the critical reference for the product gaps.
 
 **SALVAR ≠ PROMOVER.**
+
+
+## Architecture reconciliation — 2026-09-23
+
+A new candidate branch was derived from the preserved previous candidate head without touching `main` or FROZEN:
+
+- branch: `candidate/lamou-owner-architecture-reconcile-2026-09-23`
+- parent candidate head: `a5d2e9beef6cfe36dd0765568afd4f4cf3faa6cc`
+- state: `CANDIDATE_NOT_PROMOTED`
+
+Read these documents before changing portfolio/flow/module relationships:
+
+1. `ARCHITECTURE_RECONCILIATION_2026-09-23.md`
+2. `DUPLICATION_RECONCILIATION_2026-09-23.md`
+3. `METRICS_REGISTRY_2026-09-23.md`
+4. `../lamou-lovable-build-pack-v1/ARCHITECTURE_AND_FLOWS.md`
+5. `../lamou-lovable-build-pack-v1/APPLICATION_CONTRACT_STANDARD.md`
+
+Key rule: apps remain complete independent products. Central/CORE/LABTEST may organize, validate and link them but must not absorb or fragment their functionality.
+
+Metric definitions can be registered before runtime sources exist, but numeric values must remain `— / NOT_CONNECTED / NOT_VERIFIED` until measured.
+
+**Do not merge/promote this branch without explicit approval.**
