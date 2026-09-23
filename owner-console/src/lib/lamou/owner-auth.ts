@@ -1,7 +1,8 @@
 import type { Session, User } from "@supabase/supabase-js";
-import { useCallback, useEffect, useState } from "react";
+import { createContext, createElement, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { ensurePlatformOwnerSession, type OwnerAuthz } from "./platform-owner";
 
 export interface OwnerProfile {
   id: string;
@@ -26,12 +27,13 @@ export interface MfaFactorState {
  * Auth real do proprietário: cadastro, login, recuperação, MFA (TOTP) e
  * persistência de perfil na tabela profiles (RLS por auth.uid()).
  */
-export function useOwnerAuth() {
+function useOwnerAuthState() {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<OwnerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [factors, setFactors] = useState<MfaFactorState[]>([]);
+  const [authz, setAuthz] = useState<OwnerAuthz | null>(null);
 
   const loadProfile = useCallback(async (uid: string) => {
     const { data } = await supabase.from("profiles").select("*").eq("id", uid).maybeSingle();
@@ -50,6 +52,10 @@ export function useOwnerAuth() {
     );
   }, []);
 
+  const refreshAuthz = useCallback(async () => {
+    setAuthz(await ensurePlatformOwnerSession());
+  }, []);
+
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event, next) => {
       if (
@@ -65,9 +71,11 @@ export function useOwnerAuth() {
       if (next?.user) {
         void loadProfile(next.user.id);
         void refreshFactors();
+        void refreshAuthz();
       } else {
         setProfile(null);
         setFactors([]);
+        setAuthz(null);
       }
       setLoading(false);
     });
@@ -78,12 +86,13 @@ export function useOwnerAuth() {
       if (data.session?.user) {
         void loadProfile(data.session.user.id);
         void refreshFactors();
+        void refreshAuthz();
       }
       setLoading(false);
     });
 
     return () => sub.subscription.unsubscribe();
-  }, [loadProfile, refreshFactors]);
+  }, [loadProfile, refreshFactors, refreshAuthz]);
 
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {
     const { data, error } = await supabase.auth.signUp({
@@ -104,6 +113,7 @@ export function useOwnerAuth() {
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
+    setAuthz(null);
   }, []);
 
   const requestRecovery = useCallback(async (email: string) => {
@@ -169,6 +179,9 @@ export function useOwnerAuth() {
     profile,
     loading,
     factors,
+    authz,
+    isPlatformOwner: authz?.kind === "authorized",
+    refreshAuthz,
     signUp,
     signIn,
     signOut,
@@ -178,4 +191,20 @@ export function useOwnerAuth() {
     verifyMfa,
     unenrollMfa,
   };
+}
+
+
+export type OwnerAuthValue = ReturnType<typeof useOwnerAuthState>;
+
+const OwnerAuthContext = createContext<OwnerAuthValue | null>(null);
+
+export function OwnerAuthProvider({ children }: { children: ReactNode }) {
+  const value = useOwnerAuthState();
+  return createElement(OwnerAuthContext.Provider, { value }, children);
+}
+
+export function useOwnerAuth(): OwnerAuthValue {
+  const ctx = useContext(OwnerAuthContext);
+  if (!ctx) throw new Error("useOwnerAuth precisa estar dentro de OwnerAuthProvider.");
+  return ctx;
 }
