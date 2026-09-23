@@ -57,7 +57,9 @@ describe("architecture reconciliation", () => {
     for (const appKey of confirmed) {
       expect(locked.has(appKey)).toBe(true);
     }
-    expect(APP_LOCK_REGISTRY.every((item) => item.lockState === "LOCKED_APP_IDENTITY_SCOPE")).toBe(true);
+    expect(
+      APP_LOCK_REGISTRY.every((item) => item.lockState === "LOCKED_APP_IDENTITY_SCOPE"),
+    ).toBe(true);
   });
 
   test("new since V7.5 never pretends an external reference has a bundled route", () => {
