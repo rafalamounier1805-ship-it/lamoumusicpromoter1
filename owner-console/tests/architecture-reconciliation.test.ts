@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   APP_ARCHITECTURE_NODES,
   APP_FLOW_EDGES,
+  APP_LOCK_REGISTRY,
   CLASSIFICATION_HOLD,
   CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
@@ -39,16 +40,23 @@ describe("architecture reconciliation", () => {
 
   test("confirmed app catalog excludes modules, tools and system surfaces", () => {
     expect(CONFIRMED_APP_ENTITIES.length).toBeGreaterThan(0);
-    expect(
-      CONFIRMED_APP_ENTITIES.every(
-        (item) => item.kind === "app" || item.kind === "external-app-reference",
-      ),
-    ).toBe(true);
+    expect(CONFIRMED_APP_ENTITIES.every((item) => item.kind === "app")).toBe(true);
     expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "plano-acao")).toBe(true);
     expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "lab")).toBe(true);
-    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "validation-gate")).toBe(true);
+    expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "validation-gate")).toBe(true);
+    expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "processo")).toBe(true);
     expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "app-observer-360")).toBe(true);
     expect(CLASSIFICATION_HOLD.every((item) => item.includeInAppsCatalog === false)).toBe(true);
+  });
+
+  test("every confirmed app is covered by App Lock", () => {
+    const confirmed = new Set(CONFIRMED_APP_ENTITIES.map((item) => item.key));
+    const locked = new Set(APP_LOCK_REGISTRY.map((item) => item.appKey));
+    expect(locked.size).toBe(confirmed.size);
+    for (const appKey of confirmed) {
+      expect(locked.has(appKey)).toBe(true);
+    }
+    expect(APP_LOCK_REGISTRY.every((item) => item.lockState === "LOCKED_APP_IDENTITY_SCOPE")).toBe(true);
   });
 
   test("new since V7.5 never pretends an external reference has a bundled route", () => {
