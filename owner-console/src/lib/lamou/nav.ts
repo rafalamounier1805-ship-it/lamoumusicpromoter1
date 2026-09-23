@@ -174,7 +174,6 @@ export function appRoute(slug: string): AppRoute {
   return route;
 }
 
-
 /** Rotas físicas preservadas por compatibilidade, sem classificá-las como aplicativos. */
 export const SYSTEM_SURFACE_ROUTES = {
   lab: "/apps/lab",
