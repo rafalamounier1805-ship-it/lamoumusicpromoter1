@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+
+import { OwnerGuard } from "@/components/lamou/owner-guard";
 import {
   Accessibility,
   Boxes,
@@ -931,7 +933,8 @@ export const Route = createFileRoute("/install/client")({
     ],
   }),
   component: () => (
-    <InstallJourney
+    <OwnerGuard>
+      <InstallJourney
       kind="client"
       title="Instalação / Provisionamento do Cliente"
       subtitle="Disparado pela Central > Clientes · não é o Portal do Cliente"
@@ -1001,6 +1004,7 @@ export const Route = createFileRoute("/install/client")({
         footNote:
           "O provisionamento P0 pode criar a fundação real do cliente após confirmação do Owner. Contrato, licença, apps, portal e go-live continuam separados e bloqueados pelos respectivos gates.",
       }}
-    />
+      />
+    </OwnerGuard>
   ),
 });
