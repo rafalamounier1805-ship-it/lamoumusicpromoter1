@@ -116,19 +116,34 @@ Roles stay separate:
 
 Mapa Vivo may detect and contextualize a signal. It does not invent the cause. Diagnosis receives the signal with metric/source/time/evidence context.
 
-## 5. New or newly reconciled products after the V7.5 catalog
+## 5. Classification before catalog inclusion
 
-These items were not represented correctly in the previous V7.5 application view:
+An executable, ZIP, HTML or physical route does not automatically mean "application".
 
-| Product | State in this reconciliation | Availability |
+### Confirmed/new application references
+
+| Application | State in this reconciliation | Availability |
 |---|---|---|
 | PROJECT PRIME MASTER V1 | APPROVED_REFERENCE | external source/reference |
 | LAMU IA — Meu Desenvolvimento v1 COMPLETO | APPROVED_REFERENCE | external source/reference |
 | VECTRA Intelligence 360 V4 — Mapa Vivo | OFFICIAL_APPROVED | external source/reference |
 | LAMOU App Processo V0.3 | CANDIDATE_NOT_PROMOTED | external source/reference |
-| Plano de Ação | DOCUMENTED_ONLY | source package not materialized in this repo |
 
-The Owner Console must expose these states without pretending they are bundled routes.
+### Explicitly not counted as applications in this candidate
+
+| Entity | Class |
+|---|---|
+| Plano de Ação | MODULE |
+| LAMOU Lab | SYSTEM_SURFACE |
+| Validation Gate | SYSTEM_SURFACE |
+| APP Observer 360 V2 | TOOL |
+| LAMOU Shield Local | CLASSIFICATION_HOLD |
+| LAMOU Computer Scan | CLASSIFICATION_HOLD |
+| Confidential Guardian | CLASSIFICATION_HOLD |
+
+Physical compatibility routes may remain without changing classification.
+
+See `ENTITY_CLASSIFICATION_2026-09-23.md`.
 
 ## 6. Duplicates and lineage reconciliation
 
@@ -206,7 +221,7 @@ Domain metrics are additionally registered for Action Plan, PROJECT, Processo, P
 
 ## 10. Code references in this candidate
 
-- `src/lib/lamou/app-architecture.ts`: application nodes, handoff graph, module order, duplicate/lineage decisions.
+- `src/lib/lamou/app-architecture.ts`: classified entities, handoff graph, module order, duplicate/lineage decisions and classification holds.
 - `src/lib/lamou/metrics-registry.ts`: metric definitions and profiles.
 - `src/lib/lamou/nav.ts`: reconciled management order and real app routes.
 - `src/lib/lamou/registry.ts`: Wave 1 route reconciliation and living document structure.
