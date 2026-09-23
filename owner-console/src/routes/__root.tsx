@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { UsageTelemetry } from "../components/lamou/usage-telemetry";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { OwnerAuthProvider } from "../lib/lamou/owner-auth";
 import { LamouProvider } from "../lib/lamou/store";
 import { classifyLamouRoute, recordLamouUsage } from "../lib/lamou/usage-telemetry";
 
@@ -136,9 +137,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LamouProvider>
-        <UsageTelemetry />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <OwnerAuthProvider>
+          <UsageTelemetry />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </OwnerAuthProvider>
       </LamouProvider>
     </QueryClientProvider>
   );
