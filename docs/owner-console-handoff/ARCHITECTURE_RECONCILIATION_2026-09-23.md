@@ -145,6 +145,8 @@ An executable, ZIP, HTML or physical route does not automatically mean "applicat
 | LAMU IA — Meu Desenvolvimento v1 COMPLETO | APPROVED_REFERENCE | external source/reference |
 | VECTRA Intelligence 360 V4 — Mapa Vivo | OFFICIAL_APPROVED | external source/reference |
 | LAMOU App Processo V0.3 | CANDIDATE_NOT_PROMOTED | external source/reference |
+| Validation Gate | CANDIDATE_NOT_PROMOTED | bundled route + preserved lineage |
+| APP Observer 360 V2 | CANDIDATE_NOT_PROMOTED | external executable/reference |
 
 ### Explicitly not counted as applications in this candidate
 
@@ -159,6 +161,10 @@ An executable, ZIP, HTML or physical route does not automatically mean "applicat
 Physical compatibility routes may remain without changing classification.
 
 See `ENTITY_CLASSIFICATION_2026-09-23.md` and `src/lib/lamou/master-app-lock.ts`.
+
+### APP LOCK
+
+Toda entidade confirmada como APP fica travada por identidade, escopo integral, source-of-truth, linhagem/aliases e ownership. O lock impede absorção, fragmentação e reclassificação silenciosa. Ele não equivale a promoção da versão.
 
 ## 6. Duplicates and lineage reconciliation
 
