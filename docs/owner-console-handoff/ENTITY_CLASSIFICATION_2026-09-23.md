@@ -1,49 +1,70 @@
-# LAMOU — Entity Classification
+# LAMOU — Entity Classification + App Lock
 ## Candidate 2026-09-23
 
 **State:** CANDIDATE_NOT_PROMOTED
 
 ## Rule
 
-Finding a ZIP, HTML, route, screen, executable or package does **not** automatically make something an application.
+Finding a ZIP, HTML, route, screen or executable does **not** automatically make something an application.
 
-Only entities explicitly classified as **APP** or **EXTERNAL_APP_REFERENCE** may appear in the Apps catalog.
+An item enters **Aplicativos** only after its product identity is confirmed. Once confirmed, it receives **APP LOCK**:
+
+- classification locked as APP;
+- identity/name/aliases controlled;
+- complete functional scope preserved;
+- source-of-truth recorded;
+- lineage/predecessor/successor preserved;
+- silent merge forbidden;
+- silent fragmentation forbidden.
+
+**APP LOCK ≠ version promotion.** Candidate/version truth remains separate.
 
 ## Classes
 
-| Class | Meaning | Goes into Apps catalog? |
+| Class | Meaning | Apps catalog? |
 |---|---|---|
-| APP | Independent application/product with its own scope and identity | YES |
-| EXTERNAL_APP_REFERENCE | Independent app whose source is outside this Owner bundle | YES |
-| MODULE | Functional module inside a larger system/domain | NO |
-| SYSTEM_SURFACE | Governance/runtime/test surface | NO |
-| TOOL | Technical utility/tool | NO |
-| CLASSIFICATION_HOLD | Artifact found but identity/class not proven | NO |
+| LOCKED_APP | Confirmed application with identity/scope locked | YES |
+| SAME_APP_LINEAGE_ALIAS | Another name/version lineage of the same app | NO duplicate |
+| HOLD_CLASSIFICATION | Not enough evidence to decide app/module/portal/etc. | NO |
+| NOT_APP | Module, library, tool, CORE layer or system surface | NO |
 
-## Current non-App classifications
+## Explicit corrections
 
-| Entity | Class | Reason |
-|---|---|---|
-| Plano de Ação | MODULE | User requested it as a module; do not promote it to an app by inference. |
-| LAMOU Lab | SYSTEM_SURFACE | Laboratory/test surface; physical route may remain for compatibility. |
-| Validation Gate | SYSTEM_SURFACE | Validation/governance gate; not counted as an application in this candidate. |
-| APP Observer 360 V2 | TOOL | Technical observer/diagnostic utility; excluded from Apps unless explicitly reclassified. |
-| LAMOU Shield Local | CLASSIFICATION_HOLD | Package found; insufficient evidence to call it an app. |
-| LAMOU Computer Scan | CLASSIFICATION_HOLD | Scanner/utility artifact; excluded from Apps. |
-| Confidential Guardian | CLASSIFICATION_HOLD | Security candidate artifact; excluded from Apps. |
+These are applications and are locked as such:
 
-## Confirmed/new app references kept in Apps
+- **Validation Gate / Validação — APP**
+- **LAMOU App Processo / Processo — APP**
+- **APP Observer 360 — APP**
+- **Certificações — APP**
+- **PROJECT PRIME MASTER V1 — APP**
+- **LAMU IA — Meu Desenvolvimento v1 COMPLETO — APP**
+- the confirmed apps inherited from the previous catalog after lineage reconciliation
 
-- PROJECT PRIME MASTER V1
-- LAMU IA — Meu Desenvolvimento v1 COMPLETO
-- VECTRA Intelligence 360 V4 — Mapa Vivo
-- LAMOU App Processo V0.3 candidate
-- existing confirmed application lineage from the prior catalog
+## Explicit non-App examples
 
-## Compatibility rule
+- **Plano de Ação — MODULE**
+- **LAMOU Lab — SYSTEM/LAB SURFACE**
+- **LAMOU Design Library — LIBRARY / DESIGN SYSTEM**
+- **LAMOU Pulse CORE — CORE LAYER**
+- **LAMOU Shield Local — UTILITY**
+- **LAMOU Computer Scan — UTILITY**
+- **Confidential Guardian — SECURITY UTILITY**
 
-A non-App may still have a route such as `/apps/lab` from an older implementation. Route location is not classification. Compatibility routes can remain while the catalog/menu reflects the correct entity class.
+## Held instead of guessed
 
-## Reclassification
+- **Toca Minha Música** — previous catalog already says app vs module unresolved.
+- **Portal / Wormhole Pitch** — previous catalog already says portal vs module unresolved.
+- **PLGO Mineiro** — source/identity insufficient.
+- **LAMOU LifeOS** — treated as lineage/identity overlap with Orbit/Agenda, not a second independent app.
 
-Any future move from MODULE/TOOL/SYSTEM_SURFACE/HOLD to APP requires explicit product identity evidence or owner decision. It must not happen silently from filename similarity or because an executable exists.
+## Master source
+
+Code source for the closed classification:
+
+`owner-console/src/lib/lamou/master-app-lock.ts`
+
+Architecture/handoff subset:
+
+`owner-console/src/lib/lamou/app-architecture.ts`
+
+A physical compatibility route such as `/apps/lab` does not override entity classification.
