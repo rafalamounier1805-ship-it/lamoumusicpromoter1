@@ -217,7 +217,7 @@ export function PlansView({
               >
                 {selectedPlan
                   ? `Plano ${selectedPlan.id} já criado`
-                  : "Criar Plano de Ação no CORE"}
+                  : "Registrar encaminhamento para Plano de Ação"}
               </Button>
               <Button asChild size="sm" variant="outline">
                 <Link to="/core/tests">Abrir Testes & Qualidade</Link>
@@ -334,7 +334,7 @@ export function PlansView({
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                Nenhum projeto criado. Projetos nascem do tratamento técnico no CORE.
+                Nenhum projeto criado nesta visão de compatibilidade. Quando a complexidade exigir projeto, o handoff deve apontar para PROJECT sem recriar o PROJECT aqui.
               </p>
             )}
           </Panel>
@@ -421,12 +421,14 @@ export function PlansView({
       <Panel title="Onde cada atividade acontece">
         <ul className="space-y-1 text-sm text-muted-foreground">
           <li>Mapa Vivo: detectar, contextualizar fatos e encaminhar.</li>
-          <li>CORE: investigar, criar hipótese, testar, decidir, agir e medir eficácia.</li>
+          <li>CORE: investigar tecnicamente, observar e encaminhar sem absorver o aplicativo responsável pela execução.</li>
+          <li>Plano de Ação: governar ação, responsável, prazo, aprovação, evidência, resultado e eficácia.</li>
+          <li>PROJECT: assumir iniciativas complexas com múltiplas frentes, dependências e marcos.</li>
           <li>
             Teste do que já está em operação: CORE &gt; Testes & Qualidade. Candidata/experimento:
             LABTEST.
           </li>
-          <li>Persistência local DEMO no navegador; banco de dados permanece NOT_CONNECTED.</li>
+          <li>Persistência local DEMO nesta visão de compatibilidade; Plano de Ação e PROJECT permanecem aplicativos independentes e seus runtimes/bancos não são declarados conectados.</li>
           <li>Nenhuma versão foi promovida: SALVAR ≠ PROMOVER.</li>
         </ul>
       </Panel>
