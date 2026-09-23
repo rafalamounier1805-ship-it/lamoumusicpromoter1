@@ -16,13 +16,15 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   APP_FLOW_EDGES,
-  APP_LOCK_REGISTRY,
-  CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
-  NEW_SINCE_V75,
-  NON_APP_ARCHITECTURE_ENTITIES,
   OWNER_MODULE_ORDER,
 } from "@/lib/lamou/app-architecture";
+import {
+  APP_CLASSIFICATION_HOLDS,
+  APP_LINEAGE_ALIASES,
+  LOCKED_MASTER_APPS,
+  MASTER_NON_APPS,
+} from "@/lib/lamou/master-app-lock";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
 import { APPS_MENU, APP_ROUTES, appRoute, type AppSlug } from "@/lib/lamou/nav";
 import { useMemo, useState } from "react";
@@ -450,17 +452,19 @@ function ProductsPage() {
         <Panel title="Revisão de arquitetura e classificação da próxima candidata">
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Aplicativos confirmados / travados</p>
-              <p className="mt-1 font-display text-xl font-semibold">
-                {CONFIRMED_APP_ENTITIES.length} / {APP_LOCK_REGISTRY.length}
+              <p className="text-xs text-muted-foreground">Aplicativos no App Lock mestre</p>
+              <p className="mt-1 font-display text-xl font-semibold">{LOCKED_MASTER_APPS.length}</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                identidade + escopo + origem + linhagem travados
               </p>
-              <p className="mt-1 text-[10px] text-muted-foreground">APP LOCK: identidade + escopo + origem + linhagem</p>
             </div>
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Entidades novas/reconciliadas</p>
-              <p className="mt-1 font-display text-xl font-semibold">{NEW_SINCE_V75.length}</p>
+              <p className="text-xs text-muted-foreground">A classificar / aliases / não-Apps</p>
+              <p className="mt-1 font-display text-xl font-semibold">
+                {APP_CLASSIFICATION_HOLDS.length} / {APP_LINEAGE_ALIASES.length} / {MASTER_NON_APPS.length}
+              </p>
               <p className="mt-1 text-[10px] text-muted-foreground">
-                {NON_APP_ARCHITECTURE_ENTITIES.length} não são Apps
+                hold não entra em Apps até reconciliação
               </p>
             </div>
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
@@ -495,6 +499,31 @@ function ProductsPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </Panel>
+
+        <Panel title="App Lock mestre — catálogo fechado">
+          <p className="text-xs text-muted-foreground">
+            Só itens classificados como LOCKED_APP entram no catálogo de aplicativos. Alias de linhagem não duplica produto; HOLD não vira App por inferência; NOT_APP fica fora.
+          </p>
+          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+            {LOCKED_MASTER_APPS.map((app) => (
+              <div key={app.id} className="rounded-lg border border-border/50 bg-background/40 p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium">{app.name}</p>
+                    <p className="mt-1 font-mono text-[10px] text-muted-foreground">{app.id}</p>
+                  </div>
+                  <Badge variant="outline" className="border-primary/40 text-[10px] text-primary">
+                    APP LOCK
+                  </Badge>
+                </div>
+                <p className="mt-2 text-[11px] text-muted-foreground">{app.reason}</p>
+                <p className="mt-2 text-[10px] text-muted-foreground">
+                  Binding: {app.bindingTruth} · versão: {app.versionTruth}
+                </p>
+              </div>
+            ))}
           </div>
         </Panel>
 
