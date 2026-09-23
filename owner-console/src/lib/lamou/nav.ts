@@ -29,15 +29,21 @@ import {
 export type NavItem = { to: string; label: string; icon: typeof Gauge };
 export type NavGroup = "owner" | "labtest" | "core" | "apps";
 
-/** CENTRAL — somente gestão do proprietário. Detalhe técnico vive no CORE;
- *  o que ainda não foi promovido vive no LABTEST. */
+/** CENTRAL — camada gerencial. Aplicativos permanecem produtos independentes:
+ *  a Central organiza, filtra, conecta e navega; nunca absorve o escopo do app. */
 export const OWNER_MENU: NavItem[] = [
   { to: "/owner", label: "Cognitive / Cockpit", icon: LayoutDashboard },
   { to: "/owner/mapa-vivo", label: "Mapa Vivo", icon: MapIcon },
+  { to: "/owner/products", label: "Aplicativos & Produtos", icon: Package },
   { to: "/owner/clients", label: "Clientes", icon: Users },
-  { to: "/owner/products", label: "Produtos", icon: Package },
   { to: "/owner/commercial", label: "Comercial & Contratos", icon: Building2 },
   { to: "/owner/opportunities", label: "Oportunidades", icon: Lightbulb },
+  { to: "/owner/plans", label: "Projetos & Ações", icon: Activity },
+  { to: "/owner/tests", label: "Testes & Qualidade", icon: ClipboardList },
+  { to: "/owner/documents", label: "Documentos", icon: Database },
+  { to: "/owner/security", label: "Segurança & Acessos", icon: ShieldCheck },
+  { to: "/owner/versions", label: "Versões", icon: Boxes },
+  { to: "/owner/integrations", label: "Integrações", icon: Plug },
   { to: "/owner/settings", label: "Configurações", icon: Cpu },
 ];
 
@@ -48,18 +54,18 @@ export const LABTEST_MENU: NavItem[] = [
   { to: "/labtest/next", label: "Próxima Versão / Fila de Promoção", icon: Rocket },
 ];
 
-/** CORE — operação técnica corrente. MENU CANÔNICO: exatamente 9 itens.
- *  Segurança, Dados & Fontes, CALLs, IA/Prompts, Treinamentos e SOL/LUA NÃO são
- *  itens raiz: vivem dentro de Arquitetura Técnica, Configurações, Bindings e LABTEST. */
+/** CORE — operação técnica corrente. Ele fornece capacidades técnicas e bindings
+ *  explícitos; não vira dono do escopo funcional de Processo, Projeto, Plano de Ação
+ *  ou de qualquer outro aplicativo independente. */
 export const CORE_MENU: NavItem[] = [
   { to: "/core", label: "Visão Geral", icon: Cpu },
   { to: "/core/health", label: "Indicadores de Saúde", icon: Gauge },
+  { to: "/core/observability", label: "Observabilidade", icon: Eye },
   { to: "/core/architecture", label: "Arquitetura Técnica", icon: Layers },
   { to: "/core/apps", label: "Aplicativos, Plugins & Bindings", icon: AppWindow },
-  { to: "/core/problems", label: "Planos de Ação & Melhorias", icon: Activity },
-  { to: "/core/tests", label: "Testes & Qualidade", icon: ClipboardList },
+  { to: "/core/problems", label: "Problemas & Encaminhamentos", icon: Activity },
+  { to: "/core/tests", label: "Testes Técnicos do CORE", icon: ClipboardList },
   { to: "/core/versions", label: "Versões & Atualizações", icon: Boxes },
-  { to: "/core/observability", label: "Observabilidade", icon: Eye },
   { to: "/core/settings", label: "Configurações", icon: SlidersHorizontal },
 ];
 
@@ -100,13 +106,14 @@ export const APPS_MENU: NavItem[] = [
   { to: "/apps/meeting-architect", label: "Meeting Architect", icon: ClipboardList },
   { to: "/apps/teste3", label: "Teste³ IA", icon: ClipboardList },
   { to: "/apps/validation-gate", label: "Validation Gate", icon: ShieldCheck },
+  { to: "/apps/lab", label: "LAMOU Lab", icon: FlaskConical },
   { to: "/apps/orbit", label: "Orbit / Agenda / LifeOS", icon: Compass },
   { to: "/apps/version", label: "LAMOU Version", icon: Boxes },
 ];
 
-/** Três superfícies raiz — CENTRAL | LABTEST | CORE.
- *  Aplicativos não são superfície raiz: aparecem como produto na Central,
- *  como candidato no LABTEST e como binding no CORE. */
+/** Três superfícies de gestão — CENTRAL | LABTEST | CORE.
+ *  Elas NÃO absorvem aplicativos. Um app mantém fonte, identidade, fluxo e escopo
+ *  próprios; estas superfícies apenas governam portfólio, validação e bindings. */
 export const NAV_GROUPS: {
   group: "owner" | "labtest" | "core";
   short: string;
@@ -148,6 +155,7 @@ export const APP_ROUTES = {
   "meeting-architect": "/apps/meeting-architect",
   teste3: "/apps/teste3",
   "validation-gate": "/apps/validation-gate",
+  lab: "/apps/lab",
   orbit: "/apps/orbit",
   version: "/apps/version",
 } as const;
