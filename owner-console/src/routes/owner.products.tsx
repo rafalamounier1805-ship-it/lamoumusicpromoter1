@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  APP_ARCHITECTURE_NODES,
   APP_FLOW_EDGES,
   CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
