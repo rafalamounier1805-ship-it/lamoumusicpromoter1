@@ -685,7 +685,7 @@ export const DUPLICATION_RECONCILIATION: DuplicationDecision[] = [
     id: "DUP-012",
     items: ["APP Observer 360", "CORE > Observabilidade"],
     decision: "DISTINCT_KEEP_SEPARATE",
-    rule: "Observer 360 é aplicativo de observação/diagnóstico transversal de produtos; CORE Observabilidade é superfície técnica do runtime CORE. Podem compartilhar telemetria por contrato, mas um não absorve o outro.",
+    rule: "Observer 360 está classificado nesta candidata como ferramenta técnica de observação/diagnóstico transversal; CORE Observabilidade é superfície técnica do runtime CORE. Podem compartilhar telemetria por contrato, mas a ferramenta não entra no catálogo de Apps.",
   },
   {
     id: "DUP-011",
