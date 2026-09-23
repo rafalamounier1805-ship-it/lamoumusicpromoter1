@@ -10,6 +10,23 @@ Ele **não pode ser quebrado, fragmentado, absorvido ou recriado** dentro de Cen
 
 Central organiza e navega. CORE oferece capacidades/bindings técnicos explícitos. LABTEST valida candidatas. Nenhuma dessas superfícies muda o ownership funcional do app.
 
+## 1.1 APP LOCK
+
+Todo aplicativo confirmado recebe lock arquitetural obrigatório:
+
+`APP -> classification + identity + full_scope + source_of_truth + lineage_aliases = LOCKED`
+
+Consequências:
+
+- área nova não pode quebrar o app em pedaços;
+- módulo homônimo não pode substituir o app;
+- CORE pode fornecer capability/binding, mas não tomar ownership funcional;
+- alias/rebrand não cria um segundo aplicativo;
+- candidato continua candidato mesmo com o escopo travado;
+- mudança de classificação ou identidade exige decisão explícita.
+
+Registro mestre desta candidata: `src/lib/lamou/master-app-lock.ts`.
+
 ## 2. Documento Mestre
 
 Cada app deve explicar:
