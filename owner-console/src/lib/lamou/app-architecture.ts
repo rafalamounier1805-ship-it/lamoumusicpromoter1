@@ -18,11 +18,7 @@ export type ArchitectureState =
 
 export type Availability = "BUNDLED_ROUTE" | "EXTERNAL_SOURCE_REFERENCE" | "CATALOG_ONLY";
 
-export type ArchitectureEntityKind =
-  | "app"
-  | "module"
-  | "system-surface"
-  | "tool";
+export type ArchitectureEntityKind = "app" | "module" | "system-surface" | "tool";
 
 export interface AppArchitectureNode {
   key: string;
@@ -183,7 +179,8 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
     state: "DOCUMENTED_ONLY",
     availability: "CATALOG_ONLY",
     route: null,
-    sourceOfTruth: "Architecture decision 2026-09-23 + DOC-MOD-006 V1.1; standalone source not materialized in this repo",
+    sourceOfTruth:
+      "Architecture decision 2026-09-23 + DOC-MOD-006 V1.1; standalone source not materialized in this repo",
     newSinceV75: true,
     preservesFullScope: true,
   },
@@ -243,7 +240,8 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
     state: "CANDIDATE_NOT_PROMOTED",
     availability: "EXTERNAL_SOURCE_REFERENCE",
     route: null,
-    sourceOfTruth: "APP_OBSERVER_360_EXECUTAVEL.html + COMECO_123_v1.3.1_APP_OBSERVER_360_CANDIDATE.zip (2026-09-23)",
+    sourceOfTruth:
+      "APP_OBSERVER_360_EXECUTAVEL.html + COMECO_123_v1.3.1_APP_OBSERVER_360_CANDIDATE.zip (2026-09-23)",
     newSinceV75: true,
     preservesFullScope: true,
   },
@@ -258,7 +256,8 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
     state: "RECONCILIATION_REQUIRED",
     availability: "EXTERNAL_SOURCE_REFERENCE",
     route: null,
-    sourceOfTruth: "Identidade/escopo confirmados em arquitetura; APP-ID/source/version a reconciliar",
+    sourceOfTruth:
+      "Identidade/escopo confirmados em arquitetura; APP-ID/source/version a reconciliar",
     newSinceV75: true,
     preservesFullScope: true,
   },
@@ -517,7 +516,14 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
     from: "processo",
     to: "certificacoes",
     event: "certification_requirement_identified",
-    payload: ["process_id", "activity_id", "role_id", "certification_requirement", "person_id", "evidence_ids"],
+    payload: [
+      "process_id",
+      "activity_id",
+      "role_id",
+      "certification_requirement",
+      "person_id",
+      "evidence_ids",
+    ],
     condition: "atividade/processo exige certificação formal ou vigente",
     truth: "CONTRACT",
   },
@@ -547,7 +553,14 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
     from: "certificacoes",
     to: "processo",
     event: "certification_evidence_ready",
-    payload: ["person_id", "process_id", "activity_id", "certification_id", "status", "evidence_ids"],
+    payload: [
+      "person_id",
+      "process_id",
+      "activity_id",
+      "certification_id",
+      "status",
+      "evidence_ids",
+    ],
     condition: "processo precisa comprovar habilitação/certificação vigente",
     truth: "CONTRACT",
   },
@@ -557,7 +570,13 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
     from: "plano-acao",
     to: "teste3",
     event: "effectiveness_test_requested",
-    payload: ["action_plan_id", "expected_result", "baseline", "acceptance_criteria", "evidence_ids"],
+    payload: [
+      "action_plan_id",
+      "expected_result",
+      "baseline",
+      "acceptance_criteria",
+      "evidence_ids",
+    ],
     condition: "ação executada; eficácia ainda não comprovada",
     truth: "CONTRACT",
   },
@@ -636,7 +655,8 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
       "trace_ids",
       "evidence_ids",
     ],
-    condition: "anomalia possui observação/proveniência suficiente; Observer sinaliza e correlaciona, Diagnóstico investiga causa",
+    condition:
+      "anomalia possui observação/proveniência suficiente; Observer sinaliza e correlaciona, Diagnóstico investiga causa",
     truth: "REFERENCE",
   },
   {
@@ -751,16 +771,12 @@ export const DUPLICATION_RECONCILIATION: DuplicationDecision[] = [
 
 export const NEW_SINCE_V75 = APP_ARCHITECTURE_NODES.filter((app) => app.newSinceV75);
 
-
 /** Somente entidades explicitamente classificadas como aplicativo entram no catálogo de Apps. */
-export const CONFIRMED_APP_ENTITIES = APP_ARCHITECTURE_NODES.filter(
-  (item) => item.kind === "app",
-);
+export const CONFIRMED_APP_ENTITIES = APP_ARCHITECTURE_NODES.filter((item) => item.kind === "app");
 
 export const NON_APP_ARCHITECTURE_ENTITIES = APP_ARCHITECTURE_NODES.filter(
   (item) => item.kind !== "app",
 );
-
 
 export interface ClassificationHoldItem {
   name: string;
@@ -775,14 +791,16 @@ export const CLASSIFICATION_HOLD: ClassificationHoldItem[] = [
     name: "LAMOU Shield Local",
     observedArtifact: "LAMOU_SHIELD_LOCAL_V1_2_1.zip",
     provisionalKind: "security-utility",
-    reason: "Executável/pacote localizado, mas não há decisão suficiente nesta reconciliação para tratá-lo como aplicativo do portfólio.",
+    reason:
+      "Executável/pacote localizado, mas não há decisão suficiente nesta reconciliação para tratá-lo como aplicativo do portfólio.",
     includeInAppsCatalog: false,
   },
   {
     name: "LAMOU Computer Scan",
     observedArtifact: "LAMOU_COMPUTER_SCAN_V1_2.zip",
     provisionalKind: "tool-or-utility",
-    reason: "Scanner/utilitário localizado; excluir do catálogo de Apps até classificação explícita.",
+    reason:
+      "Scanner/utilitário localizado; excluir do catálogo de Apps até classificação explícita.",
     includeInAppsCatalog: false,
   },
   {
@@ -793,7 +811,6 @@ export const CLASSIFICATION_HOLD: ClassificationHoldItem[] = [
     includeInAppsCatalog: false,
   },
 ];
-
 
 export type AppLockState = "LOCKED_APP_IDENTITY_SCOPE";
 
