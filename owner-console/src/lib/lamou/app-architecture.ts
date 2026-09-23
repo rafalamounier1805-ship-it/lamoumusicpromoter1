@@ -22,8 +22,7 @@ export type ArchitectureEntityKind =
   | "app"
   | "module"
   | "system-surface"
-  | "tool"
-  | "external-app-reference";
+  | "tool";
 
 export interface AppArchitectureNode {
   key: string;
@@ -190,7 +189,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "project-prime",
-    kind: "external-app-reference",
+    kind: "app",
     canonicalId: null,
     name: "PROJECT PRIME MASTER V1",
     aliases: ["PROJECT", "Project Prime"],
@@ -205,12 +204,12 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "processo",
-    kind: "external-app-reference",
+    kind: "app",
     canonicalId: null,
     name: "LAMOU App Processo",
     aliases: ["Processo"],
     domain: "process",
-    role: "Engenharia de processos ponta a ponta: processo → atividade → A→B → pessoas/cargos → equipamentos → competências → medição → evidência.",
+    role: "Aplicativo completo de engenharia de processos ponta a ponta: processo → atividade → A→B → pessoas/cargos → equipamentos → competências → medição → evidência.",
     state: "CANDIDATE_NOT_PROMOTED",
     availability: "EXTERNAL_SOURCE_REFERENCE",
     route: null,
@@ -220,7 +219,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "meu-desenvolvimento",
-    kind: "external-app-reference",
+    kind: "app",
     canonicalId: null,
     name: "LAMU IA — Meu Desenvolvimento v1 COMPLETO",
     aliases: ["Meu Desenvolvimento"],
@@ -280,12 +279,12 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "validation-gate",
-    kind: "system-surface",
+    kind: "app",
     canonicalId: null,
     name: "Validation Gate",
-    aliases: [],
+    aliases: ["Validação"],
     domain: "validation",
-    role: "Gate de evidência e decisão de promoção; não executa o teste, valida o evidence pack.",
+    role: "Aplicativo de validação: recebe evidence pack, aplica gates/contratos e registra decisão de validação sem executar silenciosamente o teste nem promover automaticamente.",
     state: "BUNDLED_CANDIDATE",
     availability: "BUNDLED_ROUTE",
     route: "/apps/validation-gate",
@@ -310,7 +309,7 @@ export const APP_ARCHITECTURE_NODES: AppArchitectureNode[] = [
   },
   {
     key: "vectra-v4",
-    kind: "external-app-reference",
+    kind: "app",
     canonicalId: null,
     name: "VECTRA Intelligence 360 V4 — Mapa Vivo",
     aliases: ["VECTRA V4", "BELGO/VECTRA lineage"],
@@ -700,11 +699,11 @@ export const NEW_SINCE_V75 = APP_ARCHITECTURE_NODES.filter((app) => app.newSince
 
 /** Somente entidades explicitamente classificadas como aplicativo entram no catálogo de Apps. */
 export const CONFIRMED_APP_ENTITIES = APP_ARCHITECTURE_NODES.filter(
-  (item) => item.kind === "app" || item.kind === "external-app-reference",
+  (item) => item.kind === "app",
 );
 
 export const NON_APP_ARCHITECTURE_ENTITIES = APP_ARCHITECTURE_NODES.filter(
-  (item) => item.kind !== "app" && item.kind !== "external-app-reference",
+  (item) => item.kind !== "app",
 );
 
 
@@ -739,3 +738,40 @@ export const CLASSIFICATION_HOLD: ClassificationHoldItem[] = [
     includeInAppsCatalog: false,
   },
 ];
+
+
+export type AppLockState = "LOCKED_APP_IDENTITY_SCOPE";
+
+export interface AppLockRecord {
+  appKey: string;
+  appName: string;
+  lockState: AppLockState;
+  lockedDimensions: readonly [
+    "classification",
+    "identity",
+    "full_scope",
+    "source_of_truth",
+    "lineage_aliases",
+  ];
+  rule: string;
+}
+
+/**
+ * APP LOCK:
+ * locks application identity/scope inside the LAMOU architecture.
+ * It does NOT promote a candidate version and does NOT turn catalog presence into a real binding.
+ */
+export const APP_LOCK_REGISTRY: AppLockRecord[] = CONFIRMED_APP_ENTITIES.map((app) => ({
+  appKey: app.key,
+  appName: app.name,
+  lockState: "LOCKED_APP_IDENTITY_SCOPE",
+  lockedDimensions: [
+    "classification",
+    "identity",
+    "full_scope",
+    "source_of_truth",
+    "lineage_aliases",
+  ] as const,
+  rule:
+    "Aplicativo permanece inteiro dentro do LAMOU; não fragmentar, absorver, recriar como módulo ou fundir por similaridade. Mudança de classificação/identidade exige decisão explícita. SALVAR ≠ PROMOVER.",
+}));
