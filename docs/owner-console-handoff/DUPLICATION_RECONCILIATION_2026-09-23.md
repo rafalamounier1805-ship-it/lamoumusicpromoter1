@@ -23,6 +23,7 @@ This registry prevents two opposite errors:
 | DUP-009 | App Processo / Digital Improvement | DISTINCT_KEEP_SEPARATE | Process engineering vs improvement management. |
 | DUP-010 | Version / Documentos | DISTINCT_KEEP_SEPARATE | Build/version lineage vs content/source/living docs. |
 | DUP-011 | Showroom / Comercial & Contratos | DISTINCT_KEEP_SEPARATE | Solution demonstration vs pipeline/negotiation/contract. |
+| DUP-012 | APP Observer 360 / CORE Observabilidade | DISTINCT_KEEP_SEPARATE | Observer is classified as a technical TOOL in this candidate; CORE Observability is a system surface. Neither becomes an App duplicate of the other. |
 
 ## Reconciliation protocol
 
