@@ -154,7 +154,8 @@ const PRODUCTS: Product[] = [
     truth: "NOT_VERIFIED",
     clients: "—",
     version: "candidate",
-    source: "Aplicativo confirmado e APP-LOCKED; valida evidence packs e gates sem promover automaticamente.",
+    source:
+      "Aplicativo confirmado e APP-LOCKED; valida evidence packs e gates sem promover automaticamente.",
   },
 
   {
@@ -228,8 +229,6 @@ const PRODUCTS: Product[] = [
     version: "V0.3",
     source: "Candidata externa; engenharia de processos completa permanece no próprio app.",
   },
-
-
 ];
 
 function Kpi({
@@ -461,7 +460,7 @@ function ProductsPage() {
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
               <p className="text-xs text-muted-foreground">A classificar / aliases / não-Apps</p>
               <p className="mt-1 font-display text-xl font-semibold">
-                {APP_CLASSIFICATION_HOLDS.length} / {APP_LINEAGE_ALIASES.length} / {MASTER_NON_APPS.length}
+                {`${APP_CLASSIFICATION_HOLDS.length} / ${APP_LINEAGE_ALIASES.length} / ${MASTER_NON_APPS.length}`}
               </p>
               <p className="mt-1 text-[10px] text-muted-foreground">
                 hold não entra em Apps até reconciliação
@@ -474,7 +473,9 @@ function ProductsPage() {
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
               <p className="text-xs text-muted-foreground">Métricas cadastradas</p>
               <p className="mt-1 font-display text-xl font-semibold">{METRICS_REGISTRY.length}</p>
-              <p className="mt-1 text-[10px] text-muted-foreground">definições; valores exigem fonte medida</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                definições; valores exigem fonte medida
+              </p>
             </div>
           </div>
 
@@ -483,7 +484,9 @@ function ProductsPage() {
               <p className="text-xs font-medium">Ordem gerencial</p>
               <ol className="mt-2 space-y-1 text-xs text-muted-foreground">
                 {OWNER_MODULE_ORDER.map((item, index) => (
-                  <li key={item}>{index + 1}. {item}</li>
+                  <li key={item}>
+                    {index + 1}. {item}
+                  </li>
                 ))}
               </ol>
             </div>
@@ -494,7 +497,9 @@ function ProductsPage() {
                   <div key={d.id}>
                     <span className="font-mono text-[10px]">{d.id}</span> · {d.items.join(" ↔ ")}
                     <br />
-                    <span>{d.decision}: {d.rule}</span>
+                    <span>
+                      {d.decision}: {d.rule}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -504,7 +509,8 @@ function ProductsPage() {
 
         <Panel title="App Lock mestre — catálogo fechado">
           <p className="text-xs text-muted-foreground">
-            Só itens classificados como LOCKED_APP entram no catálogo de aplicativos. Alias de linhagem não duplica produto; HOLD não vira App por inferência; NOT_APP fica fora.
+            Só itens classificados como LOCKED_APP entram no catálogo de aplicativos. Alias de
+            linhagem não duplica produto; HOLD não vira App por inferência; NOT_APP fica fora.
           </p>
           <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
             {LOCKED_MASTER_APPS.map((app) => (
