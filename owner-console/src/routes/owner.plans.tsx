@@ -2,16 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PlansView } from "@/components/lamou/plans-view";
 
-/** Rota mantida por compatibilidade de links. A superfície canônica é
- *  /core/problems (CORE, operação). Não aparece no menu da Central. */
+/** Visão gerencial/compatibilidade de Projetos & Ações.
+ *  Ela organiza e encaminha registros, mas NÃO substitui Plano de Ação nem PROJECT,
+ *  que permanecem aplicativos independentes com fonte de verdade própria. */
 export const Route = createFileRoute("/owner/plans")({
   head: () => ({
     meta: [
-      { title: "Problemas, Planos & Projetos — LAMOU IA" },
+      { title: "Projetos & Ações — LAMOU IA" },
       {
         name: "description",
         content:
-          "Casos encaminhados, planos de ação, projetos e melhorias do ecossistema LAMOU, com origem, evidência e IDs relacionados.",
+          "Visão gerencial de casos, encaminhamentos, ações e projetos com origem, evidência e IDs relacionados; sem absorver os aplicativos Plano de Ação e PROJECT.",
       },
       { property: "og:title", content: "Problemas, Planos & Projetos — LAMOU IA" },
       {
