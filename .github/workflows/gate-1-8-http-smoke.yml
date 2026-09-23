@@ -1,0 +1,82 @@
+name: Gate 1.8 HTTP Route Smoke
+
+on:
+  push:
+    branches:
+      - test/gate-1-8-http-smoke-2026-09-23
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: owner-console
+    steps:
+      - name: Checkout exact test branch
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Start preview
+        run: |
+          set -euo pipefail
+          nohup bunx vite preview --host 127.0.0.1 --port 4173 > /tmp/lamou-preview.log 2>&1 &
+          echo $! > /tmp/lamou-preview.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              echo "PREVIEW_READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "PREVIEW_NOT_READY"
+          cat /tmp/lamou-preview.log || true
+          exit 1
+
+      - name: Smoke 7 routes
+        run: |
+          set -euo pipefail
+          routes=(
+            "/"
+            "/install/owner"
+            "/install/client"
+            "/reset-password"
+            "/owner"
+            "/core"
+            "/apps/orbit"
+          )
+          pass=0
+          for route in "${routes[@]}"; do
+            body="/tmp/route-body.txt"
+            status=$(curl -sS -o "$body" -w "%{http_code}" "http://127.0.0.1:4173$route")
+            bytes=$(wc -c < "$body" | tr -d ' ')
+            echo "ROUTE $route HTTP=$status BYTES=$bytes"
+            if [ "$status" -ge 200 ] && [ "$status" -lt 400 ] && [ "$bytes" -gt 0 ]; then
+              pass=$((pass+1))
+            else
+              echo "ROUTE_FAIL $route"
+              head -c 500 "$body" || true
+              echo
+            fi
+          done
+          echo "ROUTES=$pass/7"
+          test "$pass" -eq 7
+
+      - name: Preview log
+        if: always()
+        run: |
+          echo "=== PREVIEW LOG ==="
+          cat /tmp/lamou-preview.log || true
