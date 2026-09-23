@@ -182,8 +182,8 @@ const PRODUCTS: Product[] = [
     stage: "Em Teste",
     truth: "IMPLEMENTED_NOT_VERIFIED",
     clients: "—",
-    version: "candidate",
-    source: "Rota já existente no source candidato; reinserida no catálogo/navegação.",
+    version: "V0.9 external candidate / bundled route version to reconcile",
+    source: "Rota já existe no Owner source; candidata externa mais nova LAMOU LAB V0.9 precisa de reconciliação de source/version antes de substituir a rota.",
   },
   {
     id: "PRD-0013",
@@ -244,6 +244,18 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "documented",
     source: "Contrato funcional documentado; source standalone não materializado neste repo.",
+  },
+  {
+    id: "PRD-0018",
+    slug: null,
+    name: "APP Observer 360 V2",
+    family: "Observabilidade & Diagnóstico Técnico",
+    classification: "Incubado do Proprietário",
+    stage: "Em Teste",
+    truth: "CANDIDATE_NOT_PROMOTED",
+    clients: "—",
+    version: "V2",
+    source: "Executável/candidata externa criada em 2026-09-23; integrações reais ainda exigem fontes autorizadas.",
   },
 ];
 
