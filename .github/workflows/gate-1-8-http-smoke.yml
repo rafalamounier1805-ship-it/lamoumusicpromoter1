@@ -103,6 +103,45 @@ jobs:
           ! grep -Fq "Vamos preparar o ambiente deste cliente." /tmp/protected-_install_client.html
           echo "ADMIN CONTENT BEFORE AUTH: BLOCKED"
 
+      - name: Browser hydration on Cloudflare preview
+        run: |
+          set -euo pipefail
+          PREVIEW="https://test-gate-1-8-http-smoke-2026-09-23-lamou-ranking-ai.rafalamounier1805.workers.dev"
+
+          for i in $(seq 1 30); do
+            if curl -fsS "$PREVIEW/owner" | grep -Fq "Verificando autorização"; then
+              echo "CLOUDFLARE_TEST_BRANCH_READY"
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "CLOUDFLARE_TEST_BRANCH_NOT_READY"
+              exit 1
+            fi
+            sleep 2
+          done
+
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$BROWSER" ]; then
+            echo "NO_BROWSER_ON_RUNNER"
+            exit 1
+          fi
+
+          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=8000 --dump-dom "$PREVIEW/owner" \
+            > /tmp/browser-owner.html 2>/tmp/browser-owner.err
+
+          grep -Fq "Acesso restrito ao Proprietário" /tmp/browser-owner.html
+          ! grep -Fq "CORE PROPRIETÁRIO / OWNER" /tmp/browser-owner.html
+          echo "BROWSER /owner NO-SESSION GUARD: PASS"
+
+          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=8000 --dump-dom "$PREVIEW/install/owner" \
+            > /tmp/browser-install-owner.html 2>/tmp/browser-install-owner.err
+
+          grep -Fq "Seu pacote está pronto para instalar." /tmp/browser-install-owner.html
+          ! grep -Fq "This page didn't load" /tmp/browser-install-owner.html
+          echo "BROWSER /install/owner PUBLIC FLOW: PASS"
+
       - name: Preview log
         if: always()
         run: |
