@@ -68,3 +68,17 @@ Architecture/handoff subset:
 `owner-console/src/lib/lamou/app-architecture.ts`
 
 A physical compatibility route such as `/apps/lab` does not override entity classification.
+
+
+## APP LOCK
+
+Para todo item classificado como APP, ficam travados no catálogo:
+
+- identidade canônica;
+- escopo funcional completo;
+- source-of-truth;
+- linhagem/aliases;
+- ownership do processamento e métricas;
+- regra de não absorção por Central/CORE/LAB.
+
+O APP LOCK impede reclassificação/fragmentação silenciosa. **APP LOCK não promove versão. SALVAR ≠ PROMOVER.**
