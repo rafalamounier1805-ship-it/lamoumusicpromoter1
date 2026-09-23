@@ -45,7 +45,8 @@ describe("architecture reconciliation", () => {
     expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "lab")).toBe(true);
     expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "validation-gate")).toBe(true);
     expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "processo")).toBe(true);
-    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "app-observer-360")).toBe(true);
+    expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "app-observer-360")).toBe(true);
+    expect(CONFIRMED_APP_ENTITIES.some((item) => item.key === "certificacoes")).toBe(true);
     expect(CLASSIFICATION_HOLD.every((item) => item.includeInAppsCatalog === false)).toBe(true);
   });
 
