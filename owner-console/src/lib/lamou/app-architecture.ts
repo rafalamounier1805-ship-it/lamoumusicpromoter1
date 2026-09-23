@@ -706,3 +706,36 @@ export const CONFIRMED_APP_ENTITIES = APP_ARCHITECTURE_NODES.filter(
 export const NON_APP_ARCHITECTURE_ENTITIES = APP_ARCHITECTURE_NODES.filter(
   (item) => item.kind !== "app" && item.kind !== "external-app-reference",
 );
+
+
+export interface ClassificationHoldItem {
+  name: string;
+  observedArtifact: string;
+  provisionalKind: "tool-or-utility" | "security-utility" | "unknown";
+  reason: string;
+  includeInAppsCatalog: false;
+}
+
+export const CLASSIFICATION_HOLD: ClassificationHoldItem[] = [
+  {
+    name: "LAMOU Shield Local",
+    observedArtifact: "LAMOU_SHIELD_LOCAL_V1_2_1.zip",
+    provisionalKind: "security-utility",
+    reason: "Executável/pacote localizado, mas não há decisão suficiente nesta reconciliação para tratá-lo como aplicativo do portfólio.",
+    includeInAppsCatalog: false,
+  },
+  {
+    name: "LAMOU Computer Scan",
+    observedArtifact: "LAMOU_COMPUTER_SCAN_V1_2.zip",
+    provisionalKind: "tool-or-utility",
+    reason: "Scanner/utilitário localizado; excluir do catálogo de Apps até classificação explícita.",
+    includeInAppsCatalog: false,
+  },
+  {
+    name: "Confidential Guardian",
+    observedArtifact: "CONFIDENTIAL_GUARDIAN_V0_1_CANDIDATE.zip",
+    provisionalKind: "security-utility",
+    reason: "Candidata de segurança localizada; não classificar automaticamente como aplicativo.",
+    includeInAppsCatalog: false,
+  },
+];
