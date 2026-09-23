@@ -3,8 +3,11 @@ import { describe, expect, test } from "bun:test";
 import {
   APP_ARCHITECTURE_NODES,
   APP_FLOW_EDGES,
+  CLASSIFICATION_HOLD,
+  CONFIRMED_APP_ENTITIES,
   DUPLICATION_RECONCILIATION,
   NEW_SINCE_V75,
+  NON_APP_ARCHITECTURE_ENTITIES,
   OWNER_MODULE_ORDER,
 } from "../src/lib/lamou/app-architecture";
 import { METRIC_PROFILES, METRICS_REGISTRY } from "../src/lib/lamou/metrics-registry";
@@ -32,6 +35,20 @@ describe("architecture reconciliation", () => {
     expect(new Set(flowIds).size).toBe(flowIds.length);
     expect(new Set(duplicateIds).size).toBe(duplicateIds.length);
     expect(new Set(OWNER_MODULE_ORDER).size).toBe(OWNER_MODULE_ORDER.length);
+  });
+
+  test("confirmed app catalog excludes modules, tools and system surfaces", () => {
+    expect(CONFIRMED_APP_ENTITIES.length).toBeGreaterThan(0);
+    expect(
+      CONFIRMED_APP_ENTITIES.every(
+        (item) => item.kind === "app" || item.kind === "external-app-reference",
+      ),
+    ).toBe(true);
+    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "plano-acao")).toBe(true);
+    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "lab")).toBe(true);
+    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "validation-gate")).toBe(true);
+    expect(NON_APP_ARCHITECTURE_ENTITIES.some((item) => item.key === "app-observer-360")).toBe(true);
+    expect(CLASSIFICATION_HOLD.every((item) => item.includeInAppsCatalog === false)).toBe(true);
   });
 
   test("new since V7.5 never pretends an external reference has a bundled route", () => {
