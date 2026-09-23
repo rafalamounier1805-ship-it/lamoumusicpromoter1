@@ -30,6 +30,23 @@ Each application keeps its complete scope, internal flow, identity, source, vers
 
 A shared capability or linked entity does not transfer ownership of the application.
 
+## 2.1 Master App Lock
+
+Every confirmed application is registered in `src/lib/lamou/master-app-lock.ts`.
+
+The lock freezes **classification, identity, complete scope, source-of-truth and lineage** inside the LAMOU architecture. It prevents an application from being silently converted into a module, duplicated under an alias, absorbed by CORE/Central, or fragmented across areas.
+
+Explicit app decisions in this reconciliation include:
+
+- Validation Gate / Validação = APP
+- LAMOU App Processo / Processo = APP
+- APP Observer 360 = APP
+- Certificações = APP
+
+The lock does not change candidate/promotion truth.
+
+**APP LOCK ≠ PROMOTION.**
+
 ## 3. Owner module order
 
 The candidate uses the following management order:
@@ -135,15 +152,13 @@ An executable, ZIP, HTML or physical route does not automatically mean "applicat
 |---|---|
 | Plano de Ação | MODULE |
 | LAMOU Lab | SYSTEM_SURFACE |
-| Validation Gate | SYSTEM_SURFACE |
-| APP Observer 360 V2 | TOOL |
 | LAMOU Shield Local | CLASSIFICATION_HOLD |
 | LAMOU Computer Scan | CLASSIFICATION_HOLD |
 | Confidential Guardian | CLASSIFICATION_HOLD |
 
 Physical compatibility routes may remain without changing classification.
 
-See `ENTITY_CLASSIFICATION_2026-09-23.md`.
+See `ENTITY_CLASSIFICATION_2026-09-23.md` and `src/lib/lamou/master-app-lock.ts`.
 
 ## 6. Duplicates and lineage reconciliation
 
