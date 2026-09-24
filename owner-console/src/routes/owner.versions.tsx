@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/lamou/app-shell";
-import { OneClickUpdate } from "@/components/lamou/one-click-update";
 import { ModulePage } from "@/components/lamou/module-page";
 import { OneClickUpdate } from "@/components/lamou/one-click-update";
 import { Panel, TruthBadge } from "@/components/lamou/shell";
