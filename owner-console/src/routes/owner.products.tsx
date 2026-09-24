@@ -29,6 +29,8 @@ import {
   CANDIDATE_VAULT,
   CANDIDATE_VAULT_EXCLUSIONS,
   CANDIDATE_VAULT_POLICY,
+  OFFICIAL_REVIEW_CANDIDATE_POLICY,
+  OFFICIAL_REVIEW_CANDIDATE_SET,
   type CandidateVaultItem,
 } from "@/lib/lamou/candidate-vault";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
@@ -548,6 +550,53 @@ function ProductsPage() {
               </div>
             </div>
           </div>
+        </Panel>
+
+        <Panel title="4 módulos para revisão oficial">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline">OWNER REVIEW</Badge>
+            <Badge variant="outline">LOCKED</Badge>
+            <Badge variant="outline">NO_OVERWRITE</Badge>
+            <Badge variant="outline">NO_AUTO_PROMOTION</Badge>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Conjunto focal da candidata que o proprietário vai abrir e revisar antes de qualquer
+            promoção. Os quatro artefatos permanecem imutáveis; abrir/revisar não altera o estado
+            CANDIDATE_NOT_PROMOTED.
+          </p>
+          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+            {OFFICIAL_REVIEW_CANDIDATE_SET.map((item) => (
+              <div
+                key={item.slot}
+                className="rounded-lg border border-primary/30 bg-background/50 p-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-mono text-[10px] text-muted-foreground">#{item.slot}</p>
+                    <p className="text-sm font-medium">{item.name}</p>
+                    <p className="text-xs text-muted-foreground">{item.version}</p>
+                  </div>
+                  <Badge variant="outline">LOCKED</Badge>
+                </div>
+                <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">
+                  {item.sha256}
+                </p>
+                <Button
+                  className="mt-3"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => pullCandidatePointer(item)}
+                >
+                  Puxar candidato
+                </Button>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[11px] text-muted-foreground">
+            Política: locked={String(OFFICIAL_REVIEW_CANDIDATE_POLICY.locked)} · owner review
+            obrigatório · promoção automática proibida · qualquer alteração gera nova candidata
+            derivada.
+          </p>
         </Panel>
 
         <Panel title="Candidate Vault — últimos candidatos travados">
