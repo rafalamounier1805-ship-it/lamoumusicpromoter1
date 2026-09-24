@@ -35,9 +35,9 @@ export const Route = createFileRoute("/owner/opportunities")({
         action={<TruthBadge truth="DOCUMENTED_ONLY" />}
       >
         <p className="text-xs text-muted-foreground">
-          {RADAR_OPPORTUNITY_PROMPT.id} conecta esta superfície ao Comercial e ao módulo
-          Opportunity Intelligence. O contrato exige origem, freshness e evidência; runtime de IA
-          ainda NOT_CONNECTED.
+          {RADAR_OPPORTUNITY_PROMPT.id} conecta esta superfície ao Comercial e ao módulo Opportunity
+          Intelligence. O contrato exige origem, freshness e evidência; runtime de IA ainda
+          NOT_CONNECTED.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button asChild size="sm" variant="outline">
