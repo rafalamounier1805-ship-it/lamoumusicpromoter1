@@ -560,9 +560,8 @@ function ProductsPage() {
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
             Cada candidato fica travado por versão, origem e SHA-256. O botão Puxar baixa o
-            manifesto imutável de recuperação. O bridge de storage/binário permanece
-            NOT_CONNECTED nesta candidata; portanto o app não altera nem sobrescreve o arquivo
-            original.
+            manifesto imutável de recuperação. O bridge de storage/binário permanece NOT_CONNECTED
+            nesta candidata; portanto o app não altera nem sobrescreve o arquivo original.
           </p>
 
           <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
