@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { B144_LABTEST_MODULES } from "@/lib/lamou/b144-candidate";
 import {
   isReady,
   LT_IMPROVE,
@@ -167,6 +168,27 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
           </>
         }
       />
+
+      <Panel title="Módulos do LABTEST">
+        <p className="text-xs text-muted-foreground">
+          Teste³ IA executa testes; Validation Gate decide passagem por evidência. Permanecem
+          módulos distintos dentro do LABTEST e nenhum deles promove versão automaticamente.
+        </p>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {B144_LABTEST_MODULES.map((item) => (
+            <div key={item.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="min-w-0 flex-1 text-sm font-medium">{item.name}</span>
+                <Badge variant="outline" className="text-[10px]">{item.version}</Badge>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">{item.software}</p>
+              <Button asChild size="sm" variant="outline" className="mt-3">
+                <a href={item.route ?? "/owner/products"}>Abrir módulo</a>
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Panel>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi label="Itens em criação (ideia)" value={String(byStage.get("IDEIA/CRIAÇÃO") ?? 0)} />
