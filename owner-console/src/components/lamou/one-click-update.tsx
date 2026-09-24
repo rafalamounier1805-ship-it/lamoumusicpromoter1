@@ -104,11 +104,7 @@ export function OneClickUpdate({
           </div>
           <p className="mt-1 max-w-2xl text-xs text-muted-foreground">{detail}</p>
         </div>
-        <Button
-          size="sm"
-          onClick={() => void run()}
-          disabled={!["IDLE", "ERROR"].includes(state)}
-        >
+        <Button size="sm" onClick={() => void run()} disabled={!["IDLE", "ERROR"].includes(state)}>
           {state === "IDLE" || state === "ERROR" ? (
             <Download className="h-4 w-4" aria-hidden="true" />
           ) : (
