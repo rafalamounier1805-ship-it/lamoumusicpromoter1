@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { ContextDetailSheet, InteractiveRow } from "@/components/lamou/interactive";
@@ -22,6 +22,8 @@ import {
   type LtStage,
 } from "@/lib/lamou/labtest-data";
 import { cn } from "@/lib/utils";
+
+const LABTEST_STORAGE_KEY = "lamou_b144_labtest_state_v1";
 
 const STAGE_TONE: Record<string, string> = {
   "IDEIA/CRIAÇÃO": "border-border/60 text-muted-foreground",
@@ -106,8 +108,40 @@ type Sheet = { item: LtItem; mode: "ficha" | "testar" } | null;
 export function LabTestView({ initialTab = "overview" }: { initialTab?: string }) {
   const [tab, setTab] = useState(initialTab);
   const [sheet, setSheet] = useState<Sheet>(null);
-  const [queue, setQueue] = useState<string[]>(NEXT_VERSION.entries.map((e) => e.itemId));
-  const [log, setLog] = useState<{ at: string; text: string }[]>([]);
+  const [queue, setQueue] = useState<string[]>(() => {
+    const fallback = NEXT_VERSION.entries.map((e) => e.itemId);
+    if (typeof window === "undefined") return fallback;
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        queue?: string[];
+      };
+      return Array.isArray(saved.queue) ? saved.queue : fallback;
+    } catch {
+      return fallback;
+    }
+  });
+  const [validated, setValidated] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        validated?: string[];
+      };
+      return Array.isArray(saved.validated) ? saved.validated : [];
+    } catch {
+      return [];
+    }
+  });
+  const [log, setLog] = useState<{ at: string; text: string }[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        log?: { at: string; text: string }[];
+      };
+      return Array.isArray(saved.log) ? saved.log : [];
+    } catch {
+      return [];
+    }
+  });
   const [criticalPending, setCriticalPending] = useState(3);
   const [scenario, setScenario] = useState("Cenário padrão (fixture)");
   const [dataset, setDataset] = useState("");
@@ -136,10 +170,30 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     setLog((v) => [{ at: new Date().toLocaleString("pt-BR"), text }, ...v]);
   }
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      LABTEST_STORAGE_KEY,
+      JSON.stringify({ queue, validated, log: log.slice(0, 100) }),
+    );
+  }, [queue, validated, log]);
+
+  function registerValidation(item: LtItem) {
+    if (!isReady(item)) {
+      addLog(`Validação TESTE bloqueada para ${item.id}: critérios mínimos ainda pendentes.`);
+      return;
+    }
+    setValidated((current) => (current.includes(item.id) ? current : [...current, item.id]));
+    setQueue((current) => (current.includes(item.id) ? current : [...current, item.id]));
+    addLog(
+      `Validação TESTE registrada para ${item.id}; item subiu automaticamente para a fila da próxima versão. Isso não promove para OFICIAL.`,
+    );
+  }
+
   function toggleQueue(id: string) {
     setQueue((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id]));
     addLog(
-      `${queue.includes(id) ? "Removido da" : "Adicionado à"} fila da próxima versão: ${id} (registro local DEMO — adicionar à fila ≠ promover)`,
+      `${queue.includes(id) ? "Removido da" : "Adicionado à"} fila da próxima versão: ${id} (estado TESTE persistido na candidata — adicionar à fila ≠ promover)`,
     );
   }
 
@@ -160,7 +214,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         subtitle="Superfície única do que ainda NÃO foi promovido: aplicativos, módulos, builds, CORE e arquiteturas experimentais, plugins, providers, CALLs, integrações, dados de teste, treinamentos e cenários de eval."
         right={
           <>
-            <DemoBadge label="SYNTHETIC_DEMO" />
+            <Badge variant="outline">TESTE · B144</Badge>
             <TruthBadge truth="NOT_CONNECTED" hint="Nenhum runtime de teste conectado" />
             <Button asChild size="sm" variant="outline">
               <Link to="/labtest/next">Próxima Versão</Link>
@@ -216,7 +270,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         </Panel>
       </div>
 
-      <Panel title="Critérios de criticidade (locais, de demonstração)">
+      <Panel title="Critérios de criticidade do ambiente de teste">
         <div className="flex flex-wrap items-end gap-3">
           <div className="w-56">
             <Label htmlFor="lt-threshold" className="text-xs">
@@ -232,8 +286,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            {critical.length} item(ns) atingem o critério. Não existe regra de criticidade no
-            backend: este limite é local e SYNTHETIC_DEMO.
+            {critical.length} item(ns) atingem o critério. Este limite pertence ao ambiente de teste. Dados sintéticos continuam identificados quando forem usados.
           </p>
         </div>
       </Panel>
@@ -457,6 +510,11 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                       >
                         {ok ? "READY" : "NOT_READY"}
                       </Badge>
+                      {validated.includes(i.id) ? (
+                        <Badge variant="outline" className="border-success/50 text-[10px] text-success">
+                          VALIDADO PARA FILA
+                        </Badge>
+                      ) : null}
                       <Button
                         size="sm"
                         variant="ghost"
@@ -501,7 +559,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
           </Panel>
 
           {log.length ? (
-            <Panel title="Registro local desta sessão (DEMO)">
+            <Panel title="Registro persistido do ambiente de teste">
               <ul className="space-y-1 text-xs text-muted-foreground">
                 {log.map((l, idx) => (
                   <li key={idx}>
@@ -521,7 +579,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         description={
           sheet
             ? sheet.mode === "testar"
-              ? "Workspace de teste — execução DEMO/SYNTHETIC, sem runtime conectado."
+              ? "Workspace de TESTE — estado persistente da candidata; dados sintéticos são identificados separadamente e o runtime externo continua não conectado."
               : `${LT_TYPE_LABEL[sheet.item.type]} · ${sheet.item.family} · estágio ${sheet.item.stage}`
             : ""
         }
@@ -621,11 +679,21 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   disabled={!isReady(sheet.item)}
                   onClick={() =>
                     addLog(
-                      `Enviado ao Validation Gate (registro local DEMO): ${sheet.item.id} — gate não executa sem runner conectado`,
+                      `Enviado ao Validation Gate no ambiente TESTE: ${sheet.item.id} — aguardando execução/validação com evidência`,
                     )
                   }
                 >
                   Enviar ao Validation Gate
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={!isReady(sheet.item)}
+                  onClick={() => registerValidation(sheet.item)}
+                >
+                  {validated.includes(sheet.item.id)
+                    ? "Validação TESTE registrada"
+                    : "Registrar validação TESTE"}
                 </Button>
                 <Button size="sm" variant="outline" disabled>
                   Promover — bloqueado por gate
@@ -640,7 +708,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
             <div className="space-y-4 text-sm">
               <NotConnected
                 what="Runtime de teste"
-                next="Nenhum executor conectado. A execução abaixo apenas registra um ensaio local SYNTHETIC_DEMO."
+                next="Nenhum executor externo conectado. O registro abaixo pertence ao ambiente TESTE da candidata e permanece persistido localmente; dado sintético continua marcado como sintético."
               />
               <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-xs">
                 <p>
@@ -707,11 +775,11 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   size="sm"
                   onClick={() =>
                     addLog(
-                      `Ensaio DEMO registrado para ${sheet.item.id} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}” — nenhuma execução real`,
+                      `Ensaio TESTE registrado para ${sheet.item.id} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}” — runtime externo não conectado`,
                     )
                   }
                 >
-                  Executar ensaio DEMO
+                  Registrar ensaio de TESTE
                 </Button>
                 <Button
                   size="sm"
