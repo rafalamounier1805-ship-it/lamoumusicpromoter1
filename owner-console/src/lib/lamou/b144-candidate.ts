@@ -14,12 +14,37 @@ export const B144_CANDIDATE = {
 } as const;
 
 export const B144_PRODUCT_TAXONOMY = [
-  { kind: "PROPRIETARIO", label: "Proprietário", description: "Identidade, conta e responsabilidade do owner." },
-  { kind: "MODULO", label: "Módulo", description: "Software funcional independente exposto dentro do ecossistema." },
-  { kind: "APLICATIVO_LEGADO", label: "Aplicativo legado", description: "Identidade histórica preservada para compatibilidade e linhagem." },
-  { kind: "CORE", label: "CORE", description: "Plataforma/capacidades técnicas compartilhadas; não absorve o escopo dos módulos." },
-  { kind: "PLUGIN_PROVIDER", label: "Plugin / Provider", description: "Integração externa ou capability conectável." },
-  { kind: "FERRAMENTA", label: "Ferramenta", description: "Utilitário operacional que não é módulo de negócio." },
+  {
+    kind: "PROPRIETARIO",
+    label: "Proprietário",
+    description: "Identidade, conta e responsabilidade do owner.",
+  },
+  {
+    kind: "MODULO",
+    label: "Módulo",
+    description: "Software funcional independente exposto dentro do ecossistema.",
+  },
+  {
+    kind: "APLICATIVO_LEGADO",
+    label: "Aplicativo legado",
+    description: "Identidade histórica preservada para compatibilidade e linhagem.",
+  },
+  {
+    kind: "CORE",
+    label: "CORE",
+    description:
+      "Plataforma/capacidades técnicas compartilhadas; não absorve o escopo dos módulos.",
+  },
+  {
+    kind: "PLUGIN_PROVIDER",
+    label: "Plugin / Provider",
+    description: "Integração externa ou capability conectável.",
+  },
+  {
+    kind: "FERRAMENTA",
+    label: "Ferramenta",
+    description: "Utilitário operacional que não é módulo de negócio.",
+  },
 ] as const;
 
 export type B144ProductKind = (typeof B144_PRODUCT_TAXONOMY)[number]["kind"];
@@ -201,11 +226,7 @@ export const RADAR_OPPORTUNITY_PROMPT = {
   state: "DOCUMENTED_ONLY",
   runtime: "NOT_CONNECTED",
   owner: "LAMOU IA Central / Proprietário",
-  consumers: [
-    "CENTRAL:commercial",
-    "CENTRAL:opportunities",
-    "APP:opportunity-intelligence",
-  ],
+  consumers: ["CENTRAL:commercial", "CENTRAL:opportunities", "APP:opportunity-intelligence"],
   purpose:
     "Ler sinais comerciais e de mercado, estruturar oportunidades com evidência e encaminhar para Comercial e Radar de Oportunidades sem inventar fatos.",
   requiredInput: [
