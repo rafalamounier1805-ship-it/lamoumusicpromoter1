@@ -25,6 +25,12 @@ import {
   LOCKED_MASTER_APPS,
   MASTER_NON_APPS,
 } from "@/lib/lamou/master-app-lock";
+import {
+  CANDIDATE_VAULT,
+  CANDIDATE_VAULT_EXCLUSIONS,
+  CANDIDATE_VAULT_POLICY,
+  type CandidateVaultItem,
+} from "@/lib/lamou/candidate-vault";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
 import { APPS_MENU, APP_ROUTES, appRoute, type AppSlug } from "@/lib/lamou/nav";
 import { useMemo, useState } from "react";
@@ -265,6 +271,30 @@ function Kpi({
       {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}
     </div>
   );
+}
+
+function pullCandidatePointer(item: CandidateVaultItem) {
+  if (item.sourceMode === "SOURCE_NOT_FOUND") return;
+  const payload = {
+    operation: "PULL_IMMUTABLE_CANDIDATE",
+    candidate: item,
+    policy: CANDIDATE_VAULT_POLICY,
+    instructions: [
+      "Resolver a fonte no storage/biblioteca.",
+      "Copiar bytes exatos; nunca editar ou sobrescrever a origem.",
+      "Verificar SHA-256 antes de abrir/usar.",
+      "Se o hash divergir, bloquear.",
+      "Qualquer alteração deve gerar nova candidata derivada.",
+      "SALVAR != PROMOVER.",
+    ],
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const href = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = href;
+  anchor.download = `LAMOU_PULL_${item.slot}_${item.appKey}.json`;
+  anchor.click();
+  URL.revokeObjectURL(href);
 }
 
 function ProductsPage() {
@@ -516,6 +546,69 @@ function ProductsPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </Panel>
+
+        <Panel title="Candidate Vault — últimos candidatos travados">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline">IMMUTABLE</Badge>
+            <Badge variant="outline">NO_EDIT</Badge>
+            <Badge variant="outline">NO_OVERWRITE</Badge>
+            <Badge variant="outline">DERIVE_ONLY</Badge>
+            <Badge variant="outline">SALVAR ≠ PROMOVER</Badge>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Cada candidato fica travado por versão, origem e SHA-256. O botão Puxar baixa o
+            manifesto imutável de recuperação. O bridge de storage/binário permanece
+            NOT_CONNECTED nesta candidata; portanto o app não altera nem sobrescreve o arquivo
+            original.
+          </p>
+
+          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+            {CANDIDATE_VAULT.map((item) => (
+              <div
+                key={item.slot}
+                className="rounded-lg border border-border/50 bg-background/40 p-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-mono text-[10px] text-muted-foreground">#{item.slot}</p>
+                    <p className="text-sm font-medium">{item.name}</p>
+                    <p className="text-xs text-muted-foreground">{item.version}</p>
+                  </div>
+                  <Badge variant="outline">LOCKED</Badge>
+                </div>
+                <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">
+                  {item.sha256 ?? "SHA256: SOURCE_NOT_FOUND"}
+                </p>
+                <p className="mt-2 text-[11px] text-muted-foreground">{item.source}</p>
+                {item.note ? (
+                  <p className="mt-1 text-[11px] text-muted-foreground">{item.note}</p>
+                ) : null}
+                <Button
+                  className="mt-3"
+                  size="sm"
+                  variant="outline"
+                  disabled={item.sourceMode === "SOURCE_NOT_FOUND"}
+                  onClick={() => pullCandidatePointer(item)}
+                >
+                  {item.sourceMode === "SOURCE_NOT_FOUND"
+                    ? "Fonte anterior não localizada"
+                    : "Puxar candidato"}
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 rounded-lg border border-border/50 bg-surface-1/40 p-3">
+            <p className="text-xs font-medium">Não entram neste cofre</p>
+            <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+              {CANDIDATE_VAULT_EXCLUSIONS.map((item) => (
+                <p key={item.name}>
+                  <b>{item.name}</b> — {item.reason}
+                </p>
+              ))}
             </div>
           </div>
         </Panel>
