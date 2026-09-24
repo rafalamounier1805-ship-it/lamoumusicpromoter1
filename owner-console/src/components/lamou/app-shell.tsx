@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Moon, Sun } from "lucide-react";
+import { CalendarDays, Menu, Moon, Smartphone, Sun, UserRound } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { OwnerOfficialIcon } from "@/components/lamou/owner-official-icon";
@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { OWNER_OFFICIAL_ICON_BY_LABEL } from "@/lib/lamou/icon-governance";
 import { NAV_GROUPS, type NavGroup } from "@/lib/lamou/nav";
+import { useOwnerAuth } from "@/lib/lamou/owner-auth";
 import { cn } from "@/lib/utils";
 
 export function AppShell({ group, children }: { group: NavGroup; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [light, setLight] = useState(false);
+  const { profile } = useOwnerAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   // "apps" não é superfície raiz: um aplicativo é aberto a partir da Central,
   // então o menu lateral continua sendo o da Central.
@@ -155,6 +157,24 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
                 </Badge>
               </div>
               <div className="ml-auto flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="hidden gap-1.5 xl:inline-flex">
+                  <Link to="/owner/my-development" aria-label="Abrir Meu Desenvolvimento">
+                    <Smartphone className="h-4 w-4" aria-hidden="true" />
+                    Meu Desenvolvimento
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm" className="hidden gap-1.5 lg:inline-flex">
+                  <Link to="/apps/orbit" aria-label="Abrir Orbit">
+                    <CalendarDays className="h-4 w-4" aria-hidden="true" />
+                    Orbit
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm" className="hidden gap-1.5 md:inline-flex">
+                  <Link to="/owner/settings" aria-label="Editar nome e perfil do proprietário">
+                    <UserRound className="h-4 w-4" aria-hidden="true" />
+                    {profile?.full_name?.trim() || "Proprietário"}
+                  </Link>
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"
