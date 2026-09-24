@@ -12,13 +12,13 @@ import { SEVERITY_LABEL } from "@/lib/lamou/types";
 export const Route = createFileRoute("/owner/apps")({
   head: () => ({
     meta: [
-      { title: "Inventário reconciliado de Aplicativos — LAMOU IA Central" },
+      { title: "Inventário reconciliado de Módulos — LAMOU IA Central" },
       {
         name: "description",
         content:
-          "Rota de compatibilidade somente-leitura para preservar os registros legados de aplicativos. A superfície gerencial canônica é Central > Produtos.",
+          "Rota de compatibilidade somente-leitura para preservar os registros legados de módulos. A superfície gerencial canônica é Central > Módulos & Produtos.",
       },
-      { property: "og:title", content: "Inventário reconciliado de Aplicativos — LAMOU IA" },
+      { property: "og:title", content: "Inventário reconciliado de Módulos — LAMOU IA" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -30,11 +30,11 @@ function AppsCompatibilityPage() {
   return (
     <AppShell group="owner">
       <PageHeader
-        title="Aplicativos — inventário reconciliado"
-        subtitle="Rota de compatibilidade somente-leitura. A experiência gerencial canônica foi unificada em Central > Produtos; os registros anteriores permanecem visíveis aqui para não perder proveniência nem dados."
+        title="Módulos — inventário reconciliado"
+        subtitle="Rota de compatibilidade somente-leitura. A experiência gerencial canônica foi unificada em Central > Módulos & Produtos; os registros anteriores permanecem visíveis aqui para não perder proveniência nem dados."
         right={
           <Button asChild size="sm">
-            <Link to="/owner/products">Abrir Produtos</Link>
+            <Link to="/owner/products">Abrir Módulos & Produtos</Link>
           </Button>
         }
       />
@@ -44,7 +44,7 @@ function AppsCompatibilityPage() {
         <DemoBadge label="PRESERVAÇÃO / RECONCILIAÇÃO" />
       </div>
 
-      <Panel title={`Fichas de aplicativo preservadas (${APP_PAGES.length})`}>
+      <Panel title={`Fichas de módulo preservadas (${APP_PAGES.length})`}>
         <p className="text-xs text-muted-foreground">
           Fonte: `APP_PAGES`. Estes registros não criam um segundo modelo gerencial; servem como
           evidência de reconciliação do catálogo existente.
@@ -113,7 +113,7 @@ function AppsCompatibilityPage() {
         </div>
       </Panel>
 
-      <Panel title={`Fixtures históricas de produto/app (${APPS.length})`}>
+      <Panel title={`Fixtures históricas de produto/módulo (${APPS.length})`}>
         <p className="text-xs text-muted-foreground">
           Fonte: `demo-data.APPS`. Os números abaixo continuam explicitamente DEMO e não comprovam
           produção, clientes reais, saúde real ou promoção.
@@ -180,7 +180,7 @@ function AppsCompatibilityPage() {
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button asChild size="sm">
-            <Link to="/owner/products">Produtos — superfície canônica</Link>
+            <Link to="/owner/products">Módulos & Produtos — superfície canônica</Link>
           </Button>
           <Button asChild size="sm" variant="outline">
             <Link to="/core/apps">Bindings técnicos no CORE</Link>
