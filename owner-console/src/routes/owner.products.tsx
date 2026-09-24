@@ -33,7 +33,11 @@ import {
   OFFICIAL_REVIEW_CANDIDATE_SET,
   type CandidateVaultItem,
 } from "@/lib/lamou/candidate-vault";
-import { B144_CANDIDATE, B144_MODULE_CATALOG, B144_PRODUCT_TAXONOMY } from "@/lib/lamou/b144-candidate";
+import {
+  B144_CANDIDATE,
+  B144_MODULE_CATALOG,
+  B144_PRODUCT_TAXONOMY,
+} from "@/lib/lamou/b144-candidate";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
 import { APPS_MENU, APP_ROUTES, appRoute, type AppSlug } from "@/lib/lamou/nav";
 import { useMemo, useState } from "react";
@@ -508,7 +512,10 @@ function ProductsPage() {
 
           <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
             {B144_PRODUCT_TAXONOMY.map((item) => (
-              <div key={item.kind} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <div
+                key={item.kind}
+                className="rounded-lg border border-border/50 bg-surface-1/40 p-3"
+              >
                 <p className="font-mono text-[10px] text-muted-foreground">{item.kind}</p>
                 <p className="text-sm font-medium">{item.label}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{item.description}</p>
@@ -536,11 +543,15 @@ function ProductsPage() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase text-muted-foreground">Tipo / proprietário</p>
-                  <p className="text-xs">{item.kind} · {item.ownership}</p>
+                  <p className="text-xs">
+                    {item.kind} · {item.ownership}
+                  </p>
                 </div>
                 <div>
                   <p className="text-[10px] uppercase text-muted-foreground">Versão / estágio</p>
-                  <p className="text-xs">{item.version} · {item.stage}</p>
+                  <p className="text-xs">
+                    {item.version} · {item.stage}
+                  </p>
                 </div>
               </div>
             ))}
