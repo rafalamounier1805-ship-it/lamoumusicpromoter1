@@ -42,9 +42,8 @@ export const Route = createFileRoute("/owner/versions")({
           <Badge variant="outline">DERIVE_ONLY</Badge>
         </div>
         <p className="mt-2 text-xs text-muted-foreground">
-          Branch travada: {B144_CANDIDATE.branch}. Base preservada:
-          {" "}{B144_CANDIDATE.baseCommit}. Validar não promove. Qualquer alteração posterior deve
-          gerar nova candidata derivada.
+          Branch travada: {B144_CANDIDATE.branch}. Base preservada: {B144_CANDIDATE.baseCommit}.
+          Validar não promove. Qualquer alteração posterior deve gerar nova candidata derivada.
         </p>
       </Panel>
       <ModulePage spec={spec} />
