@@ -27,11 +27,7 @@ import { cn } from "@/lib/utils";
 const LABTEST_STORAGE_KEY = "lamou_b144_labtest_state_v2";
 
 type ValidationStatus = "VALIDADO" | "NAO_VALIDADO";
-type ValidationDestination =
-  | "TESTE"
-  | "PLANO_DE_ACAO"
-  | "MELHORIA"
-  | "APROVACAO_PROXIMA_VERSAO";
+type ValidationDestination = "TESTE" | "PLANO_DE_ACAO" | "MELHORIA" | "APROVACAO_PROXIMA_VERSAO";
 
 interface ValidationRecord {
   itemId: string;
@@ -151,17 +147,19 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
       return [];
     }
   });
-  const [validationRecords, setValidationRecords] = useState<Record<string, ValidationRecord>>(() => {
-    if (typeof window === "undefined") return {};
-    try {
-      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
-        validationRecords?: Record<string, ValidationRecord>;
-      };
-      return saved.validationRecords ?? {};
-    } catch {
-      return {};
-    }
-  });
+  const [validationRecords, setValidationRecords] = useState<Record<string, ValidationRecord>>(
+    () => {
+      if (typeof window === "undefined") return {};
+      try {
+        const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+          validationRecords?: Record<string, ValidationRecord>;
+        };
+        return saved.validationRecords ?? {};
+      } catch {
+        return {};
+      }
+    },
+  );
   const [log, setLog] = useState<{ at: string; text: string }[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -244,9 +242,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
       );
     } else {
       setQueue((current) => current.filter((id) => id !== item.id));
-      addLog(
-        `NÃO VALIDADO: ${item.name} · por ${actor} · retorno para TESTE/AJUSTE.`,
-      );
+      addLog(`NÃO VALIDADO: ${item.name} · por ${actor} · retorno para TESTE/AJUSTE.`);
     }
   }
 
@@ -724,7 +720,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   </div>
                   <div>
                     <dt className="text-[10px] uppercase text-muted-foreground">Hipótese</dt>
-                    <dd className="text-xs">não informada na entrada — registrar antes da conclusão</dd>
+                    <dd className="text-xs">
+                      não informada na entrada — registrar antes da conclusão
+                    </dd>
                   </div>
                 </dl>
                 <div className="mt-2">
