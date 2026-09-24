@@ -1030,8 +1030,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 </div>
               ) : null}
               <p className="text-[11px] text-muted-foreground">
-                Verde aparece somente depois de VALIDADO. "Pronto para validar" permanece azul/neutro e não
-                equivale a validação nem a aprovação. SALVAR ≠ PROMOVER.
+                Verde aparece somente depois de VALIDADO. "Pronto para validar" permanece
+                azul/neutro e não equivale a validação nem a aprovação. SALVAR ≠ PROMOVER.
               </p>
             </div>
           ) : (
@@ -1046,7 +1046,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 </p>
                 <p className="mt-1 text-muted-foreground">
                   Entrada: {testRecords[sheet.item.id]?.enteredAt ?? sheet.item.updatedAt} · enviado
-                  por {testRecords[sheet.item.id]?.submittedBy ?? sheet.item.owner ?? "não informado"} ·
+                  por{" "}
+                  {testRecords[sheet.item.id]?.submittedBy ?? sheet.item.owner ?? "não informado"} ·
                   origem: {testRecords[sheet.item.id]?.source ?? sheet.item.source}
                 </p>
                 <p className="mt-1">
@@ -1109,10 +1110,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  onClick={() => registerTest(sheet.item)}
-                >
+                <Button size="sm" onClick={() => registerTest(sheet.item)}>
                   Registrar ensaio de TESTE
                 </Button>
                 <Button
