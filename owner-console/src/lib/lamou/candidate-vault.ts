@@ -265,6 +265,68 @@ export const CANDIDATE_VAULT: CandidateVaultItem[] = [
   },
 ];
 
+export const OFFICIAL_REVIEW_CANDIDATE_SET: CandidateVaultItem[] = [
+  {
+    slot: "01",
+    appKey: "metraction-360",
+    name: "Metraction 360",
+    version: "V0.4 VISUAL BASELINE",
+    immutable: true,
+    promotion: "CANDIDATE_NOT_PROMOTED",
+    sourceMode: "LIBRARY_FILE",
+    source: "/METRACTION_360_VISUAL_BASELINE_V0_4.html",
+    sha256: "ca4e912faa19e058027c8d315485b8c7abc576f51c96e369c4a32f00ec45d686",
+    note: "Conjunto focal para revisão do proprietário; não promover automaticamente.",
+  },
+  {
+    slot: "02",
+    appKey: "showroom",
+    name: "LAMOU Showroom",
+    version: "V0.4 DESIGN C",
+    immutable: true,
+    promotion: "CANDIDATE_NOT_PROMOTED",
+    sourceMode: "LIBRARY_FILE",
+    source: "/LAMOU_SHOWROOM_V0_4_DESIGN_C_EXECUTAVEL_HOMOLOGACAO.html",
+    sha256: "25f344ed3f5f3d5baad87ca6f6ba8f2bbd872458bd63c94b0681020305abe1f7",
+    note: "Showroom V0.4 físico preservado para revisão oficial do proprietário.",
+  },
+  {
+    slot: "03",
+    appKey: "orbit",
+    name: "LAMOU Orbit",
+    version: "V5.9 OWNER",
+    immutable: true,
+    promotion: "CANDIDATE_NOT_PROMOTED",
+    sourceMode: "LIBRARY_PACKAGE",
+    source:
+      "/LAMOU IA CORE/Documentos Mestre/CANDIDATAS/2026-09-06_LAMOU_ORBITE_V5_9_P0_P1/LAMOU_ORBITE_V5_9_P0_P1_CANDIDATE_01.zip",
+    sha256: "07877c2366b79a7b00d33db120232e6619a705982c2113ade1f0f5943c8ceafc",
+    note: "Executável Owner V5.9 travado para revisão oficial do proprietário.",
+  },
+  {
+    slot: "04",
+    appKey: "teste3",
+    name: "Teste³ IA",
+    version: "V0.2",
+    immutable: true,
+    promotion: "CANDIDATE_NOT_PROMOTED",
+    sourceMode: "RECOVERED_HISTORICAL_PACKAGE",
+    source: "APP-010 historical candidate — Teste³ / Forge lineage",
+    sha256: "792eef755c8ad7893f9e7770fa341ba06a2570256bb2a2707e4f4818efadd2dd",
+    note: "Candidata V0.2 travada para revisão oficial do proprietário.",
+  },
+];
+
+export const OFFICIAL_REVIEW_CANDIDATE_POLICY = {
+  locked: true,
+  ownerReviewRequired: true,
+  readyForOwnerOpen: true,
+  autoPromotionForbidden: true,
+  overwriteForbidden: true,
+  deriveOnly: true,
+  saveDoesNotPromote: true,
+} as const;
+
 export function candidateVaultItem(appKey: string): CandidateVaultItem | null {
   return CANDIDATE_VAULT.find((item) => item.appKey === appKey) ?? null;
 }
