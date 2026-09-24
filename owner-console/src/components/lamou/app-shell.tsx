@@ -77,7 +77,7 @@ export function AppShell({ group, children }: { group: NavGroup; children: React
             </div>
             {group === "apps" ? (
               <p className="mt-2 rounded-md border border-border/50 bg-surface-1/50 px-2 py-1.5 text-[10px] text-muted-foreground">
-                Aplicativo aberto a partir da Central &gt; Aplicativos.
+                Módulo aberto a partir da Central &gt; Módulos.
               </p>
             ) : null}
 
