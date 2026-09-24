@@ -219,7 +219,7 @@ function ClientsPage() {
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setFlow("update")}>
                     <CalendarClock className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                    Programar atualização
+                    Atualizar agora
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setFlow("backup")}>
                     <DatabaseBackup className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
@@ -954,9 +954,9 @@ function UpdateFlow({
         <div className="rounded-lg border border-warning/40 bg-warning/5 p-3 text-xs">
           <p className="font-medium">Agente desktop necessário</p>
           <p className="mt-1 text-muted-foreground">
-            Próxima etapa técnica: ligar o instalador/auto-updater do Windows a este botão. O usuário
-            continua com uma única ação; a confirmação do sistema operacional aparece somente quando
-            o Windows exigir.
+            Próxima etapa técnica: ligar o instalador/auto-updater do Windows a este botão. O
+            usuário continua com uma única ação; a confirmação do sistema operacional aparece
+            somente quando o Windows exigir.
           </p>
         </div>
       ) : null}
