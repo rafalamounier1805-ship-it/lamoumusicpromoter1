@@ -1,0 +1,185 @@
+{
+  "id": "LAMOU-EXPLAINABLE-HEALTH-TREE-V0.1",
+  "state": "EXPERIMENT_PROPOSAL",
+  "promotion": "NOT_PROMOTED",
+  "architecture": {
+    "calculation_owner": "CORE",
+    "experimental_surface": "LABTEST",
+    "independent_product": false
+  },
+  "truth_rules": {
+    "score_without_verified_target": "NOT_CALCULABLE",
+    "fact_without_evidence": false,
+    "pass_without_evidence": false,
+    "invented_probability": false,
+    "invented_benchmark": false
+  },
+  "dimensions": [
+    {
+      "id": "performance",
+      "label": "Desempenho técnico",
+      "metrics": [
+        { "id": "latency_p50", "direction": "LOWER_IS_BETTER", "unit": "ms" },
+        { "id": "latency_p95", "direction": "LOWER_IS_BETTER", "unit": "ms" },
+        { "id": "latency_p99", "direction": "LOWER_IS_BETTER", "unit": "ms" },
+        { "id": "throughput", "direction": "HIGHER_IS_BETTER" },
+        { "id": "availability", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "error_rate", "direction": "LOWER_IS_BETTER", "unit": "%" },
+        { "id": "memory", "direction": "LOWER_IS_BETTER" },
+        { "id": "cpu", "direction": "LOWER_IS_BETTER" },
+        { "id": "storage", "direction": "LOWER_IS_BETTER" },
+        { "id": "bundle_size", "direction": "LOWER_IS_BETTER" }
+      ]
+    },
+    {
+      "id": "reliability",
+      "label": "Confiabilidade e execução",
+      "metrics": [
+        { "id": "success_rate", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "retry_rate", "direction": "LOWER_IS_BETTER", "unit": "%" },
+        { "id": "incident_rate", "direction": "LOWER_IS_BETTER" },
+        { "id": "mttr", "direction": "LOWER_IS_BETTER" },
+        { "id": "recovery_success", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "observability_coverage", "direction": "HIGHER_IS_BETTER", "unit": "%" }
+      ]
+    },
+    {
+      "id": "security",
+      "label": "Segurança",
+      "metrics": [
+        { "id": "authentication", "direction": "BINARY_OR_LEVEL" },
+        { "id": "mfa", "direction": "BINARY_OR_LEVEL" },
+        { "id": "authorization_scopes", "direction": "BINARY_OR_LEVEL" },
+        { "id": "tenant_rls", "direction": "BINARY_OR_LEVEL" },
+        { "id": "secret_management", "direction": "BINARY_OR_LEVEL" },
+        { "id": "encryption", "direction": "BINARY_OR_LEVEL" },
+        { "id": "auditability", "direction": "HIGHER_IS_BETTER" },
+        { "id": "backup_restore", "direction": "BINARY_OR_LEVEL" },
+        { "id": "vulnerability_count", "direction": "LOWER_IS_BETTER" }
+      ]
+    },
+    {
+      "id": "usage",
+      "label": "Uso e adoção",
+      "metrics": [
+        { "id": "active_users", "direction": "HIGHER_IS_BETTER" },
+        { "id": "usage_frequency", "direction": "HIGHER_IS_BETTER" },
+        { "id": "retention", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "task_success_rate", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "task_time", "direction": "LOWER_IS_BETTER" },
+        { "id": "abandonment_rate", "direction": "LOWER_IS_BETTER", "unit": "%" }
+      ]
+    },
+    {
+      "id": "business",
+      "label": "Negócio e vendas",
+      "metrics": [
+        { "id": "active_clients", "direction": "HIGHER_IS_BETTER" },
+        { "id": "attributed_sales", "direction": "HIGHER_IS_BETTER" },
+        { "id": "recurring_revenue", "direction": "HIGHER_IS_BETTER" },
+        { "id": "conversion", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "upsell", "direction": "HIGHER_IS_BETTER" },
+        { "id": "churn", "direction": "LOWER_IS_BETTER", "unit": "%" },
+        { "id": "cost_to_serve", "direction": "LOWER_IS_BETTER" },
+        { "id": "margin", "direction": "HIGHER_IS_BETTER", "unit": "%" }
+      ]
+    },
+    {
+      "id": "evolution",
+      "label": "Evolução",
+      "metrics": [
+        { "id": "release_frequency", "direction": "TARGET_RANGE" },
+        { "id": "lead_time", "direction": "LOWER_IS_BETTER" },
+        { "id": "test_coverage", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "bugs_per_release", "direction": "LOWER_IS_BETTER" },
+        { "id": "regressions", "direction": "LOWER_IS_BETTER" },
+        { "id": "fix_time", "direction": "LOWER_IS_BETTER" },
+        { "id": "technical_debt", "direction": "LOWER_IS_BETTER" }
+      ]
+    },
+    {
+      "id": "adaptability",
+      "label": "Adaptabilidade",
+      "metrics": [
+        { "id": "contexts_supported", "direction": "HIGHER_IS_BETTER" },
+        { "id": "configuration_over_fork", "direction": "HIGHER_IS_BETTER" },
+        { "id": "responsive_coverage", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "accessibility_coverage", "direction": "HIGHER_IS_BETTER", "unit": "%" },
+        { "id": "safe_recovery", "direction": "BINARY_OR_LEVEL" },
+        { "id": "provider_swap_capability", "direction": "HIGHER_IS_BETTER" }
+      ]
+    },
+    {
+      "id": "plurality",
+      "label": "Portabilidade e pluralidade",
+      "metrics": [
+        { "id": "providers_supported", "direction": "HIGHER_IS_BETTER" },
+        { "id": "models_supported", "direction": "HIGHER_IS_BETTER" },
+        { "id": "adapters_supported", "direction": "HIGHER_IS_BETTER" },
+        { "id": "platforms_supported", "direction": "HIGHER_IS_BETTER" },
+        { "id": "import_export", "direction": "BINARY_OR_LEVEL" },
+        { "id": "open_standards", "direction": "HIGHER_IS_BETTER" },
+        { "id": "coupling", "direction": "LOWER_IS_BETTER" }
+      ]
+    },
+    {
+      "id": "efficiency",
+      "label": "Eficiência",
+      "metrics": [
+        { "id": "cost_per_operation", "direction": "LOWER_IS_BETTER" },
+        { "id": "cost_per_user", "direction": "LOWER_IS_BETTER" },
+        { "id": "infrastructure_consumption", "direction": "LOWER_IS_BETTER" },
+        { "id": "cost_per_result", "direction": "LOWER_IS_BETTER" },
+        { "id": "manual_work", "direction": "LOWER_IS_BETTER" },
+        { "id": "operational_complexity", "direction": "LOWER_IS_BETTER" }
+      ]
+    }
+  ],
+  "explanation_tree": {
+    "levels": [
+      "ENTITY",
+      "DIMENSION",
+      "METRIC",
+      "CONTRIBUTOR_OR_CAUSE",
+      "EVIDENCE"
+    ],
+    "required_node_fields": [
+      "truth_state",
+      "source_id",
+      "evidence_ids",
+      "build",
+      "environment",
+      "last_verified_at",
+      "owner"
+    ]
+  },
+  "recommendation_model": {
+    "max_options": 3,
+    "required_fields": [
+      "reason",
+      "expected_gain_if_evidenced",
+      "risk",
+      "dependencies",
+      "cost",
+      "cross_dimension_impact",
+      "reversibility",
+      "evidence_ids",
+      "required_test",
+      "truth_state"
+    ]
+  },
+  "math": {
+    "higher_is_better": "clamp(100 * (value - minimum_acceptable) / (target - minimum_acceptable), 0, 100)",
+    "lower_is_better": "clamp(100 * (maximum_acceptable - value) / (maximum_acceptable - target), 0, 100)",
+    "dimension_health": "sum(weight_i * score_i) / sum(weight_i)",
+    "overall_health": "sum(dimension_weight_d * dimension_health_d) / sum(dimension_weight_d)",
+    "missing_target_or_denominator": "NOT_CALCULABLE"
+  },
+  "governance": [
+    "PRIMEIRO: O QUE NOS JA TEMOS?",
+    "SOURCE AVAILABILITY GATE",
+    "EVIDENCE-BASED STATUS",
+    "ONE-CHANGE-AT-A-TIME",
+    "SALVAR != PROMOVER"
+  ]
+}

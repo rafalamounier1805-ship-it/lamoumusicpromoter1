@@ -1,0 +1,92 @@
+{
+  "id": "LAMOU-EXPLAINABLE-HEALTH-TREE-VALUE-CONTRACT-V0.1",
+  "state": "EXPERIMENT_PROPOSAL",
+  "promotion": "NOT_PROMOTED",
+  "purpose": "Todo item visivel da arvore deve mostrar seu valor atual ou declarar explicitamente por que o valor nao e calculavel.",
+  "applies_to": [
+    "ENTITY",
+    "DIMENSION",
+    "METRIC",
+    "CONTRIBUTOR_OR_CAUSE",
+    "EVIDENCE",
+    "RECOMMENDATION_OPTION"
+  ],
+  "required_display_fields": [
+    "label",
+    "current_value",
+    "unit",
+    "score_or_state",
+    "target_or_range",
+    "gap_to_target",
+    "trend",
+    "truth_state",
+    "source_id",
+    "last_verified_at"
+  ],
+  "weighted_fields_when_applicable": [
+    "weight",
+    "contribution_points",
+    "coverage"
+  ],
+  "economic_fields_when_applicable": [
+    "economic_value",
+    "currency",
+    "economic_value_period",
+    "economic_value_method",
+    "economic_value_source_id",
+    "economic_value_truth_state"
+  ],
+  "display_rules": {
+    "value_always_visible": true,
+    "score_never_substitutes_raw_value": true,
+    "missing_value_label": "SEM DADO / NOT_VERIFIED",
+    "uncalculable_score_label": "NAO CALCULAVEL",
+    "no_invented_money": true,
+    "no_invented_score": true,
+    "no_invented_target": true,
+    "show_raw_value_and_score_together_when_both_exist": true,
+    "show_weight_and_contribution_when_node_affects_parent_score": true
+  },
+  "examples": [
+    {
+      "label": "Latencia p95",
+      "current_value": 320,
+      "unit": "ms",
+      "score_or_state": "NOT_CALCULABLE",
+      "target_or_range": null,
+      "gap_to_target": null,
+      "truth_state": "NOT_VERIFIED"
+    },
+    {
+      "label": "Seguranca",
+      "current_value": 74,
+      "unit": "score/100",
+      "score_or_state": 74,
+      "target_or_range": 90,
+      "gap_to_target": -16,
+      "weight": 0.2,
+      "contribution_points": 14.8,
+      "truth_state": "EXAMPLE_ONLY"
+    },
+    {
+      "label": "Vendas atribuidas",
+      "current_value": null,
+      "unit": "BRL",
+      "score_or_state": "NOT_CONNECTED",
+      "economic_value": null,
+      "truth_state": "NOT_CONNECTED"
+    }
+  ],
+  "tree_visual_contract": {
+    "primary_line": "LABEL + CURRENT_VALUE + UNIT",
+    "secondary_line": "SCORE_OR_STATE + TARGET + GAP + TREND",
+    "tertiary_line": "WEIGHT + CONTRIBUTION + COVERAGE when applicable",
+    "detail_sheet": "source, evidence, process, CORE/plugin/provider/model/build, owner, timestamp and calculation explanation"
+  },
+  "governance": [
+    "RAW VALUE BEFORE SCORE",
+    "EVIDENCE BEFORE CLAIM",
+    "MONEY ONLY WITH VERIFIED SOURCE",
+    "SALVAR != PROMOVER"
+  ]
+}
