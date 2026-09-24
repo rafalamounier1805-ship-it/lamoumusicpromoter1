@@ -100,14 +100,11 @@ describe("metric registry", () => {
   });
 });
 
-
 describe("candidate vault lock", () => {
   test("candidate slots and app keys are unique and immutable", () => {
     expect(CANDIDATE_VAULT).toHaveLength(18);
     expect(new Set(CANDIDATE_VAULT.map((item) => item.slot)).size).toBe(CANDIDATE_VAULT.length);
-    expect(new Set(CANDIDATE_VAULT.map((item) => item.appKey)).size).toBe(
-      CANDIDATE_VAULT.length,
-    );
+    expect(new Set(CANDIDATE_VAULT.map((item) => item.appKey)).size).toBe(CANDIDATE_VAULT.length);
     expect(CANDIDATE_VAULT.every((item) => item.immutable)).toBe(true);
     expect(CANDIDATE_VAULT_POLICY.editForbidden).toBe(true);
     expect(CANDIDATE_VAULT_POLICY.overwriteForbidden).toBe(true);
