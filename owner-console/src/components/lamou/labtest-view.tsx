@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { B144_LABTEST_MODULES } from "@/lib/lamou/b144-candidate";
+import { useOwnerAuth } from "@/lib/lamou/owner-auth";
 import {
   isReady,
   LT_IMPROVE,
@@ -23,7 +24,25 @@ import {
 } from "@/lib/lamou/labtest-data";
 import { cn } from "@/lib/utils";
 
-const LABTEST_STORAGE_KEY = "lamou_b144_labtest_state_v1";
+const LABTEST_STORAGE_KEY = "lamou_b144_labtest_state_v2";
+
+type ValidationStatus = "VALIDADO" | "NAO_VALIDADO";
+type ValidationDestination =
+  | "TESTE"
+  | "PLANO_DE_ACAO"
+  | "MELHORIA"
+  | "APROVACAO_PROXIMA_VERSAO";
+
+interface ValidationRecord {
+  itemId: string;
+  status: ValidationStatus;
+  enteredAt: string;
+  submittedBy: string;
+  source: string;
+  decidedAt: string;
+  decidedBy: string;
+  destination: ValidationDestination | null;
+}
 
 const STAGE_TONE: Record<string, string> = {
   "IDEIA/CRIAÇÃO": "border-border/60 text-muted-foreground",
@@ -106,6 +125,7 @@ function ItemRow({
 type Sheet = { item: LtItem; mode: "ficha" | "testar" } | null;
 
 export function LabTestView({ initialTab = "overview" }: { initialTab?: string }) {
+  const { profile } = useOwnerAuth();
   const [tab, setTab] = useState(initialTab);
   const [sheet, setSheet] = useState<Sheet>(null);
   const [queue, setQueue] = useState<string[]>(() => {
@@ -131,6 +151,17 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
       return [];
     }
   });
+  const [validationRecords, setValidationRecords] = useState<Record<string, ValidationRecord>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        validationRecords?: Record<string, ValidationRecord>;
+      };
+      return saved.validationRecords ?? {};
+    } catch {
+      return {};
+    }
+  });
   const [log, setLog] = useState<{ at: string; text: string }[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -143,7 +174,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     }
   });
   const [criticalPending, setCriticalPending] = useState(3);
-  const [scenario, setScenario] = useState("Cenário padrão (fixture)");
+  const [scenario, setScenario] = useState("Cenário de teste");
   const [dataset, setDataset] = useState("");
 
   const byStage = useMemo(() => {
@@ -174,20 +205,58 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     if (typeof window === "undefined") return;
     window.localStorage.setItem(
       LABTEST_STORAGE_KEY,
-      JSON.stringify({ queue, validated, log: log.slice(0, 100) }),
+      JSON.stringify({ queue, validated, validationRecords, log: log.slice(0, 100) }),
     );
-  }, [queue, validated, log]);
+  }, [queue, validated, validationRecords, log]);
 
-  function registerValidation(item: LtItem) {
-    if (!isReady(item)) {
-      addLog(`Validação TESTE bloqueada para ${item.id}: critérios mínimos ainda pendentes.`);
+  function decideValidation(item: LtItem, status: ValidationStatus) {
+    if (status === "VALIDADO" && !isReady(item)) {
+      addLog(`Validação bloqueada para ${item.name}: ainda existem testes ou blockers pendentes.`);
       return;
     }
-    setValidated((current) => (current.includes(item.id) ? current : [...current, item.id]));
-    setQueue((current) => (current.includes(item.id) ? current : [...current, item.id]));
-    addLog(
-      `Validação TESTE registrada para ${item.id}; item subiu automaticamente para a fila da próxima versão. Isso não promove para OFICIAL.`,
+
+    const now = new Date().toLocaleString("pt-BR");
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const record: ValidationRecord = {
+      itemId: item.id,
+      status,
+      enteredAt: item.updatedAt,
+      submittedBy: item.owner ?? "origem não informada",
+      source: item.source,
+      decidedAt: now,
+      decidedBy: actor,
+      destination: status === "VALIDADO" ? "APROVACAO_PROXIMA_VERSAO" : "TESTE",
+    };
+
+    setValidationRecords((current) => ({ ...current, [item.id]: record }));
+    setValidated((current) =>
+      status === "VALIDADO"
+        ? current.includes(item.id)
+          ? current
+          : [...current, item.id]
+        : current.filter((id) => id !== item.id),
     );
+
+    if (status === "VALIDADO") {
+      setQueue((current) => (current.includes(item.id) ? current : [...current, item.id]));
+      addLog(
+        `VALIDADO: ${item.name} · por ${actor} · origem ${item.source} · conclusão registrada no LABTEST e adicionada à fila da próxima versão.`,
+      );
+    } else {
+      setQueue((current) => current.filter((id) => id !== item.id));
+      addLog(
+        `NÃO VALIDADO: ${item.name} · por ${actor} · retorno para TESTE/AJUSTE.`,
+      );
+    }
+  }
+
+  function setValidationDestination(item: LtItem, destination: ValidationDestination) {
+    setValidationRecords((current) => {
+      const existing = current[item.id];
+      if (!existing) return current;
+      return { ...current, [item.id]: { ...existing, destination } };
+    });
+    addLog(`Destino da conclusão de ${item.name}: ${destination}.`);
   }
 
   function toggleQueue(id: string) {
@@ -506,10 +575,10 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                         variant="outline"
                         className={cn(
                           "text-[10px]",
-                          ok ? "border-success/50 text-success" : "border-warning/50 text-warning",
+                          ok ? "border-primary/50 text-primary" : "border-warning/50 text-warning",
                         )}
                       >
-                        {ok ? "READY" : "NOT_READY"}
+                        {ok ? "PRONTO PARA VALIDAR" : "PENDENTE"}
                       </Badge>
                       {validated.includes(i.id) ? (
                         <Badge
@@ -529,13 +598,19 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                       </Button>
                     </div>
                     <p className="mt-1 text-[11px] text-muted-foreground">
-                      Origem: {entry?.origin ?? i.source} · tipo {LT_TYPE_LABEL[i.type]} · estágio{" "}
-                      {i.stage} · risco {entry?.risk ?? "não avaliado"} · testes {i.testsDone} ok /{" "}
-                      {i.testsPending} pendentes · dependências{" "}
-                      {i.dependencies.join(", ") || "nenhuma"} · evidências{" "}
-                      {i.evidences.join(", ") || "nenhuma"} · blocker{" "}
-                      {i.blockers.join("; ") || "nenhum"}
+                      Entrada: {i.updatedAt} · enviado por {i.owner ?? "não informado"} · origem:{" "}
+                      {entry?.origin ?? i.source} · tipo {LT_TYPE_LABEL[i.type]} · testes{" "}
+                      {i.testsDone} ok / {i.testsPending} pendentes · evidências{" "}
+                      {i.evidences.join(", ") || "nenhuma"}
                     </p>
+                    {validationRecords[i.id] ? (
+                      <p className="mt-1 text-[11px] text-muted-foreground">
+                        Decisão: {validationRecords[i.id]!.status} ·{" "}
+                        {validationRecords[i.id]!.decidedAt} · por{" "}
+                        {validationRecords[i.id]!.decidedBy} · destino{" "}
+                        {validationRecords[i.id]!.destination ?? "não definido"}
+                      </p>
+                    ) : null}
                   </div>
                 );
               })}
@@ -622,6 +697,48 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 ))}
               </dl>
 
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <p className="text-xs font-medium">Entrada do teste</p>
+                <dl className="mt-2 grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Nome / objeto</dt>
+                    <dd className="text-xs">{sheet.item.name}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Data de entrada</dt>
+                    <dd className="text-xs">{sheet.item.updatedAt}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Enviado por</dt>
+                    <dd className="text-xs">{sheet.item.owner ?? "não informado"}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Origem</dt>
+                    <dd className="text-xs">{sheet.item.source}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Problema</dt>
+                    <dd className="text-xs">
+                      {sheet.item.blockers.join("; ") || "problema não informado na entrada"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Hipótese</dt>
+                    <dd className="text-xs">não informada na entrada — registrar antes da conclusão</dd>
+                  </div>
+                </dl>
+                <div className="mt-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">
+                    Pontos críticos a testar
+                  </p>
+                  <ul className="mt-1 space-y-1 text-xs">
+                    {sheet.item.requiredTests.map((point) => (
+                      <li key={point}>· {point}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
               <div>
                 <p className="text-xs font-medium">Testes obrigatórios</p>
                 <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
@@ -670,7 +787,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
 
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" onClick={() => setSheet({ item: sheet.item, mode: "testar" })}>
-                  TESTAR
+                  Abrir teste · {sheet.item.name}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => toggleQueue(sheet.item.id)}>
                   {queue.includes(sheet.item.id)
@@ -691,28 +808,82 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant={validated.includes(sheet.item.id) ? "default" : "outline"}
                   disabled={!isReady(sheet.item)}
-                  onClick={() => registerValidation(sheet.item)}
+                  onClick={() => decideValidation(sheet.item, "VALIDADO")}
                 >
-                  {validated.includes(sheet.item.id)
-                    ? "Validação TESTE registrada"
-                    : "Registrar validação TESTE"}
+                  {validated.includes(sheet.item.id) ? "VALIDADO" : "Validar"}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => decideValidation(sheet.item, "NAO_VALIDADO")}
+                >
+                  Não validar
                 </Button>
                 <Button size="sm" variant="outline" disabled>
                   Promover — bloqueado por gate
                 </Button>
               </div>
+              {validationRecords[sheet.item.id] ? (
+                <div className="rounded-lg border border-border/60 bg-surface-1/40 p-3">
+                  <p className="text-xs font-medium">Conclusão e próximo destino</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    {validationRecords[sheet.item.id]!.status} em{" "}
+                    {validationRecords[sheet.item.id]!.decidedAt} por{" "}
+                    {validationRecords[sheet.item.id]!.decidedBy}. A conclusão fica registrada no
+                    LABTEST.
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setValidationDestination(sheet.item, "TESTE");
+                        setSheet({ item: sheet.item, mode: "testar" });
+                      }}
+                    >
+                      Voltar para Teste / Ajuste
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/owner/plans"
+                        onClick={() => setValidationDestination(sheet.item, "PLANO_DE_ACAO")}
+                      >
+                        Enviar para Plano de Ação
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/owner/plans"
+                        onClick={() => setValidationDestination(sheet.item, "MELHORIA")}
+                      >
+                        Enviar para Melhoria
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/labtest/next"
+                        onClick={() =>
+                          setValidationDestination(sheet.item, "APROVACAO_PROXIMA_VERSAO")
+                        }
+                      >
+                        Próxima versão / Aprovação
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
               <p className="text-[11px] text-muted-foreground">
-                Promoção permanece bloqueada: exige Validation Gate com evidência real. SALVAR ≠
-                PROMOVER.
+                Verde significa VALIDADO. Estar pronto para validar não equivale a validação nem a
+                aprovação. SALVAR ≠ PROMOVER.
               </p>
             </div>
           ) : (
             <div className="space-y-4 text-sm">
               <NotConnected
-                what="Runtime de teste"
-                next="Nenhum executor externo conectado. O registro abaixo pertence ao ambiente TESTE da candidata e permanece persistido localmente; dado sintético continua marcado como sintético."
+                what="Executor externo do teste"
+                next="O ambiente TESTE da B144 registra o fluxo e a conclusão. O executor automatizado externo ainda não está conectado; quando houver dado sintético ele é marcado separadamente como sintético."
               />
               <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-xs">
                 <p>
