@@ -179,7 +179,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
             <div key={item.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="min-w-0 flex-1 text-sm font-medium">{item.name}</span>
-                <Badge variant="outline" className="text-[10px]">{item.version}</Badge>
+                <Badge variant="outline" className="text-[10px]">
+                  {item.version}
+                </Badge>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">{item.software}</p>
               <Button asChild size="sm" variant="outline" className="mt-3">
