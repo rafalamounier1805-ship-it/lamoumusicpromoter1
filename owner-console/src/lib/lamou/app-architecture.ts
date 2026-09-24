@@ -423,7 +423,7 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
   {
     id: "FLOW-COM-RADAR-02",
     lane: "commercial",
-    from: "PROMPT-RADAR-OPPORTUNITY-B144",
+    from: "opportunity-intelligence",
     to: "CENTRAL:opportunities",
     event: "opportunity_radar_output",
     payload: ["opportunity_id", "signal_summary", "problem_or_need", "hypothesis", "fit", "risk", "evidence_ids", "freshness"],
