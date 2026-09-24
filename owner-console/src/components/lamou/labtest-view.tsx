@@ -40,6 +40,22 @@ interface ValidationRecord {
   destination: ValidationDestination | null;
 }
 
+interface TestRecord {
+  itemId: string;
+  name: string;
+  problem: string;
+  hypothesis: string;
+  criticalPoints: string[];
+  enteredAt: string;
+  submittedBy: string;
+  source: string;
+  createdAt: string;
+  createdBy: string;
+  scenario: string;
+  dataset: string;
+  status: "AGUARDANDO_TESTE" | "TESTE_REGISTRADO";
+}
+
 const STAGE_TONE: Record<string, string> = {
   "IDEIA/CRIAÇÃO": "border-border/60 text-muted-foreground",
   DESENVOLVIMENTO: "border-primary/40 text-primary",
@@ -160,6 +176,17 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
       }
     },
   );
+  const [testRecords, setTestRecords] = useState<Record<string, TestRecord>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        testRecords?: Record<string, TestRecord>;
+      };
+      return saved.testRecords ?? {};
+    } catch {
+      return {};
+    }
+  });
   const [log, setLog] = useState<{ at: string; text: string }[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -203,9 +230,80 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     if (typeof window === "undefined") return;
     window.localStorage.setItem(
       LABTEST_STORAGE_KEY,
-      JSON.stringify({ queue, validated, validationRecords, log: log.slice(0, 100) }),
+      JSON.stringify({
+        queue,
+        validated,
+        validationRecords,
+        testRecords,
+        log: log.slice(0, 100),
+      }),
     );
-  }, [queue, validated, validationRecords, log]);
+  }, [queue, validated, validationRecords, testRecords, log]);
+
+  function contextualTestName(item: LtItem) {
+    const context = item.blockers[0] ?? item.requiredTests[0] ?? "validação funcional";
+    return `${item.name} — ${context}`;
+  }
+
+  function createOrOpenTest(item: LtItem) {
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const now = new Date().toLocaleString("pt-BR");
+    const existing = testRecords[item.id];
+    if (!existing) {
+      const record: TestRecord = {
+        itemId: item.id,
+        name: contextualTestName(item),
+        problem: item.blockers.join("; ") || "problema não informado",
+        hypothesis: "A validar durante o teste",
+        criticalPoints: [...item.requiredTests],
+        enteredAt: item.updatedAt,
+        submittedBy: item.owner ?? "não informado",
+        source: item.source,
+        createdAt: now,
+        createdBy: actor,
+        scenario,
+        dataset,
+        status: "AGUARDANDO_TESTE",
+      };
+      setTestRecords((current) => ({ ...current, [item.id]: record }));
+      addLog(
+        `TESTE CRIADO: ${record.name} · entrada ${record.enteredAt} · por ${record.submittedBy} · origem ${record.source}`,
+      );
+    }
+    setSheet({ item, mode: "testar" });
+  }
+
+  function registerTest(item: LtItem) {
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const now = new Date().toLocaleString("pt-BR");
+    const current =
+      testRecords[item.id] ??
+      ({
+        itemId: item.id,
+        name: contextualTestName(item),
+        problem: item.blockers.join("; ") || "problema não informado",
+        hypothesis: "A validar durante o teste",
+        criticalPoints: [...item.requiredTests],
+        enteredAt: item.updatedAt,
+        submittedBy: item.owner ?? "não informado",
+        source: item.source,
+        createdAt: now,
+        createdBy: actor,
+        scenario,
+        dataset,
+        status: "AGUARDANDO_TESTE",
+      } satisfies TestRecord);
+    const updated: TestRecord = {
+      ...current,
+      scenario,
+      dataset,
+      status: "TESTE_REGISTRADO",
+    };
+    setTestRecords((state) => ({ ...state, [item.id]: updated }));
+    addLog(
+      `TESTE REGISTRADO: ${updated.name} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}”`,
+    );
+  }
 
   function decideValidation(item: LtItem, status: ValidationStatus) {
     if (status === "VALIDADO" && !isReady(item)) {
@@ -223,7 +321,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
       source: item.source,
       decidedAt: now,
       decidedBy: actor,
-      destination: status === "VALIDADO" ? "APROVACAO_PROXIMA_VERSAO" : "TESTE",
+      destination: status === "VALIDADO" ? null : "TESTE",
     };
 
     setValidationRecords((current) => ({ ...current, [item.id]: record }));
@@ -236,9 +334,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     );
 
     if (status === "VALIDADO") {
-      setQueue((current) => (current.includes(item.id) ? current : [...current, item.id]));
       addLog(
-        `VALIDADO: ${item.name} · por ${actor} · origem ${item.source} · conclusão registrada no LABTEST e adicionada à fila da próxima versão.`,
+        `VALIDADO: ${item.name} · por ${actor} · origem ${item.source} · aguardando escolha do próximo destino.`,
       );
     } else {
       setQueue((current) => current.filter((id) => id !== item.id));
@@ -271,6 +368,10 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
   const queueItems = queue
     .map((id) => LT_ITEMS.find((i) => i.id === id))
     .filter((i): i is LtItem => Boolean(i));
+  const pendingValidationItems = queueItems.filter((item) => !validated.includes(item.id));
+  const validatedItems = validated
+    .map((id) => LT_ITEMS.find((item) => item.id === id))
+    .filter((item): item is LtItem => Boolean(item));
 
   return (
     <AppShell group="labtest">
@@ -539,7 +640,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                     className={cn(
                       "text-[10px]",
                       isReady(i)
-                        ? "border-success/50 text-success"
+                        ? "border-primary/50 text-primary"
                         : "border-warning/50 text-warning",
                     )}
                   >
@@ -552,9 +653,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         </TabsContent>
 
         <TabsContent value="next" className="mt-3 space-y-4">
-          <Panel title={`Próxima versão · alvo ${NEXT_VERSION.target} · ${NEXT_VERSION.planned}`}>
+          <Panel title={`Validar · alvo ${NEXT_VERSION.target} · ${NEXT_VERSION.planned}`}>
             <div className="space-y-2">
-              {queueItems.map((i) => {
+              {pendingValidationItems.map((i) => {
                 const entry = NEXT_VERSION.entries.find((e) => e.itemId === i.id);
                 const ok = isReady(i);
                 return (
@@ -586,6 +687,14 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                       ) : null}
                       <Button
                         size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        onClick={() => setSheet({ item: i, mode: "ficha" })}
+                      >
+                        Abrir detalhes
+                      </Button>
+                      <Button
+                        size="sm"
                         variant="ghost"
                         className="h-7 px-2 text-[11px]"
                         onClick={() => toggleQueue(i.id)}
@@ -593,6 +702,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                         Remover da fila
                       </Button>
                     </div>
+                    <p className="mt-1 text-[11px] text-muted-foreground">
+                      Teste: {testRecords[i.id]?.name ?? contextualTestName(i)}
+                    </p>
                     <p className="mt-1 text-[11px] text-muted-foreground">
                       Entrada: {i.updatedAt} · enviado por {i.owner ?? "não informado"} · origem:{" "}
                       {entry?.origin ?? i.source} · tipo {LT_TYPE_LABEL[i.type]} · testes{" "}
@@ -610,7 +722,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   </div>
                 );
               })}
-              {queueItems.length === 0 ? (
+              {pendingValidationItems.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Fila vazia.</p>
               ) : null}
             </div>
@@ -618,6 +730,50 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               Adicionar à fila ≠ promover. A promoção depende do Validation Gate com evidência real
               e permanece bloqueada.
             </p>
+          </Panel>
+
+          <Panel title="Validados">
+            {validatedItems.length ? (
+              <div className="space-y-2">
+                {validatedItems.map((item) => {
+                  const record = validationRecords[item.id];
+                  return (
+                    <div
+                      key={item.id}
+                      className="rounded-lg border border-success/30 bg-success/5 p-3 text-sm"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant="outline" className="font-mono text-[10px]">
+                          {item.id}
+                        </Badge>
+                        <span className="min-w-0 flex-1 font-medium">{item.name}</span>
+                        <Badge
+                          variant="outline"
+                          className="border-success/50 text-[10px] text-success"
+                        >
+                          VALIDADO
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 px-2 text-[11px]"
+                          onClick={() => setSheet({ item, mode: "ficha" })}
+                        >
+                          Abrir detalhes
+                        </Button>
+                      </div>
+                      <p className="mt-1 text-[11px] text-muted-foreground">
+                        {record
+                          ? `Data: ${record.decidedAt} · validado por ${record.decidedBy} · origem: ${record.source} · destino: ${record.destination ?? "aguardando escolha"}`
+                          : "Validação registrada."}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum item validado ainda.</p>
+            )}
           </Panel>
 
           <Panel title="Fora da fila">
@@ -784,8 +940,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button size="sm" onClick={() => setSheet({ item: sheet.item, mode: "testar" })}>
-                  Abrir teste · {sheet.item.name}
+                <Button size="sm" onClick={() => createOrOpenTest(sheet.item)}>
+                  {testRecords[sheet.item.id] ? "Abrir teste" : "Criar teste"} ·{" "}
+                  {testRecords[sheet.item.id]?.name ?? contextualTestName(sheet.item)}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => toggleQueue(sheet.item.id)}>
                   {queue.includes(sheet.item.id)
@@ -873,8 +1030,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 </div>
               ) : null}
               <p className="text-[11px] text-muted-foreground">
-                Verde significa VALIDADO. Estar pronto para validar não equivale a validação nem a
-                aprovação. SALVAR ≠ PROMOVER.
+                Verde aparece somente depois de VALIDADO. "Pronto para validar" permanece azul/neutro e não
+                equivale a validação nem a aprovação. SALVAR ≠ PROMOVER.
               </p>
             </div>
           ) : (
@@ -884,7 +1041,15 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                 next="O ambiente TESTE da B144 registra o fluxo e a conclusão. O executor automatizado externo ainda não está conectado; quando houver dado sintético ele é marcado separadamente como sintético."
               />
               <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-xs">
-                <p>
+                <p className="font-medium">
+                  {testRecords[sheet.item.id]?.name ?? contextualTestName(sheet.item)}
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Entrada: {testRecords[sheet.item.id]?.enteredAt ?? sheet.item.updatedAt} · enviado
+                  por {testRecords[sheet.item.id]?.submittedBy ?? sheet.item.owner ?? "não informado"} ·
+                  origem: {testRecords[sheet.item.id]?.source ?? sheet.item.source}
+                </p>
+                <p className="mt-1">
                   Alvo: <span className="font-mono">{sheet.item.id}</span> — {sheet.item.name} (
                   {LT_TYPE_LABEL[sheet.item.type]})
                 </p>
@@ -946,11 +1111,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               <div className="flex flex-wrap gap-2">
                 <Button
                   size="sm"
-                  onClick={() =>
-                    addLog(
-                      `Ensaio TESTE registrado para ${sheet.item.id} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}” — runtime externo não conectado`,
-                    )
-                  }
+                  onClick={() => registerTest(sheet.item)}
                 >
                   Registrar ensaio de TESTE
                 </Button>
