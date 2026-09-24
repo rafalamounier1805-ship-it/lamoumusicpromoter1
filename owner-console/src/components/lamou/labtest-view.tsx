@@ -286,7 +286,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            {critical.length} item(ns) atingem o critério. Este limite pertence ao ambiente de teste. Dados sintéticos continuam identificados quando forem usados.
+            {critical.length} item(ns) atingem o critério. Este limite pertence ao ambiente de
+            teste. Dados sintéticos continuam identificados quando forem usados.
           </p>
         </div>
       </Panel>
@@ -511,7 +512,10 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                         {ok ? "READY" : "NOT_READY"}
                       </Badge>
                       {validated.includes(i.id) ? (
-                        <Badge variant="outline" className="border-success/50 text-[10px] text-success">
+                        <Badge
+                          variant="outline"
+                          className="border-success/50 text-[10px] text-success"
+                        >
                           VALIDADO PARA FILA
                         </Badge>
                       ) : null}
