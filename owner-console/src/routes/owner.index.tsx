@@ -104,7 +104,7 @@ const GOVERNANCE: GovItem[] = [
     id: "GEST-CLIENTES",
     title: "Clientes",
     value: String(CLIENTS.length),
-    target: "carteira de demonstração · meta comercial não definida",
+    target: "carteira exibida nesta visão",
     definition: "Contas na carteira gerenciada pela Central, com ambiente, pacote e ficha 360.",
     truth: "SYNTHETIC_DEMO",
     tone: "neutral",
@@ -253,16 +253,14 @@ function Cockpit() {
       label: "Módulos exibidos",
       definition:
         "Quantos módulos gerenciais a Central está mostrando agora, sobre o total conhecido nas fixtures. Crítico significa apenas crítico/falha; probabilidade possui filtro próprio.",
-      value: `${modules.length} de ${MODULES.length}`,
+      value: String(modules.length),
       target:
         filterMode === "critical"
-          ? "somente crítico/falha · meta não se aplica"
+          ? "filtro: crítico/falha"
           : filterMode === "probability"
-            ? "somente probabilidade · meta não se aplica"
-            : `${MODULES.length} conhecidos · meta de exibição: ${MODULES.length}`,
-      trend: filterMode === "all" ? "completo" : "filtrado",
-      meaning:
-        "Mede cobertura de leitura: se menos módulos aparecem do que os conhecidos, a visão está parcial por filtro explícito.",
+            ? "filtro: probabilidade"
+            : "módulos visíveis agora",
+      meaning: "Mostra os módulos que estão aparecendo no filtro atual.",
       source: "Fixtures de módulos do cockpit (demo-data).",
       updatedAt: "atualizado com o carregamento da tela",
       owner: "responsável: proprietário",
@@ -290,8 +288,8 @@ function Cockpit() {
       id: "KPI-OCORRENCIAS",
       label: "Ocorrências no Mapa Vivo",
       definition: "Casos com ocorrência registrada no Mapa Vivo, sobre o total de casos.",
-      value: `${occurrences} de ${CASES.length}`,
-      target: "meta não definida / NOT_VERIFIED",
+      value: String(occurrences),
+      target: "casos observados no Mapa Vivo",
       trend: "sem série histórica",
       meaning: "Volume de problemas já observados. Sem série temporal real, não há tendência.",
       source: "Casos do Mapa Vivo (fixtures).",
@@ -905,7 +903,6 @@ function Cockpit() {
                       <div key={mt.label} className="rounded-lg bg-surface-1/50 p-2">
                         <p className="text-[10px] text-muted-foreground">{mt.label}</p>
                         <p className="font-mono text-sm">{mt.value}</p>
-                        <p className="text-[10px] text-muted-foreground">meta não definida</p>
                         {mt.demo ? <DemoBadge label="DEMO" /> : null}
                       </div>
                     ))}
