@@ -123,7 +123,7 @@ function ClientsPage() {
         }
       />
 
-      <div className="grid gap-4 xl:grid-cols-[300px_1fr]">
+      <div className="grid gap-4 xl:grid-cols-2">
         <nav aria-label="Lista de clientes" className="space-y-2">
           {CLIENTS.map((c) => (
             <InteractiveCard
@@ -641,6 +641,7 @@ function PackageFlow({
 
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
       title="Alterar pacote"
@@ -807,6 +808,7 @@ function UpdateFlow({
 
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
       title="Programar atualização"
@@ -906,6 +908,7 @@ function BackupFlow({
 }) {
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
       title="Backup e restauração"
