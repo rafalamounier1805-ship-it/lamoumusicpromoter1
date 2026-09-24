@@ -13,10 +13,7 @@
  */
 
 export type CandidateSourceMode =
-  | "LIBRARY_FILE"
-  | "LIBRARY_PACKAGE"
-  | "RECOVERED_HISTORICAL_PACKAGE"
-  | "SOURCE_NOT_FOUND";
+  "LIBRARY_FILE" | "LIBRARY_PACKAGE" | "RECOVERED_HISTORICAL_PACKAGE" | "SOURCE_NOT_FOUND";
 
 export interface CandidateVaultItem {
   slot: string;
