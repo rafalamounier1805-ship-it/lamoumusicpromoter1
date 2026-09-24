@@ -7,7 +7,7 @@ const EXPECTED_ROOTS = [
   ["/core/health", "Indicadores de Saúde"],
   ["/core/observability", "Observabilidade"],
   ["/core/architecture", "Arquitetura Técnica"],
-  ["/core/apps", "Aplicativos, Plugins & Bindings"],
+  ["/core/apps", "Módulos, Plugins & Bindings"],
   ["/core/problems", "Problemas & Encaminhamentos"],
   ["/core/tests", "Testes Técnicos do CORE"],
   ["/core/versions", "Versões & Atualizações"],
