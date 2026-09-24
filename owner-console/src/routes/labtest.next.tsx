@@ -5,20 +5,20 @@ import { LabTestView } from "@/components/lamou/labtest-view";
 export const Route = createFileRoute("/labtest/next")({
   head: () => ({
     meta: [
-      { title: "Próxima Versão / Fila de Promoção — LABTEST | LAMOU IA" },
+      { title: "Validar — LABTEST | LAMOU IA" },
       {
         name: "description",
         content:
-          "O que está guardado para subir: itens candidatos, testes obrigatórios, gate, risco e status READY / NOT_READY. Adicionar à fila não promove.",
+          "Entradas para validação com data, quem enviou, origem, teste, evidências e próximo destino. Validar não promove.",
       },
       {
         property: "og:title",
-        content: "Próxima Versão / Fila de Promoção — LABTEST | LAMOU IA",
+        content: "Validar — LABTEST | LAMOU IA",
       },
       {
         property: "og:description",
         content:
-          "Fila explícita de pré-promoção com evidências, bloqueadores e regra SALVAR ≠ PROMOVER.",
+          "Validação explícita com proveniência, evidências, decisão e destino da conclusão.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
