@@ -270,7 +270,9 @@ export function PlansView({
                     {item.software} · {item.version}
                   </p>
                 </div>
-                <Badge variant="outline" className="text-[10px]">MÓDULO</Badge>
+                <Badge variant="outline" className="text-[10px]">
+                  MÓDULO
+                </Badge>
               </div>
               <Button asChild size="sm" variant="outline" className="mt-3">
                 <a href={item.route ?? "/owner/products"}>
