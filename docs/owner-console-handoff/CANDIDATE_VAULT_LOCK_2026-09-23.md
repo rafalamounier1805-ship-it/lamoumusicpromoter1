@@ -6,7 +6,7 @@ Rule: **SALVAR != PROMOVER**
 
 ## Purpose
 
-Preserve the selected recovered candidates inside the Owner application as immutable recovery references.
+Preserve the selected recovered candidates inside the Owner module catalog as immutable recovery references.
 
 A locked candidate is identified by:
 
@@ -20,9 +20,9 @@ A locked candidate is identified by:
 
 ## Pull flow
 
-1. Owner > Aplicativos & Produtos.
+1. Owner > Módulos & Produtos.
 2. Open **Candidate Vault — últimos candidatos travados**.
-3. Select the application.
+3. Select the module.
 4. Click **Puxar candidato**.
 5. The current UI exports an immutable pull manifest containing source, version and SHA-256.
 6. A binary/storage bridge must resolve the Library source and copy the exact bytes.
@@ -36,7 +36,7 @@ Current binary storage bridge state: **NOT_CONNECTED**.
 
 This vault intentionally excludes:
 
-- VECTRA Intelligence 360 as a separate entry — BELGO Intelligence 360 V2 is the prior lineage candidate used here;
+- VECTRA Intelligence 360 as a separate module entry — BELGO Intelligence 360 V2 is the prior lineage candidate used here;
 - Validation Gate;
 - APP Observer 360.
 
