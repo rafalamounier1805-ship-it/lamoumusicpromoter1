@@ -13,17 +13,17 @@ import { CALL_REGISTRY, WAVE1_APPS } from "@/lib/lamou/registry";
 export const Route = createFileRoute("/core/apps")({
   head: () => ({
     meta: [
-      { title: "Apps & Bindings — LAMOU CORE" },
+      { title: "Módulos & Bindings — LAMOU CORE" },
       {
         name: "description",
         content:
           "Visão técnica: APP-ID, capabilities do CORE, CALL-IDs, providers e adapters, dados, permissões, observabilidade e evidências de teste.",
       },
-      { property: "og:title", content: "Apps & Bindings — LAMOU CORE" },
+      { property: "og:title", content: "Módulos & Bindings — LAMOU CORE" },
       {
         property: "og:description",
         content:
-          "Binding técnico entre aplicativos e capabilities do CORE Proprietário, com CALL-IDs e estado de evidência.",
+          "Binding técnico entre módulos e capabilities do CORE Proprietário, com CALL-IDs e estado de evidência.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -46,7 +46,7 @@ function CoreAppsPage() {
   return (
     <AppShell group="core">
       <PageHeader
-        title="Apps & Bindings"
+        title="Módulos & Bindings"
         subtitle="Visão técnica do binding: APP-ID → capabilities do CORE → CALL-IDs → providers/adapters → dados → permissões → observabilidade → evidências. O portfólio gerencial fica na Central."
         right={<TruthBadge truth="PARTIAL" hint="Estado de verdade desta tela" />}
       />
@@ -95,7 +95,7 @@ function CoreAppsPage() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {slug ? (
                   <Button asChild size="sm" variant="outline">
-                    <Link to={appRoute(slug)}>Abrir aplicativo</Link>
+                    <Link to={appRoute(slug)}>Abrir módulo</Link>
                   </Button>
                 ) : null}
                 <Button asChild size="sm" variant="ghost">
@@ -174,14 +174,14 @@ function CoreAppsPage() {
 
       <Panel title="Regra de binding">
         <div className="space-y-2 text-xs text-muted-foreground">
-          <p>Um app só abre rota real quando existir tela; ficha não é execução.</p>
+          <p>Um módulo só abre rota real quando existir tela; ficha não é execução.</p>
           <p>
             Cada CALL exige contrato, escopo, fallback e teste próprio antes de virar evidência.
           </p>
           <p>
             Portfólio, clientes, contratos e valor não são inspecionados aqui: isso é{" "}
             <Link className="text-primary underline" to="/owner/apps">
-              Central &gt; Aplicativos
+              Central &gt; Módulos
             </Link>
             .
           </p>
@@ -190,7 +190,7 @@ function CoreAppsPage() {
           </p>
         </div>
       </Panel>
-      <CoreDetailSurfaces parent="Aplicativos, Plugins & Bindings" />
+      <CoreDetailSurfaces parent="Módulos, Plugins & Bindings" />
     </AppShell>
   );
 }
