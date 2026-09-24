@@ -614,8 +614,8 @@ function ProductsPage() {
 
         <Panel title="Module Lock mestre — catálogo fechado">
           <p className="text-xs text-muted-foreground">
-            Só itens classificados como LOCKED_APP entram no catálogo de módulos. Alias de
-            linhagem não duplica produto; HOLD não vira App por inferência; NOT_APP fica fora.
+            Só itens classificados como LOCKED_APP entram no catálogo de módulos. Alias de linhagem
+            não duplica produto; HOLD não vira módulo por inferência; NOT_APP fica fora.
           </p>
           <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
             {LOCKED_MASTER_APPS.map((app) => (
@@ -838,7 +838,10 @@ export const Route = createFileRoute("/owner/products")({
         content:
           "Catálogo gerencial do portfólio LAMOU: módulos incubados do proprietário, produtos comerciais, estágios, clientes e o CORE como ativo estratégico.",
       },
-      { property: "og:title", content: "Módulos & Produtos — Portfólio Gerencial | LAMOU IA Central" },
+      {
+        property: "og:title",
+        content: "Módulos & Produtos — Portfólio Gerencial | LAMOU IA Central",
+      },
       {
         property: "og:description",
         content:
