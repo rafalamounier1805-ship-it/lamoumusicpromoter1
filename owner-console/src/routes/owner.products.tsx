@@ -33,6 +33,7 @@ import {
   OFFICIAL_REVIEW_CANDIDATE_SET,
   type CandidateVaultItem,
 } from "@/lib/lamou/candidate-vault";
+import { B144_CANDIDATE, B144_MODULE_CATALOG, B144_PRODUCT_TAXONOMY } from "@/lib/lamou/b144-candidate";
 import { METRICS_REGISTRY } from "@/lib/lamou/metrics-registry";
 import { APPS_MENU, APP_ROUTES, appRoute, type AppSlug } from "@/lib/lamou/nav";
 import { useMemo, useState } from "react";
@@ -492,6 +493,59 @@ function ProductsPage() {
             icon={Boxes}
           />
         </div>
+
+        <Panel title="B144 — cadastro mestre de Produtos">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline">B144</Badge>
+            <Badge variant="outline">{B144_CANDIDATE.state}</Badge>
+            <Badge variant="outline">LOCKED</Badge>
+            <Badge variant="outline">OWNER APPROVAL REQUIRED</Badge>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Produtos agora distinguem propriedade e tipo de entidade. Módulo, aplicativo legado,
+            CORE, plugin/provider e ferramenta não são mais tratados como a mesma coisa.
+          </p>
+
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            {B144_PRODUCT_TAXONOMY.map((item) => (
+              <div key={item.kind} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+                <p className="font-mono text-[10px] text-muted-foreground">{item.kind}</p>
+                <p className="text-sm font-medium">{item.label}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">{item.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 space-y-2">
+            {B144_MODULE_CATALOG.map((item) => (
+              <div
+                key={item.id}
+                className="grid gap-2 rounded-lg border border-border/50 bg-background/40 p-3 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]"
+              >
+                <div>
+                  <p className="font-mono text-[10px] text-muted-foreground">{item.id}</p>
+                  <p className="text-sm font-medium">{item.name}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase text-muted-foreground">Software</p>
+                  <p className="text-xs">{item.software}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase text-muted-foreground">Modelo</p>
+                  <p className="text-xs">{item.model}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase text-muted-foreground">Tipo / proprietário</p>
+                  <p className="text-xs">{item.kind} · {item.ownership}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase text-muted-foreground">Versão / estágio</p>
+                  <p className="text-xs">{item.version} · {item.stage}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
 
         <Panel title="Revisão de arquitetura e classificação da próxima candidata">
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
