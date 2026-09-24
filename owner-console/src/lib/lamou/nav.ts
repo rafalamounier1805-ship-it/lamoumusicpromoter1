@@ -34,7 +34,7 @@ export type NavGroup = "owner" | "labtest" | "core" | "apps";
 export const OWNER_MENU: NavItem[] = [
   { to: "/owner", label: "Cognitive / Cockpit", icon: LayoutDashboard },
   { to: "/owner/mapa-vivo", label: "Mapa Vivo", icon: MapIcon },
-  { to: "/owner/products", label: "Aplicativos & Produtos", icon: Package },
+  { to: "/owner/products", label: "Módulos & Produtos", icon: Package },
   { to: "/owner/clients", label: "Clientes", icon: Users },
   { to: "/owner/commercial", label: "Comercial & Contratos", icon: Building2 },
   { to: "/owner/opportunities", label: "Oportunidades", icon: Lightbulb },
@@ -63,7 +63,7 @@ export const CORE_MENU: NavItem[] = [
   { to: "/core/health", label: "Indicadores de Saúde", icon: Gauge },
   { to: "/core/observability", label: "Observabilidade", icon: Eye },
   { to: "/core/architecture", label: "Arquitetura Técnica", icon: Layers },
-  { to: "/core/apps", label: "Aplicativos, Plugins & Bindings", icon: AppWindow },
+  { to: "/core/apps", label: "Módulos, Plugins & Bindings", icon: AppWindow },
   { to: "/core/problems", label: "Problemas & Encaminhamentos", icon: Activity },
   { to: "/core/tests", label: "Testes Técnicos do CORE", icon: ClipboardList },
   { to: "/core/versions", label: "Versões & Atualizações", icon: Boxes },
@@ -92,7 +92,7 @@ export const CORE_DETAIL_SURFACES: {
     to: "/core/trainings",
     label: "Treinamentos & Capacitação",
     icon: GraduationCap,
-    parent: "Aplicativos, Plugins & Bindings",
+    parent: "Módulos, Plugins & Bindings",
   },
   { to: "/core/sol-lua", label: "SOL / LUA (estados)", icon: SunMoon, parent: "LABTEST" },
 ];
