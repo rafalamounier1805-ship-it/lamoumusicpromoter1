@@ -184,8 +184,8 @@ export function CommercialView() {
           <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
             <p className="text-sm font-medium">Radar de Oportunidades</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Prompt compartilhado: {RADAR_OPPORTUNITY_PROMPT.id}. Comercial e Oportunidades usam
-              o mesmo opportunity_id e a mesma proveniência; runtime ainda NOT_CONNECTED.
+              Prompt compartilhado: {RADAR_OPPORTUNITY_PROMPT.id}. Comercial e Oportunidades usam o
+              mesmo opportunity_id e a mesma proveniência; runtime ainda NOT_CONNECTED.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button asChild size="sm" variant="outline">
