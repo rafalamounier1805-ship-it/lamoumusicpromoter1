@@ -161,7 +161,7 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "candidate",
     source:
-      "Aplicativo confirmado e APP-LOCKED; valida evidence packs e gates sem promover automaticamente.",
+      "Módulo confirmado e MODULE-LOCKED; valida evidence packs e gates sem promover automaticamente.",
   },
 
   {
@@ -197,7 +197,7 @@ const PRODUCTS: Product[] = [
     truth: "APPROVED_REFERENCE",
     clients: "—",
     version: "V1",
-    source: "Aplicativo aprovado externo; não embutido nesta Owner Console.",
+    source: "Módulo aprovado externo; não embutido nesta Owner Console.",
   },
   {
     id: "PRD-0014",
@@ -209,7 +209,7 @@ const PRODUCTS: Product[] = [
     truth: "APPROVED_REFERENCE",
     clients: "—",
     version: "v1 COMPLETO",
-    source: "Aplicativo aprovado externo; preserva escopo próprio.",
+    source: "Módulo aprovado externo; preserva escopo próprio.",
   },
   {
     id: "PRD-0015",
@@ -246,7 +246,7 @@ const PRODUCTS: Product[] = [
     clients: "—",
     version: "V2",
     source:
-      "Aplicativo independente; executável/candidata externa de 2026-09-23. APP LOCK não equivale a promoção.",
+      "Módulo independente; executável/candidata externa de 2026-09-23. MODULE LOCK não equivale a promoção.",
   },
 ];
 
@@ -324,7 +324,7 @@ function ProductsPage() {
   const column = (() => {
     if (!current) {
       return (
-        <ContextColumn empty="Selecione um aplicativo do portfólio: a leitura executiva abre aqui, sem sair da tela." />
+        <ContextColumn empty="Selecione um módulo do portfólio: a leitura executiva abre aqui, sem sair da tela." />
       );
     }
     const route =
@@ -348,8 +348,8 @@ function ProductsPage() {
               label="Execução"
               value={
                 executavel
-                  ? "Rota do aplicativo está materializada nesta candidata. Isso não prova integração externa nem promoção."
-                  : "Aplicativo/referência externo ao bundle atual; fonte e estado são preservados sem falsa incorporação."
+                  ? "Rota do módulo está materializada nesta candidata. Isso não prova integração externa nem promoção."
+                  : "Módulo/referência externo ao bundle atual; fonte e estado são preservados sem falsa incorporação."
               }
             />
           </>
@@ -444,7 +444,7 @@ function ProductsPage() {
           <>
             {route ? (
               <Button asChild size="sm" variant="outline">
-                <Link to={route}>Abrir aplicativo</Link>
+                <Link to={route}>Abrir módulo</Link>
               </Button>
             ) : (
               <Button size="sm" variant="outline" disabled>
@@ -463,8 +463,8 @@ function ProductsPage() {
   return (
     <AppShell group="owner">
       <PageHeader
-        title="Produtos"
-        subtitle="Catálogo gerencial do portfólio: aplicativos incubados do proprietário, produtos comerciais e o CORE como ativo estratégico."
+        title="Módulos & Produtos"
+        subtitle="Catálogo gerencial do portfólio: módulos incubados do proprietário, produtos comerciais e o CORE como ativo estratégico."
       />
       <DemoBadge label="SYNTHETIC_DEMO — sem vendas, receita, uso ou satisfação medidos" />
 
@@ -494,7 +494,7 @@ function ProductsPage() {
         <Panel title="Revisão de arquitetura e classificação da próxima candidata">
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
-              <p className="text-xs text-muted-foreground">Aplicativos no App Lock mestre</p>
+              <p className="text-xs text-muted-foreground">Módulos no Module Lock mestre</p>
               <p className="mt-1 font-display text-xl font-semibold">{LOCKED_MASTER_APPS.length}</p>
               <p className="mt-1 text-[10px] text-muted-foreground">
                 identidade + escopo + origem + linhagem travados
@@ -612,9 +612,9 @@ function ProductsPage() {
           </div>
         </Panel>
 
-        <Panel title="App Lock mestre — catálogo fechado">
+        <Panel title="Module Lock mestre — catálogo fechado">
           <p className="text-xs text-muted-foreground">
-            Só itens classificados como LOCKED_APP entram no catálogo de aplicativos. Alias de
+            Só itens classificados como LOCKED_APP entram no catálogo de módulos. Alias de
             linhagem não duplica produto; HOLD não vira App por inferência; NOT_APP fica fora.
           </p>
           <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
@@ -654,14 +654,14 @@ function ProductsPage() {
 
         <Tabs defaultValue="apps">
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="apps">Aplicativos</TabsTrigger>
+            <TabsTrigger value="apps">Módulos</TabsTrigger>
             <TabsTrigger value="core">CORE / Plataforma</TabsTrigger>
             <TabsTrigger value="plugins">Plugins / Providers</TabsTrigger>
             <TabsTrigger value="quality">Qualidade & SAC</TabsTrigger>
           </TabsList>
 
           <TabsContent value="apps" className="mt-3 space-y-3">
-            <Panel title={`Portfólio de aplicativos (${filtered.length} de ${PRODUCTS.length})`}>
+            <Panel title={`Portfólio de módulos (${filtered.length} de ${PRODUCTS.length})`}>
               <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
                 <Input
                   value={query}
@@ -746,7 +746,7 @@ function ProductsPage() {
                   <Link to="/labtest">Ver candidatos no LABTEST</Link>
                 </Button>
                 <Button asChild size="sm" variant="outline">
-                  <Link to="/owner/apps">Portfólio detalhado de aplicativos</Link>
+                  <Link to="/owner/apps">Portfólio detalhado de módulos</Link>
                 </Button>
               </div>
             </Panel>
@@ -832,13 +832,13 @@ function ProductsPage() {
 export const Route = createFileRoute("/owner/products")({
   head: () => ({
     meta: [
-      { title: "Produtos — Portfólio Gerencial | LAMOU IA Central" },
+      { title: "Módulos & Produtos — Portfólio Gerencial | LAMOU IA Central" },
       {
         name: "description",
         content:
-          "Catálogo gerencial do portfólio LAMOU: aplicativos incubados do proprietário, produtos comerciais, estágios, clientes e o CORE como ativo estratégico.",
+          "Catálogo gerencial do portfólio LAMOU: módulos incubados do proprietário, produtos comerciais, estágios, clientes e o CORE como ativo estratégico.",
       },
-      { property: "og:title", content: "Produtos — Portfólio Gerencial | LAMOU IA Central" },
+      { property: "og:title", content: "Módulos & Produtos — Portfólio Gerencial | LAMOU IA Central" },
       {
         property: "og:description",
         content:
