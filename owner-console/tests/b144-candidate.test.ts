@@ -37,10 +37,7 @@ describe("B144 candidate governance", () => {
   });
 
   test("keeps Teste3 and Validation inside LABTEST", () => {
-    expect(B144_LABTEST_MODULES.map((item) => item.name)).toEqual([
-      "Teste³ IA",
-      "Validation Gate",
-    ]);
+    expect(B144_LABTEST_MODULES.map((item) => item.name)).toEqual(["Teste³ IA", "Validation Gate"]);
   });
 
   test("places Metraction and Showroom correctly", () => {
