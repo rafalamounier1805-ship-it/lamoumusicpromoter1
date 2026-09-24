@@ -98,6 +98,7 @@ export function ContextDetailSheet({
   side = "right",
   children,
   footer,
+  desktopHalf = false,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -106,12 +107,16 @@ export function ContextDetailSheet({
   side?: "right" | "bottom";
   children: ReactNode;
   footer?: ReactNode;
+  desktopHalf?: boolean;
 }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side={side}
-        className="flex w-full flex-col gap-0 border-border/60 bg-card/95 p-0 backdrop-blur sm:max-w-xl lg:max-w-2xl"
+        className={cn(
+          "flex w-full flex-col gap-0 border-border/60 bg-card/95 p-0 backdrop-blur sm:max-w-xl",
+          desktopHalf ? "lg:w-1/2 lg:max-w-none" : "lg:max-w-2xl",
+        )}
       >
         <SheetHeader className="border-b border-border/60 px-5 py-4 text-left">
           <SheetTitle className="font-display text-base">{title}</SheetTitle>
