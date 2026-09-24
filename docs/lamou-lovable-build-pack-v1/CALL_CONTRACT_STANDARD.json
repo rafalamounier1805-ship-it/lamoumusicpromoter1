@@ -1,0 +1,112 @@
+{
+  "standard": "LAMOU_CALL_CONTRACT_V1",
+  "status": "CANDIDATE_NOT_PROMOTED",
+  "required_fields": [
+    "call_id",
+    "app_id",
+    "name",
+    "purpose",
+    "source_system",
+    "target_system",
+    "transport",
+    "auth",
+    "permission",
+    "tenant_scope",
+    "input_schema",
+    "output_schema",
+    "data_classification",
+    "timeout_ms",
+    "retry_policy",
+    "idempotency",
+    "fallback",
+    "audit",
+    "observability",
+    "tests",
+    "evidence",
+    "truth_state",
+    "version",
+    "owner",
+    "last_verified_at"
+  ],
+  "template": {
+    "call_id": "CALL-APPXXX-001",
+    "app_id": "APP-XXX",
+    "name": "Example call",
+    "purpose": "Describe business outcome, not implementation trivia",
+    "source_system": "APP",
+    "target_system": "PROVIDER_OR_CORE_CAPABILITY",
+    "transport": "REST|RPC|SQL|WEBHOOK|EVENT|MCP|INTERNAL",
+    "auth": {
+      "method": "OIDC|JWT|SERVICE_IDENTITY|NONE",
+      "scope": [],
+      "secret_location": "SERVER_SIDE_ONLY"
+    },
+    "permission": "resource.action",
+    "tenant_scope": "REQUIRED",
+    "input_schema": "schemas/input.json",
+    "output_schema": "schemas/output.json",
+    "data_classification": "PUBLIC|INTERNAL|CONFIDENTIAL|SENSITIVE",
+    "timeout_ms": 5000,
+    "retry_policy": {
+      "enabled": true,
+      "max_attempts": 2,
+      "backoff": "exponential",
+      "safe_only": true
+    },
+    "idempotency": {
+      "required": true,
+      "key": "request_id"
+    },
+    "fallback": [
+      "last_known_good",
+      "degraded_mode",
+      "safe_stop"
+    ],
+    "audit": {
+      "required": true,
+      "fields": [
+        "request_id",
+        "user_id",
+        "tenant_id",
+        "call_id",
+        "result",
+        "timestamp"
+      ]
+    },
+    "observability": [
+      "latency",
+      "errors",
+      "provider",
+      "trace_id",
+      "cost_when_measured"
+    ],
+    "tests": [
+      "success",
+      "invalid_input",
+      "unauthenticated",
+      "unauthorized",
+      "wrong_tenant",
+      "timeout",
+      "provider_offline",
+      "bad_schema",
+      "idempotency",
+      "fallback",
+      "recovery",
+      "audit_trace"
+    ],
+    "evidence": {
+      "required": true,
+      "store": "Evidence Pack",
+      "bind_to": [
+        "commit",
+        "build",
+        "environment",
+        "test_run"
+      ]
+    },
+    "truth_state": "NOT_VERIFIED",
+    "version": "1.0.0",
+    "owner": "TBD",
+    "last_verified_at": null
+  }
+}

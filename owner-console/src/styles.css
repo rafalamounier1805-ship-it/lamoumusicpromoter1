@@ -1,0 +1,293 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+@import "./lamou-shell-polish.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * LAMOU IA — CORE PROPRIETÁRIO / OWNER
+ * Design system: dark premium enterprise.
+ * Deep navy base, electric cyan primary, violet accent.
+ * Institutional (white/ice) surface tokens for technical flows.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-violet: var(--violet);
+  --color-violet-foreground: var(--violet-foreground);
+  --color-cyan: var(--cyan);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-critical: var(--critical);
+  --color-signal: var(--signal);
+  --color-demo: var(--demo);
+  --color-institutional: var(--institutional);
+  --color-institutional-foreground: var(--institutional-foreground);
+  --color-institutional-border: var(--institutional-border);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-glow:
+    0 0 0 1px oklch(0.72 0.14 220 / 0.25), 0 12px 40px -12px oklch(0.6 0.16 235 / 0.45);
+  --shadow-panel: 0 24px 60px -24px oklch(0.1 0.05 260 / 0.9);
+}
+
+:root {
+  --radius: 0.9rem;
+
+  --background: oklch(0.17 0.045 262);
+  --foreground: oklch(0.96 0.008 250);
+
+  --surface-1: oklch(0.21 0.05 262);
+  --surface-2: oklch(0.25 0.055 264);
+  --surface-3: oklch(0.3 0.06 266);
+
+  --card: oklch(0.215 0.048 263);
+  --card-foreground: oklch(0.96 0.008 250);
+  --popover: oklch(0.2 0.05 263);
+  --popover-foreground: oklch(0.96 0.008 250);
+
+  --primary: oklch(0.74 0.15 218);
+  --primary-foreground: oklch(0.16 0.05 262);
+  --cyan: oklch(0.82 0.13 200);
+
+  --secondary: oklch(0.27 0.055 264);
+  --secondary-foreground: oklch(0.94 0.01 250);
+
+  --muted: oklch(0.25 0.05 264);
+  --muted-foreground: oklch(0.72 0.03 255);
+
+  --accent: oklch(0.3 0.075 285);
+  --accent-foreground: oklch(0.96 0.01 250);
+
+  --violet: oklch(0.66 0.19 296);
+  --violet-foreground: oklch(0.98 0.005 250);
+
+  --destructive: oklch(0.62 0.22 22);
+  --destructive-foreground: oklch(0.98 0.005 250);
+
+  --success: oklch(0.74 0.15 165);
+  --warning: oklch(0.82 0.15 85);
+  --critical: oklch(0.65 0.22 20);
+  --signal: oklch(0.78 0.14 240);
+  --demo: oklch(0.72 0.12 310);
+
+  --institutional: oklch(0.98 0.004 240);
+  --institutional-foreground: oklch(0.22 0.04 262);
+  --institutional-border: oklch(0.88 0.012 245);
+
+  --border: oklch(0.98 0.01 250 / 12%);
+  --input: oklch(0.98 0.01 250 / 16%);
+  --ring: oklch(0.74 0.15 218);
+
+  --chart-1: oklch(0.74 0.15 218);
+  --chart-2: oklch(0.66 0.19 296);
+  --chart-3: oklch(0.82 0.13 200);
+  --chart-4: oklch(0.74 0.15 165);
+  --chart-5: oklch(0.82 0.15 85);
+
+  --sidebar: oklch(0.155 0.045 264);
+  --sidebar-foreground: oklch(0.9 0.012 250);
+  --sidebar-primary: oklch(0.74 0.15 218);
+  --sidebar-primary-foreground: oklch(0.16 0.05 262);
+  --sidebar-accent: oklch(0.24 0.055 268);
+  --sidebar-accent-foreground: oklch(0.97 0.008 250);
+  --sidebar-border: oklch(0.98 0.01 250 / 10%);
+  --sidebar-ring: oklch(0.74 0.15 218);
+}
+
+/* LIGHT EXECUTIVO — gelo/branco com contraste real.
+ * Escopo por classe: mesma arquitetura, tokens invertidos.
+ * Usado pelo shell (alternância de tema) e pelas jornadas de instalação. */
+.lamou-light {
+  --background: oklch(0.985 0.003 240);
+  --foreground: oklch(0.22 0.04 262);
+
+  --surface-1: oklch(0.965 0.005 240);
+  --surface-2: oklch(0.935 0.008 242);
+  --surface-3: oklch(0.9 0.01 244);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.04 262);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.04 262);
+
+  --primary: oklch(0.52 0.16 245);
+  --primary-foreground: oklch(0.99 0.003 240);
+  --cyan: oklch(0.55 0.12 215);
+
+  --secondary: oklch(0.93 0.01 242);
+  --secondary-foreground: oklch(0.26 0.04 262);
+
+  --muted: oklch(0.94 0.008 242);
+  --muted-foreground: oklch(0.44 0.03 258);
+
+  --accent: oklch(0.93 0.02 262);
+  --accent-foreground: oklch(0.24 0.04 262);
+
+  --violet: oklch(0.48 0.19 296);
+  --violet-foreground: oklch(0.99 0.003 240);
+
+  --destructive: oklch(0.52 0.2 25);
+  --destructive-foreground: oklch(0.99 0.003 240);
+
+  --success: oklch(0.48 0.13 162);
+  --warning: oklch(0.56 0.13 75);
+  --critical: oklch(0.52 0.2 22);
+  --signal: oklch(0.5 0.14 250);
+  --demo: oklch(0.5 0.16 310);
+
+  --border: oklch(0.2 0.04 262 / 16%);
+  --input: oklch(0.2 0.04 262 / 22%);
+  --ring: oklch(0.52 0.16 245);
+
+  --sidebar: oklch(0.97 0.004 240);
+  --sidebar-foreground: oklch(0.26 0.04 262);
+  --sidebar-accent: oklch(0.93 0.01 244);
+  --sidebar-accent-foreground: oklch(0.22 0.04 262);
+  --sidebar-border: oklch(0.2 0.04 262 / 14%);
+
+  color-scheme: light;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(1100px 620px at 88% -12%, oklch(0.66 0.19 296 / 0.16), transparent 60%),
+      radial-gradient(900px 520px at 4% 0%, oklch(0.74 0.15 218 / 0.14), transparent 62%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background: oklch(0.74 0.15 218 / 0.32);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+@utility glass {
+  background: linear-gradient(
+    150deg,
+    oklch(0.98 0.01 250 / 0.07),
+    oklch(0.98 0.01 250 / 0.02) 55%,
+    transparent
+  );
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border);
+}
+
+@utility glow-primary {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility panel {
+  background: linear-gradient(160deg, var(--surface-1), var(--background) 70%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+@utility institutional-panel {
+  background: var(--color-institutional);
+  color: var(--color-institutional-foreground);
+  border: 1px solid var(--color-institutional-border);
+  border-radius: var(--radius-lg);
+}
+
+@utility text-gradient-core {
+  background: linear-gradient(100deg, var(--color-cyan), var(--color-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-3) transparent;
+}
+
+@keyframes lamou-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.14);
+  }
+}
+
+@utility animate-occurrence {
+  animation: lamou-pulse 1.5s ease-in-out infinite;
+}

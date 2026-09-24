@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789496277130,
+      "tag": "0000_create_owner_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789497641007,
+      "tag": "0001_core_billing_providers",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789497661493,
+      "tag": "0002_owner_avatars_policies",
+      "breakpoints": true
+    }
+  ]
+}

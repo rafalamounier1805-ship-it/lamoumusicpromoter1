@@ -1,0 +1,82 @@
+{
+  "standard": "LAMOU_VA_AGENT_CONTRACT_V1",
+  "status": "CANDIDATE_NOT_PROMOTED",
+  "required_fields": [
+    "va_id",
+    "name",
+    "purpose",
+    "consumer_apps",
+    "skills",
+    "models_allowed",
+    "tools_allowed",
+    "calls_allowed",
+    "data_allowed",
+    "actions_forbidden",
+    "human_approval",
+    "autonomy_limit",
+    "timeouts",
+    "fallback",
+    "evals",
+    "cost_budget",
+    "latency_budget",
+    "evidence",
+    "truth_state",
+    "version"
+  ],
+  "template": {
+    "va_id": "VA-XXX-001",
+    "name": "Example VA",
+    "purpose": "Single clear job",
+    "consumer_apps": [],
+    "skills": [],
+    "models_allowed": [],
+    "tools_allowed": [],
+    "calls_allowed": [],
+    "data_allowed": [],
+    "actions_forbidden": [
+      "undeclared_tool_use",
+      "secret_exfiltration",
+      "automatic_promotion"
+    ],
+    "human_approval": {
+      "required_for": [
+        "production_write",
+        "contractual_commitment",
+        "security_policy_change",
+        "promotion"
+      ]
+    },
+    "autonomy_limit": "BOUNDED",
+    "timeouts": {
+      "turn_ms": 30000,
+      "workflow_ms": 120000
+    },
+    "fallback": [
+      "smaller_model",
+      "human_review",
+      "safe_stop"
+    ],
+    "evals": [
+      "accuracy",
+      "grounding",
+      "tool_selection",
+      "policy",
+      "cost",
+      "latency",
+      "failure_recovery"
+    ],
+    "cost_budget": {
+      "currency": "USD",
+      "per_run": null
+    },
+    "latency_budget": {
+      "p95_ms": null
+    },
+    "evidence": {
+      "required": true,
+      "trace_required": true
+    },
+    "truth_state": "NOT_VERIFIED",
+    "version": "1.0.0"
+  }
+}
