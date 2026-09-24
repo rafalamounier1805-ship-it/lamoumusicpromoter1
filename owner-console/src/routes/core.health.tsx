@@ -400,6 +400,21 @@ function HealthPage() {
 
         <NextActionsPanel limit={4} />
 
+        <Panel title="Metraction 360 — módulo de Indicadores">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline">MÓDULO</Badge>
+            <Badge variant="outline">V0.4 VISUAL BASELINE</Badge>
+            <TruthBadge truth="PARTIAL" />
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Metraction 360 fica sob Indicadores como módulo independente de métricas e
+            rastreabilidade. Esta tela não absorve sua lógica nem transforma o módulo em CORE.
+          </p>
+          <Button asChild size="sm" variant="outline" className="mt-3">
+            <Link to="/owner/products">Abrir ficha do Metraction em Produtos</Link>
+          </Button>
+        </Panel>
+
         <Panel title={`Indicadores (${HEALTH_INDICATORS.length})`}>
           <p className="text-xs text-muted-foreground">
             Cada indicador tem ícone próprio da sua família, valor, meta/denominador, peso
