@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CrudBlock, StatusItem } from "@/components/lamou/governed-crud";
 import { Panel } from "@/components/lamou/shell";
 import { Button } from "@/components/ui/button";
+import { RADAR_OPPORTUNITY_PROMPT } from "@/lib/lamou/b144-candidate";
 import { CLIENTS, CONTRACTS } from "@/lib/lamou/demo-data";
 import type { CrudSpec, SettingsStatus } from "@/lib/lamou/settings-data";
 import { PLAN_LABEL } from "@/lib/lamou/types";
@@ -168,6 +169,36 @@ export function CommercialView() {
 
   return (
     <div className="space-y-4">
+      <Panel title="Comercial — Showroom & Radar de Oportunidades">
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+            <p className="text-sm font-medium">LAMOU Showroom V0.4</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Módulo comercial independente para demonstração de soluções, ligado a esta área sem
+              ser absorvido pelo Comercial.
+            </p>
+            <Button asChild size="sm" variant="outline" className="mt-3">
+              <Link to="/apps/showroom">Abrir Showroom</Link>
+            </Button>
+          </div>
+          <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+            <p className="text-sm font-medium">Radar de Oportunidades</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Prompt compartilhado: {RADAR_OPPORTUNITY_PROMPT.id}. Comercial e Oportunidades usam
+              o mesmo opportunity_id e a mesma proveniência; runtime ainda NOT_CONNECTED.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="outline">
+                <Link to="/owner/opportunities">Abrir Radar</Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost">
+                <Link to="/apps/opportunity-intelligence">Opportunity Intelligence</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Panel>
+
       <Panel
         title="Estado e origem"
         action={
