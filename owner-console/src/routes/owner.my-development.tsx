@@ -36,7 +36,10 @@ function MyDevelopmentBridge() {
           <Field label="E-mail" value={profile?.email ?? user?.email ?? "não conectado"} />
           <Field label="Empresa" value={profile?.company ?? "não informada"} />
           <Field label="Cargo / função" value={profile?.role_title ?? "não informado"} />
-          <Field label="Responsável" value={profile?.responsible_name ?? "próprio usuário / não definido"} />
+          <Field
+            label="Responsável"
+            value={profile?.responsible_name ?? "próprio usuário / não definido"}
+          />
           <Field
             label="Estado do vínculo"
             value={profile ? "perfil carregado do Owner Auth" : "sessão/perfil não conectado"}
@@ -46,8 +49,9 @@ function MyDevelopmentBridge() {
 
       <Panel title="Regra de integração">
         <p className="text-sm text-muted-foreground">
-          O aplicativo LAMU IA — Meu Desenvolvimento mantém arquitetura, fluxo, dados e versão próprios.
-          O LAMOU Central fornece apenas identidade/contexto permitido e o atalho de acesso.
+          O aplicativo LAMU IA — Meu Desenvolvimento mantém arquitetura, fluxo, dados e versão
+          próprios. O LAMOU Central fornece apenas identidade/contexto permitido e o atalho de
+          acesso.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button asChild size="sm">
