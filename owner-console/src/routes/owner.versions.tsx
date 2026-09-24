@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { ModulePage } from "@/components/lamou/module-page";
+import { OneClickUpdate } from "@/components/lamou/one-click-update";
 import { Panel, TruthBadge } from "@/components/lamou/shell";
 import { Badge } from "@/components/ui/badge";
 import { B144_CANDIDATE } from "@/lib/lamou/b144-candidate";
@@ -46,6 +47,7 @@ export const Route = createFileRoute("/owner/versions")({
           Validar não promove. Qualquer alteração posterior deve gerar nova candidata derivada.
         </p>
       </Panel>
+      <OneClickUpdate targetVersion="B144" candidate={B144_CANDIDATE.branch} />
       <ModulePage spec={spec} />
     </AppShell>
   ),
