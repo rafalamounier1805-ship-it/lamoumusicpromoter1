@@ -3,7 +3,8 @@ import { LAB_CONCEPTS } from "@/lib/lamou/lab-data";
 
 /**
  * LABTEST — superfície única de tudo que ainda não foi promovido.
- * Todo o conteúdo é fixture SYNTHETIC_DEMO: não existe runtime de teste conectado.
+ * TESTE e DEMO são estados distintos. Itens sintéticos devem ser marcados individualmente como DEMO;
+ * uma execução de TESTE é um registro persistente de validação e não deve ser descartada como demonstração.
  */
 
 export const LT_STAGES = [
@@ -64,7 +65,7 @@ export const LT_TABS: { key: string; label: string; types?: LtType[] }[] = [
   { key: "trainings", label: "Treinamentos", types: ["treinamento"] },
   { key: "evals", label: "Cenários & Evals", types: ["prompt"] },
   { key: "evidence", label: "Evidências & Validation Gate" },
-  { key: "next", label: "Próxima Versão / Fila" },
+  { key: "next", label: "Validar" },
 ];
 
 export interface LtItem {

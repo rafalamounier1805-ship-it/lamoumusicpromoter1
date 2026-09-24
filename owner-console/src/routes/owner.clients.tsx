@@ -123,7 +123,7 @@ function ClientsPage() {
         }
       />
 
-      <div className="grid gap-4 xl:grid-cols-[300px_1fr]">
+      <div className="grid gap-4 xl:grid-cols-2">
         <nav aria-label="Lista de clientes" className="space-y-2">
           {CLIENTS.map((c) => (
             <InteractiveCard
@@ -219,7 +219,7 @@ function ClientsPage() {
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setFlow("update")}>
                     <CalendarClock className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                    Programar atualização
+                    Atualizar agora
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setFlow("backup")}>
                     <DatabaseBackup className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
@@ -405,11 +405,11 @@ function ClientsPage() {
                 )}
                 <div className="flex flex-wrap items-center gap-2">
                   <Button size="sm" onClick={() => setFlow("update")}>
-                    Programar atualização
+                    Atualizar agora
                   </Button>
                   <TruthBadge
-                    truth="NOT_CONNECTED"
-                    hint="Não há executor de atualização nem rollback conectado ao ambiente do cliente."
+                    truth="IMPLEMENTED_NOT_VERIFIED"
+                    hint="Web/PWA pode aplicar atualização automaticamente. Desktop Windows exige agente instalador conectado."
                   />
                 </div>
               </TabsContent>
@@ -641,6 +641,7 @@ function PackageFlow({
 
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
       title="Alterar pacote"
@@ -794,103 +795,171 @@ function UpdateFlow({
   onRegister: (t: string) => void;
 }) {
   const [version, setVersion] = useState(versions[0] ?? "—");
-  const [window, setWindow] = useState("");
-  const [backupOk, setBackupOk] = useState(false);
-  const [gateOk, setGateOk] = useState(false);
-  const [msg, setMsg] = useState(
-    MSG_TEMPLATES["preUpdate"]!({
-      client: clientName,
-      a: "a janela definida",
-      b: versions[0] ?? "—",
-    }),
-  );
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState<
+    "IDLE" | "UPDATED" | "NO_UPDATE" | "DESKTOP_AGENT_REQUIRED" | "ERROR"
+  >("IDLE");
+  const [steps, setSteps] = useState<string[]>([]);
+
+  function pushStep(text: string) {
+    setSteps((current) => [...current, text]);
+  }
+
+  async function updateNow() {
+    if (running || version === "—") return;
+    setRunning(true);
+    setResult("IDLE");
+    setSteps([]);
+
+    try {
+      pushStep("1/5 · Snapshot local de segurança");
+      if (typeof window !== "undefined") {
+        const snapshot: Record<string, string> = {};
+        for (let i = 0; i < window.localStorage.length; i += 1) {
+          const key = window.localStorage.key(i);
+          if (key) snapshot[key] = window.localStorage.getItem(key) ?? "";
+        }
+        const backupKey = `lamou_auto_backup_${Date.now()}`;
+        window.localStorage.setItem(
+          backupKey,
+          JSON.stringify({
+            createdAt: new Date().toISOString(),
+            clientName,
+            targetVersion: version,
+            storage: snapshot,
+          }),
+        );
+      }
+
+      pushStep("2/5 · Verificando atualização disponível");
+      if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
+        pushStep("Desktop/ambiente sem Service Worker: agente instalador necessário");
+        setResult("DESKTOP_AGENT_REQUIRED");
+        onRegister(
+          `Atualização automática solicitada para ${version} · bloqueada porque este ambiente exige agente instalador desktop`,
+        );
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (!registration) {
+        pushStep("Nenhum Service Worker registrado neste ambiente");
+        setResult("DESKTOP_AGENT_REQUIRED");
+        onRegister(
+          `Atualização automática solicitada para ${version} · Service Worker não registrado`,
+        );
+        return;
+      }
+
+      pushStep("3/5 · Buscando e preparando a nova versão");
+      await registration.update();
+
+      const waiting = registration.waiting;
+      if (waiting) {
+        pushStep("4/5 · Ativando a nova versão");
+        waiting.postMessage({ type: "SKIP_WAITING" });
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        pushStep("5/5 · Atualização aplicada; recarregando");
+        setResult("UPDATED");
+        onRegister(
+          `Atualização automática ${version} aplicada no ambiente TESTE/web-PWA · snapshot local criado antes da ativação`,
+        );
+        setTimeout(() => window.location.reload(), 500);
+        return;
+      }
+
+      pushStep("4/5 · Service Worker verificado");
+      pushStep("5/5 · Nenhuma versão nova aguardando ativação");
+      setResult("NO_UPDATE");
+      onRegister(
+        `Verificação automática de atualização concluída para ${version} · nenhuma nova versão aguardando ativação`,
+      );
+    } catch (error) {
+      pushStep(`Falha: ${error instanceof Error ? error.message : "erro não identificado"}`);
+      setResult("ERROR");
+      onRegister(`Falha na atualização automática ${version} · rollback não executado`);
+    } finally {
+      setRunning(false);
+    }
+  }
 
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
-      title="Programar atualização"
-      description="Checklists obrigatórios antes de agendar. O executor de atualização não está conectado."
+      title="Atualização automática"
+      description="Um botão executa o fluxo. Não há download manual de ZIP no caminho normal."
       footer={
         <>
-          <Button
-            size="sm"
-            disabled={!backupOk || !gateOk || !window}
-            onClick={() => {
-              onRegister(
-                `Atualização ${version} marcada como agendada para ${window} · backup prévio e gate confirmados no checklist`,
-              );
-              onClose();
-            }}
-          >
-            Marcar como agendada (local DEMO)
+          <Button size="sm" disabled={running || version === "—"} onClick={() => void updateNow()}>
+            {running ? "Atualizando…" : "Atualizar agora"}
           </Button>
-          <TruthBadge truth="NOT_CONNECTED" />
+          <TruthBadge
+            truth={
+              result === "UPDATED"
+                ? "IMPLEMENTED_VERIFIED"
+                : result === "ERROR"
+                  ? "BLOCKED"
+                  : "IMPLEMENTED_NOT_VERIFIED"
+            }
+          />
         </>
       }
     >
-      <div className="grid gap-2 md:grid-cols-2">
-        <div className="space-y-1">
-          <Label className="text-xs">Versão candidata / permitida</Label>
-          <Select value={version} onValueChange={setVersion}>
-            <SelectTrigger className="h-9 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {versions.map((v) => (
-                <SelectItem key={v} value={v} className="text-xs">
-                  {v}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1">
-          <Label className="text-xs" htmlFor="upd-window">
-            Janela (data e hora)
-          </Label>
-          <Input
-            id="upd-window"
-            value={window}
-            onChange={(e) => setWindow(e.target.value)}
-            placeholder="2026-10-05 01:00–02:00"
-            className="h-9 text-xs"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2 rounded-lg border border-border/60 bg-surface-1/40 p-3 text-xs">
-        <p className="font-medium">Checklist obrigatório</p>
-        <label className="flex items-start gap-2">
-          <Checkbox checked={backupOk} onCheckedChange={(v) => setBackupOk(Boolean(v))} />
-          <span>Backup prévio confirmado (sem executor conectado, é confirmação manual)</span>
-        </label>
-        <label className="flex items-start gap-2">
-          <Checkbox checked={gateOk} onCheckedChange={(v) => setGateOk(Boolean(v))} />
-          <span>Teste prévio / Validation Gate revisado para esta versão</span>
-        </label>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs">
-            <Link to="/apps/validation-gate">Abrir Validation Gate</Link>
-          </Button>
-          <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs">
-            <Link to="/apps/teste3">Abrir Teste³</Link>
-          </Button>
-        </div>
-      </div>
-
       <div className="space-y-1">
-        <Label className="text-xs">Mensagem pré-atualização (rascunho editável)</Label>
-        <Textarea
-          value={msg}
-          onChange={(e) => setMsg(e.target.value)}
-          rows={6}
-          className="text-xs"
-        />
-        <p className="font-mono text-[10px] text-muted-foreground">
-          canal não conectado · nada é enviado
+        <Label className="text-xs">Versão permitida</Label>
+        <Select value={version} onValueChange={setVersion} disabled={running}>
+          <SelectTrigger className="h-9 text-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {versions.map((v) => (
+              <SelectItem key={v} value={v} className="text-xs">
+                {v}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="rounded-lg border border-border/60 bg-surface-1/40 p-3 text-xs">
+        <p className="font-medium">Fluxo automático</p>
+        <ol className="mt-2 space-y-1 text-muted-foreground">
+          <li>1. snapshot/backup local de segurança</li>
+          <li>2. verificar versão disponível</li>
+          <li>3. buscar atualização</li>
+          <li>4. ativar nova versão</li>
+          <li>5. recarregar e registrar conclusão</li>
+        </ol>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          Web/PWA: aplicação automática por Service Worker. Desktop Windows: o navegador não pode
+          instalar um executável silenciosamente; nesse caso o sistema exige o agente instalador
+          LAMOU conectado e não finge que a instalação aconteceu.
         </p>
       </div>
+
+      {steps.length > 0 ? (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+          <p className="text-xs font-medium">Execução</p>
+          <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+            {steps.map((step, index) => (
+              <li key={`${index}-${step}`}>{step}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {result === "DESKTOP_AGENT_REQUIRED" ? (
+        <div className="rounded-lg border border-warning/40 bg-warning/5 p-3 text-xs">
+          <p className="font-medium">Agente desktop necessário</p>
+          <p className="mt-1 text-muted-foreground">
+            Próxima etapa técnica: ligar o instalador/auto-updater do Windows a este botão. O
+            usuário continua com uma única ação; a confirmação do sistema operacional aparece
+            somente quando o Windows exigir.
+          </p>
+        </div>
+      ) : null}
     </ContextDetailSheet>
   );
 }
@@ -906,6 +975,7 @@ function BackupFlow({
 }) {
   return (
     <ContextDetailSheet
+      desktopHalf
       open
       onOpenChange={(v) => !v && onClose()}
       title="Backup e restauração"

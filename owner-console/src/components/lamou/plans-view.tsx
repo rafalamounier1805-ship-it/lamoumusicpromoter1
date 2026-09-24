@@ -5,6 +5,7 @@ import { DemoBadge, PageHeader, Panel, TruthBadge } from "@/components/lamou/she
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { B144_ACTION_PLAN_MODULES } from "@/lib/lamou/b144-candidate";
 import { caseExtra } from "@/lib/lamou/case-provenance";
 import { mapCaseToCoreFacts } from "@/lib/lamou/core-case-facts";
 import type { NavGroup } from "@/lib/lamou/nav";
@@ -252,6 +253,36 @@ export function PlansView({
           </div>
         ))}
       </div>
+
+      <Panel title="Módulos disponíveis dentro de Planos de Ação">
+        <p className="text-xs text-muted-foreground">
+          Plano de Ação continua completo: ação, responsável, prazo, prioridade, evidência,
+          resultado, eficácia e fechamento. Os módulos abaixo são acionáveis dentro do plano e
+          mantêm identidade, dados e arquitetura próprios.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {B144_ACTION_PLAN_MODULES.map((item) => (
+            <div key={item.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium">{item.name}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {item.software} · {item.version}
+                  </p>
+                </div>
+                <Badge variant="outline" className="text-[10px]">
+                  MÓDULO
+                </Badge>
+              </div>
+              <Button asChild size="sm" variant="outline" className="mt-3">
+                <a href={item.route ?? "/owner/products"}>
+                  {item.route ? "Abrir módulo" : "Abrir ficha em Produtos"}
+                </a>
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Panel>
 
       <Tabs defaultValue="problemas" className="w-full">
         <TabsList className="flex w-full flex-wrap justify-start gap-1">

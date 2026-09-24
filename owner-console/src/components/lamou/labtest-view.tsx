@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppShell } from "@/components/lamou/app-shell";
 import { ContextDetailSheet, InteractiveRow } from "@/components/lamou/interactive";
@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { B144_LABTEST_MODULES } from "@/lib/lamou/b144-candidate";
+import { useOwnerAuth } from "@/lib/lamou/owner-auth";
 import {
   isReady,
   LT_IMPROVE,
@@ -21,6 +23,38 @@ import {
   type LtStage,
 } from "@/lib/lamou/labtest-data";
 import { cn } from "@/lib/utils";
+
+const LABTEST_STORAGE_KEY = "lamou_b144_labtest_state_v2";
+
+type ValidationStatus = "VALIDADO" | "NAO_VALIDADO";
+type ValidationDestination = "TESTE" | "PLANO_DE_ACAO" | "MELHORIA" | "APROVACAO_PROXIMA_VERSAO";
+
+interface ValidationRecord {
+  itemId: string;
+  status: ValidationStatus;
+  enteredAt: string;
+  submittedBy: string;
+  source: string;
+  decidedAt: string;
+  decidedBy: string;
+  destination: ValidationDestination | null;
+}
+
+interface TestRecord {
+  itemId: string;
+  name: string;
+  problem: string;
+  hypothesis: string;
+  criticalPoints: string[];
+  enteredAt: string;
+  submittedBy: string;
+  source: string;
+  createdAt: string;
+  createdBy: string;
+  scenario: string;
+  dataset: string;
+  status: "AGUARDANDO_TESTE" | "TESTE_REGISTRADO";
+}
 
 const STAGE_TONE: Record<string, string> = {
   "IDEIA/CRIAÇÃO": "border-border/60 text-muted-foreground",
@@ -103,12 +137,69 @@ function ItemRow({
 type Sheet = { item: LtItem; mode: "ficha" | "testar" } | null;
 
 export function LabTestView({ initialTab = "overview" }: { initialTab?: string }) {
+  const { profile } = useOwnerAuth();
   const [tab, setTab] = useState(initialTab);
   const [sheet, setSheet] = useState<Sheet>(null);
-  const [queue, setQueue] = useState<string[]>(NEXT_VERSION.entries.map((e) => e.itemId));
-  const [log, setLog] = useState<{ at: string; text: string }[]>([]);
+  const [queue, setQueue] = useState<string[]>(() => {
+    const fallback = NEXT_VERSION.entries.map((e) => e.itemId);
+    if (typeof window === "undefined") return fallback;
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        queue?: string[];
+      };
+      return Array.isArray(saved.queue) ? saved.queue : fallback;
+    } catch {
+      return fallback;
+    }
+  });
+  const [validated, setValidated] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        validated?: string[];
+      };
+      return Array.isArray(saved.validated) ? saved.validated : [];
+    } catch {
+      return [];
+    }
+  });
+  const [validationRecords, setValidationRecords] = useState<Record<string, ValidationRecord>>(
+    () => {
+      if (typeof window === "undefined") return {};
+      try {
+        const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+          validationRecords?: Record<string, ValidationRecord>;
+        };
+        return saved.validationRecords ?? {};
+      } catch {
+        return {};
+      }
+    },
+  );
+  const [testRecords, setTestRecords] = useState<Record<string, TestRecord>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        testRecords?: Record<string, TestRecord>;
+      };
+      return saved.testRecords ?? {};
+    } catch {
+      return {};
+    }
+  });
+  const [log, setLog] = useState<{ at: string; text: string }[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LABTEST_STORAGE_KEY) ?? "{}") as {
+        log?: { at: string; text: string }[];
+      };
+      return Array.isArray(saved.log) ? saved.log : [];
+    } catch {
+      return [];
+    }
+  });
   const [criticalPending, setCriticalPending] = useState(3);
-  const [scenario, setScenario] = useState("Cenário padrão (fixture)");
+  const [scenario, setScenario] = useState("Cenário de teste");
   const [dataset, setDataset] = useState("");
 
   const byStage = useMemo(() => {
@@ -135,10 +226,136 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
     setLog((v) => [{ at: new Date().toLocaleString("pt-BR"), text }, ...v]);
   }
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      LABTEST_STORAGE_KEY,
+      JSON.stringify({
+        queue,
+        validated,
+        validationRecords,
+        testRecords,
+        log: log.slice(0, 100),
+      }),
+    );
+  }, [queue, validated, validationRecords, testRecords, log]);
+
+  function contextualTestName(item: LtItem) {
+    const context = item.blockers[0] ?? item.requiredTests[0] ?? "validação funcional";
+    return `${item.name} — ${context}`;
+  }
+
+  function createOrOpenTest(item: LtItem) {
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const now = new Date().toLocaleString("pt-BR");
+    const existing = testRecords[item.id];
+    if (!existing) {
+      const record: TestRecord = {
+        itemId: item.id,
+        name: contextualTestName(item),
+        problem: item.blockers.join("; ") || "problema não informado",
+        hypothesis: "A validar durante o teste",
+        criticalPoints: [...item.requiredTests],
+        enteredAt: item.updatedAt,
+        submittedBy: item.owner ?? "não informado",
+        source: item.source,
+        createdAt: now,
+        createdBy: actor,
+        scenario,
+        dataset,
+        status: "AGUARDANDO_TESTE",
+      };
+      setTestRecords((current) => ({ ...current, [item.id]: record }));
+      addLog(
+        `TESTE CRIADO: ${record.name} · entrada ${record.enteredAt} · por ${record.submittedBy} · origem ${record.source}`,
+      );
+    }
+    setSheet({ item, mode: "testar" });
+  }
+
+  function registerTest(item: LtItem) {
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const now = new Date().toLocaleString("pt-BR");
+    const current =
+      testRecords[item.id] ??
+      ({
+        itemId: item.id,
+        name: contextualTestName(item),
+        problem: item.blockers.join("; ") || "problema não informado",
+        hypothesis: "A validar durante o teste",
+        criticalPoints: [...item.requiredTests],
+        enteredAt: item.updatedAt,
+        submittedBy: item.owner ?? "não informado",
+        source: item.source,
+        createdAt: now,
+        createdBy: actor,
+        scenario,
+        dataset,
+        status: "AGUARDANDO_TESTE",
+      } satisfies TestRecord);
+    const updated: TestRecord = {
+      ...current,
+      scenario,
+      dataset,
+      status: "TESTE_REGISTRADO",
+    };
+    setTestRecords((state) => ({ ...state, [item.id]: updated }));
+    addLog(
+      `TESTE REGISTRADO: ${updated.name} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}”`,
+    );
+  }
+
+  function decideValidation(item: LtItem, status: ValidationStatus) {
+    if (status === "VALIDADO" && !isReady(item)) {
+      addLog(`Validação bloqueada para ${item.name}: ainda existem testes ou blockers pendentes.`);
+      return;
+    }
+
+    const now = new Date().toLocaleString("pt-BR");
+    const actor = profile?.full_name?.trim() || "Proprietário";
+    const record: ValidationRecord = {
+      itemId: item.id,
+      status,
+      enteredAt: item.updatedAt,
+      submittedBy: item.owner ?? "origem não informada",
+      source: item.source,
+      decidedAt: now,
+      decidedBy: actor,
+      destination: status === "VALIDADO" ? null : "TESTE",
+    };
+
+    setValidationRecords((current) => ({ ...current, [item.id]: record }));
+    setValidated((current) =>
+      status === "VALIDADO"
+        ? current.includes(item.id)
+          ? current
+          : [...current, item.id]
+        : current.filter((id) => id !== item.id),
+    );
+
+    if (status === "VALIDADO") {
+      addLog(
+        `VALIDADO: ${item.name} · por ${actor} · origem ${item.source} · aguardando escolha do próximo destino.`,
+      );
+    } else {
+      setQueue((current) => current.filter((id) => id !== item.id));
+      addLog(`NÃO VALIDADO: ${item.name} · por ${actor} · retorno para TESTE/AJUSTE.`);
+    }
+  }
+
+  function setValidationDestination(item: LtItem, destination: ValidationDestination) {
+    setValidationRecords((current) => {
+      const existing = current[item.id];
+      if (!existing) return current;
+      return { ...current, [item.id]: { ...existing, destination } };
+    });
+    addLog(`Destino da conclusão de ${item.name}: ${destination}.`);
+  }
+
   function toggleQueue(id: string) {
     setQueue((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id]));
     addLog(
-      `${queue.includes(id) ? "Removido da" : "Adicionado à"} fila da próxima versão: ${id} (registro local DEMO — adicionar à fila ≠ promover)`,
+      `${queue.includes(id) ? "Removido da" : "Adicionado à"} fila da próxima versão: ${id} (estado TESTE persistido na candidata — adicionar à fila ≠ promover)`,
     );
   }
 
@@ -151,6 +368,10 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
   const queueItems = queue
     .map((id) => LT_ITEMS.find((i) => i.id === id))
     .filter((i): i is LtItem => Boolean(i));
+  const pendingValidationItems = queueItems.filter((item) => !validated.includes(item.id));
+  const validatedItems = validated
+    .map((id) => LT_ITEMS.find((item) => item.id === id))
+    .filter((item): item is LtItem => Boolean(item));
 
   return (
     <AppShell group="labtest">
@@ -159,7 +380,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         subtitle="Superfície única do que ainda NÃO foi promovido: aplicativos, módulos, builds, CORE e arquiteturas experimentais, plugins, providers, CALLs, integrações, dados de teste, treinamentos e cenários de eval."
         right={
           <>
-            <DemoBadge label="SYNTHETIC_DEMO" />
+            <Badge variant="outline">TESTE · B144</Badge>
             <TruthBadge truth="NOT_CONNECTED" hint="Nenhum runtime de teste conectado" />
             <Button asChild size="sm" variant="outline">
               <Link to="/labtest/next">Próxima Versão</Link>
@@ -167,6 +388,29 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
           </>
         }
       />
+
+      <Panel title="Módulos do LABTEST">
+        <p className="text-xs text-muted-foreground">
+          Teste³ IA executa testes; Validation Gate decide passagem por evidência. Permanecem
+          módulos distintos dentro do LABTEST e nenhum deles promove versão automaticamente.
+        </p>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {B144_LABTEST_MODULES.map((item) => (
+            <div key={item.id} className="rounded-lg border border-border/50 bg-surface-1/40 p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="min-w-0 flex-1 text-sm font-medium">{item.name}</span>
+                <Badge variant="outline" className="text-[10px]">
+                  {item.version}
+                </Badge>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">{item.software}</p>
+              <Button asChild size="sm" variant="outline" className="mt-3">
+                <a href={item.route ?? "/owner/products"}>Abrir módulo</a>
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Panel>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi label="Itens em criação (ideia)" value={String(byStage.get("IDEIA/CRIAÇÃO") ?? 0)} />
@@ -192,7 +436,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         </Panel>
       </div>
 
-      <Panel title="Critérios de criticidade (locais, de demonstração)">
+      <Panel title="Critérios de criticidade do ambiente de teste">
         <div className="flex flex-wrap items-end gap-3">
           <div className="w-56">
             <Label htmlFor="lt-threshold" className="text-xs">
@@ -208,8 +452,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            {critical.length} item(ns) atingem o critério. Não existe regra de criticidade no
-            backend: este limite é local e SYNTHETIC_DEMO.
+            {critical.length} item(ns) atingem o critério. Este limite pertence ao ambiente de
+            teste. Dados sintéticos continuam identificados quando forem usados.
           </p>
         </div>
       </Panel>
@@ -396,7 +640,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                     className={cn(
                       "text-[10px]",
                       isReady(i)
-                        ? "border-success/50 text-success"
+                        ? "border-primary/50 text-primary"
                         : "border-warning/50 text-warning",
                     )}
                   >
@@ -409,9 +653,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         </TabsContent>
 
         <TabsContent value="next" className="mt-3 space-y-4">
-          <Panel title={`Próxima versão · alvo ${NEXT_VERSION.target} · ${NEXT_VERSION.planned}`}>
+          <Panel title={`Validar · alvo ${NEXT_VERSION.target} · ${NEXT_VERSION.planned}`}>
             <div className="space-y-2">
-              {queueItems.map((i) => {
+              {pendingValidationItems.map((i) => {
                 const entry = NEXT_VERSION.entries.find((e) => e.itemId === i.id);
                 const ok = isReady(i);
                 return (
@@ -428,11 +672,27 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                         variant="outline"
                         className={cn(
                           "text-[10px]",
-                          ok ? "border-success/50 text-success" : "border-warning/50 text-warning",
+                          ok ? "border-primary/50 text-primary" : "border-warning/50 text-warning",
                         )}
                       >
-                        {ok ? "READY" : "NOT_READY"}
+                        {ok ? "PRONTO PARA VALIDAR" : "PENDENTE"}
                       </Badge>
+                      {validated.includes(i.id) ? (
+                        <Badge
+                          variant="outline"
+                          className="border-success/50 text-[10px] text-success"
+                        >
+                          VALIDADO PARA FILA
+                        </Badge>
+                      ) : null}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        onClick={() => setSheet({ item: i, mode: "ficha" })}
+                      >
+                        Abrir detalhes
+                      </Button>
                       <Button
                         size="sm"
                         variant="ghost"
@@ -443,17 +703,26 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                       </Button>
                     </div>
                     <p className="mt-1 text-[11px] text-muted-foreground">
-                      Origem: {entry?.origin ?? i.source} · tipo {LT_TYPE_LABEL[i.type]} · estágio{" "}
-                      {i.stage} · risco {entry?.risk ?? "não avaliado"} · testes {i.testsDone} ok /{" "}
-                      {i.testsPending} pendentes · dependências{" "}
-                      {i.dependencies.join(", ") || "nenhuma"} · evidências{" "}
-                      {i.evidences.join(", ") || "nenhuma"} · blocker{" "}
-                      {i.blockers.join("; ") || "nenhum"}
+                      Teste: {testRecords[i.id]?.name ?? contextualTestName(i)}
                     </p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">
+                      Entrada: {i.updatedAt} · enviado por {i.owner ?? "não informado"} · origem:{" "}
+                      {entry?.origin ?? i.source} · tipo {LT_TYPE_LABEL[i.type]} · testes{" "}
+                      {i.testsDone} ok / {i.testsPending} pendentes · evidências{" "}
+                      {i.evidences.join(", ") || "nenhuma"}
+                    </p>
+                    {validationRecords[i.id] ? (
+                      <p className="mt-1 text-[11px] text-muted-foreground">
+                        Decisão: {validationRecords[i.id]!.status} ·{" "}
+                        {validationRecords[i.id]!.decidedAt} · por{" "}
+                        {validationRecords[i.id]!.decidedBy} · destino{" "}
+                        {validationRecords[i.id]!.destination ?? "não definido"}
+                      </p>
+                    ) : null}
                   </div>
                 );
               })}
-              {queueItems.length === 0 ? (
+              {pendingValidationItems.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Fila vazia.</p>
               ) : null}
             </div>
@@ -461,6 +730,50 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               Adicionar à fila ≠ promover. A promoção depende do Validation Gate com evidência real
               e permanece bloqueada.
             </p>
+          </Panel>
+
+          <Panel title="Validados">
+            {validatedItems.length ? (
+              <div className="space-y-2">
+                {validatedItems.map((item) => {
+                  const record = validationRecords[item.id];
+                  return (
+                    <div
+                      key={item.id}
+                      className="rounded-lg border border-success/30 bg-success/5 p-3 text-sm"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant="outline" className="font-mono text-[10px]">
+                          {item.id}
+                        </Badge>
+                        <span className="min-w-0 flex-1 font-medium">{item.name}</span>
+                        <Badge
+                          variant="outline"
+                          className="border-success/50 text-[10px] text-success"
+                        >
+                          VALIDADO
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 px-2 text-[11px]"
+                          onClick={() => setSheet({ item, mode: "ficha" })}
+                        >
+                          Abrir detalhes
+                        </Button>
+                      </div>
+                      <p className="mt-1 text-[11px] text-muted-foreground">
+                        {record
+                          ? `Data: ${record.decidedAt} · validado por ${record.decidedBy} · origem: ${record.source} · destino: ${record.destination ?? "aguardando escolha"}`
+                          : "Validação registrada."}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum item validado ainda.</p>
+            )}
           </Panel>
 
           <Panel title="Fora da fila">
@@ -477,7 +790,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
           </Panel>
 
           {log.length ? (
-            <Panel title="Registro local desta sessão (DEMO)">
+            <Panel title="Registro persistido do ambiente de teste">
               <ul className="space-y-1 text-xs text-muted-foreground">
                 {log.map((l, idx) => (
                   <li key={idx}>
@@ -497,7 +810,7 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
         description={
           sheet
             ? sheet.mode === "testar"
-              ? "Workspace de teste — execução DEMO/SYNTHETIC, sem runtime conectado."
+              ? "Workspace de TESTE — estado persistente da candidata; dados sintéticos são identificados separadamente e o runtime externo continua não conectado."
               : `${LT_TYPE_LABEL[sheet.item.type]} · ${sheet.item.family} · estágio ${sheet.item.stage}`
             : ""
         }
@@ -535,6 +848,50 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   </div>
                 ))}
               </dl>
+
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <p className="text-xs font-medium">Entrada do teste</p>
+                <dl className="mt-2 grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Nome / objeto</dt>
+                    <dd className="text-xs">{sheet.item.name}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Data de entrada</dt>
+                    <dd className="text-xs">{sheet.item.updatedAt}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Enviado por</dt>
+                    <dd className="text-xs">{sheet.item.owner ?? "não informado"}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Origem</dt>
+                    <dd className="text-xs">{sheet.item.source}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Problema</dt>
+                    <dd className="text-xs">
+                      {sheet.item.blockers.join("; ") || "problema não informado na entrada"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase text-muted-foreground">Hipótese</dt>
+                    <dd className="text-xs">
+                      não informada na entrada — registrar antes da conclusão
+                    </dd>
+                  </div>
+                </dl>
+                <div className="mt-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">
+                    Pontos críticos a testar
+                  </p>
+                  <ul className="mt-1 space-y-1 text-xs">
+                    {sheet.item.requiredTests.map((point) => (
+                      <li key={point}>· {point}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
               <div>
                 <p className="text-xs font-medium">Testes obrigatórios</p>
@@ -583,8 +940,9 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button size="sm" onClick={() => setSheet({ item: sheet.item, mode: "testar" })}>
-                  TESTAR
+                <Button size="sm" onClick={() => createOrOpenTest(sheet.item)}>
+                  {testRecords[sheet.item.id] ? "Abrir teste" : "Criar teste"} ·{" "}
+                  {testRecords[sheet.item.id]?.name ?? contextualTestName(sheet.item)}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => toggleQueue(sheet.item.id)}>
                   {queue.includes(sheet.item.id)
@@ -597,29 +955,102 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
                   disabled={!isReady(sheet.item)}
                   onClick={() =>
                     addLog(
-                      `Enviado ao Validation Gate (registro local DEMO): ${sheet.item.id} — gate não executa sem runner conectado`,
+                      `Enviado ao Validation Gate no ambiente TESTE: ${sheet.item.id} — aguardando execução/validação com evidência`,
                     )
                   }
                 >
                   Enviar ao Validation Gate
                 </Button>
+                <Button
+                  size="sm"
+                  variant={validated.includes(sheet.item.id) ? "default" : "outline"}
+                  disabled={!isReady(sheet.item)}
+                  onClick={() => decideValidation(sheet.item, "VALIDADO")}
+                >
+                  {validated.includes(sheet.item.id) ? "VALIDADO" : "Validar"}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => decideValidation(sheet.item, "NAO_VALIDADO")}
+                >
+                  Não validar
+                </Button>
                 <Button size="sm" variant="outline" disabled>
                   Promover — bloqueado por gate
                 </Button>
               </div>
+              {validationRecords[sheet.item.id] ? (
+                <div className="rounded-lg border border-border/60 bg-surface-1/40 p-3">
+                  <p className="text-xs font-medium">Conclusão e próximo destino</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    {validationRecords[sheet.item.id]!.status} em{" "}
+                    {validationRecords[sheet.item.id]!.decidedAt} por{" "}
+                    {validationRecords[sheet.item.id]!.decidedBy}. A conclusão fica registrada no
+                    LABTEST.
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setValidationDestination(sheet.item, "TESTE");
+                        setSheet({ item: sheet.item, mode: "testar" });
+                      }}
+                    >
+                      Voltar para Teste / Ajuste
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/owner/plans"
+                        onClick={() => setValidationDestination(sheet.item, "PLANO_DE_ACAO")}
+                      >
+                        Enviar para Plano de Ação
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/owner/plans"
+                        onClick={() => setValidationDestination(sheet.item, "MELHORIA")}
+                      >
+                        Enviar para Melhoria
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <Link
+                        to="/labtest/next"
+                        onClick={() =>
+                          setValidationDestination(sheet.item, "APROVACAO_PROXIMA_VERSAO")
+                        }
+                      >
+                        Próxima versão / Aprovação
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
               <p className="text-[11px] text-muted-foreground">
-                Promoção permanece bloqueada: exige Validation Gate com evidência real. SALVAR ≠
-                PROMOVER.
+                Verde aparece somente depois de VALIDADO. "Pronto para validar" permanece
+                azul/neutro e não equivale a validação nem a aprovação. SALVAR ≠ PROMOVER.
               </p>
             </div>
           ) : (
             <div className="space-y-4 text-sm">
               <NotConnected
-                what="Runtime de teste"
-                next="Nenhum executor conectado. A execução abaixo apenas registra um ensaio local SYNTHETIC_DEMO."
+                what="Executor externo do teste"
+                next="O ambiente TESTE da B144 registra o fluxo e a conclusão. O executor automatizado externo ainda não está conectado; quando houver dado sintético ele é marcado separadamente como sintético."
               />
               <div className="rounded-lg border border-border/50 bg-surface-1/40 p-3 text-xs">
-                <p>
+                <p className="font-medium">
+                  {testRecords[sheet.item.id]?.name ?? contextualTestName(sheet.item)}
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Entrada: {testRecords[sheet.item.id]?.enteredAt ?? sheet.item.updatedAt} · enviado
+                  por{" "}
+                  {testRecords[sheet.item.id]?.submittedBy ?? sheet.item.owner ?? "não informado"} ·
+                  origem: {testRecords[sheet.item.id]?.source ?? sheet.item.source}
+                </p>
+                <p className="mt-1">
                   Alvo: <span className="font-mono">{sheet.item.id}</span> — {sheet.item.name} (
                   {LT_TYPE_LABEL[sheet.item.type]})
                 </p>
@@ -679,15 +1110,8 @@ export function LabTestView({ initialTab = "overview" }: { initialTab?: string }
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  onClick={() =>
-                    addLog(
-                      `Ensaio DEMO registrado para ${sheet.item.id} · cenário “${scenario}” · dataset “${dataset || "não selecionado"}” — nenhuma execução real`,
-                    )
-                  }
-                >
-                  Executar ensaio DEMO
+                <Button size="sm" onClick={() => registerTest(sheet.item)}>
+                  Registrar ensaio de TESTE
                 </Button>
                 <Button
                   size="sm"
