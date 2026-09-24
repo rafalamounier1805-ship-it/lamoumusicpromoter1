@@ -11,6 +11,11 @@ import {
   NON_APP_ARCHITECTURE_ENTITIES,
   OWNER_MODULE_ORDER,
 } from "../src/lib/lamou/app-architecture";
+import {
+  CANDIDATE_VAULT,
+  CANDIDATE_VAULT_EXCLUSIONS,
+  CANDIDATE_VAULT_POLICY,
+} from "../src/lib/lamou/candidate-vault";
 import { METRIC_PROFILES, METRICS_REGISTRY } from "../src/lib/lamou/metrics-registry";
 
 describe("architecture reconciliation", () => {
@@ -90,6 +95,40 @@ describe("metric registry", () => {
     for (const profile of Object.values(METRIC_PROFILES)) {
       for (const metricId of profile) {
         expect(ids.has(metricId)).toBe(true);
+      }
+    }
+  });
+});
+
+
+describe("candidate vault lock", () => {
+  test("candidate slots and app keys are unique and immutable", () => {
+    expect(CANDIDATE_VAULT).toHaveLength(18);
+    expect(new Set(CANDIDATE_VAULT.map((item) => item.slot)).size).toBe(CANDIDATE_VAULT.length);
+    expect(new Set(CANDIDATE_VAULT.map((item) => item.appKey)).size).toBe(
+      CANDIDATE_VAULT.length,
+    );
+    expect(CANDIDATE_VAULT.every((item) => item.immutable)).toBe(true);
+    expect(CANDIDATE_VAULT_POLICY.editForbidden).toBe(true);
+    expect(CANDIDATE_VAULT_POLICY.overwriteForbidden).toBe(true);
+    expect(CANDIDATE_VAULT_POLICY.deriveOnly).toBe(true);
+  });
+
+  test("excluded candidates never enter the locked pull vault", () => {
+    const names = CANDIDATE_VAULT.map((item) => item.name.toLowerCase());
+    expect(names.some((name) => name.includes("vectra"))).toBe(false);
+    expect(names.some((name) => name.includes("validation gate"))).toBe(false);
+    expect(names.some((name) => name.includes("observer 360"))).toBe(false);
+    expect(CANDIDATE_VAULT_EXCLUSIONS).toHaveLength(3);
+    expect(CANDIDATE_VAULT.some((item) => item.name === "BELGO Intelligence 360")).toBe(true);
+  });
+
+  test("every located artifact has a sha256 integrity lock", () => {
+    for (const item of CANDIDATE_VAULT) {
+      if (item.sourceMode === "SOURCE_NOT_FOUND") {
+        expect(item.sha256).toBeNull();
+      } else {
+        expect(item.sha256).toMatch(/^[a-f0-9]{64}$/);
       }
     }
   });
