@@ -416,8 +416,17 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
     from: "opportunity-intelligence",
     to: "CENTRAL:commercial",
     event: "opportunity_radar_output",
-    payload: ["opportunity_id", "signal_summary", "problem_or_need", "fit", "risk", "evidence_ids", "freshness"],
-    condition: "PROMPT-RADAR-OPPORTUNITY-B144 gerou saída com origem, freshness e evidência identificadas",
+    payload: [
+      "opportunity_id",
+      "signal_summary",
+      "problem_or_need",
+      "fit",
+      "risk",
+      "evidence_ids",
+      "freshness",
+    ],
+    condition:
+      "PROMPT-RADAR-OPPORTUNITY-B144 gerou saída com origem, freshness e evidência identificadas",
     truth: "CONTRACT",
   },
   {
@@ -426,8 +435,18 @@ export const APP_FLOW_EDGES: FlowEdge[] = [
     from: "opportunity-intelligence",
     to: "CENTRAL:opportunities",
     event: "opportunity_radar_output",
-    payload: ["opportunity_id", "signal_summary", "problem_or_need", "hypothesis", "fit", "risk", "evidence_ids", "freshness"],
-    condition: "PROMPT-RADAR-OPPORTUNITY-B144 compartilha o mesmo opportunity_id com Comercial e Radar de Oportunidades",
+    payload: [
+      "opportunity_id",
+      "signal_summary",
+      "problem_or_need",
+      "hypothesis",
+      "fit",
+      "risk",
+      "evidence_ids",
+      "freshness",
+    ],
+    condition:
+      "PROMPT-RADAR-OPPORTUNITY-B144 compartilha o mesmo opportunity_id com Comercial e Radar de Oportunidades",
     truth: "CONTRACT",
   },
   {
